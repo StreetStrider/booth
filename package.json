@@ -16,7 +16,11 @@
 
   "scripts":
   {
-    "npm": "metalbox preset npm"
+    "test": "npm run npm && npm run mocha",
+
+    "npm": "metalbox preset npm",
+
+    "mocha": "mocha --recursive release/npm/dist/test/case/"
   },
 
   "metalbox":
@@ -36,6 +40,12 @@
       "1.7",
 
     "metalbox":
-      "1.1"
+      "1.1",
+
+    "mocha":
+      "3",
+
+    "chai":
+      "3"
   }
 }
