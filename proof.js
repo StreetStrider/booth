@@ -3,11 +3,27 @@ var Server = require('http').createServer
 var Socketio = require('socket.io')
 var SocketioClient = require('socket.io-client')
 
+var flyd = require('flyd')
+var stream = flyd.stream
+
+//
+
 var http = Server().listen(9000)
 
 var io = Socketio().attach(http)
 
-io.on('connection', socket =>
+//
+
+function connections (io)
+{
+	var s = stream()
+
+	io.on('connection', s)
+
+	return s
+}
+
+flyd.on(socket =>
 {
 	socket.on('request', data =>
 	{
@@ -15,7 +31,9 @@ io.on('connection', socket =>
 
 		socket.emit('done')
 	})
-})
+}
+, connections(io))
+
 
 var io_client = SocketioClient('ws://localhost:9000')
 

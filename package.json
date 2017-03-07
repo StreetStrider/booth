@@ -8,6 +8,12 @@
       "1.7"
   },
 
+  "dependencies":
+  {
+    "flyd":
+      "0.2"
+  },
+
   "devDependencies":
   {
     "socket.io":
