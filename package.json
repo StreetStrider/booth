@@ -14,12 +14,28 @@
       "0.2"
   },
 
+  "scripts":
+  {
+    "npm": "metalbox preset npm"
+  },
+
+  "metalbox":
+  {
+    "presets":
+    {
+      "npm": [ "Library" ]
+    }
+  },
+
   "devDependencies":
   {
     "socket.io":
       "1.7",
 
     "socket.io-client":
-      "1.7"
+      "1.7",
+
+    "metalbox":
+      "1.1"
   }
 }

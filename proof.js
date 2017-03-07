@@ -1,9 +1,10 @@
 
-var Server = require('http').createServer
-var Socketio = require('socket.io')
-var SocketioClient = require('socket.io-client')
+import { createServer as Server } from 'http'
+import Socketio from 'socket.io'
+import SocketioClient from 'socket.io-client'
 
-var flyd = require('flyd')
+import flyd from 'flyd'
+
 var stream = flyd.stream
 
 //
