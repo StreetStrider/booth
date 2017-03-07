@@ -16,9 +16,11 @@
 
   "scripts":
   {
-    "test": "npm run npm && npm run mocha",
+    "test": "npm run st && npm run npm && npm run mocha",
 
     "npm": "metalbox preset npm",
+
+    "st": "eslint .",
 
     "mocha": "mocha --recursive release/npm/dist/test/case/"
   },
@@ -39,8 +41,17 @@
     "socket.io-client":
       "1.7",
 
+
     "metalbox":
       "1.1",
+
+
+    "eslint":
+      "3",
+
+    "js-outlander":
+      "StrangeTransistor/js-outlander#2.1.0",
+
 
     "mocha":
       "3",
