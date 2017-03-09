@@ -16,11 +16,13 @@
 
   "scripts":
   {
-    "test": "npm run st && npm run npm && npm run mocha",
+    "test": "npm run st && npm run flow && npm run npm && npm run mocha",
 
     "npm": "metalbox preset npm",
 
     "st": "eslint .",
+
+    "flow": "flow check",
 
     "mocha": "mocha --recursive release/npm/dist/test/case/"
   },
@@ -57,6 +59,13 @@
       "3",
 
     "chai":
-      "3"
+      "3",
+
+
+    "flow-bin":
+      "0.41",
+
+    "flow-typed":
+      "2"
   }
 }

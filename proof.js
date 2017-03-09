@@ -1,3 +1,4 @@
+/* @flow */
 
 import { createServer as Server } from 'http'
 import Socketio from 'socket.io'

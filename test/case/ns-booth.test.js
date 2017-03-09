@@ -1,3 +1,4 @@
+/* @flow */
 
 import ns_booth from '../../lib/ns-booth'
 
