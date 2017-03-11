@@ -12,7 +12,10 @@ var stream = flyd.stream
 
 var http = Server().listen(9000)
 
-var io = Socketio().attach(http)
+var io = Socketio()
+.path('/realtime')
+.serveClient(false)
+.attach(http)
 
 //
 
@@ -37,7 +40,7 @@ flyd.on(socket =>
 , connections(io))
 
 
-var io_client = SocketioClient('ws://localhost:9000')
+var io_client = SocketioClient('ws://localhost:9000', { path: '/realtime' })
 
 io_client.emit('request', { a: 'b' })
 
@@ -47,4 +50,14 @@ io_client.on('done', data =>
 	console.log(data)
 
 	process.exit()
+})
+
+io_client.on('connect_error', error =>
+{
+	console.log(error)
+})
+
+io_client.on('reconnect_attempt', reconnect =>
+{
+	console.log(reconnect)
 })
