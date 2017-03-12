@@ -31,7 +31,8 @@
   {
     "presets":
     {
-      "npm": [ "Library" ]
+      "npm": [ "Library" ],
+      "dev": [ "Library/Dev" ]
     }
   },
 
@@ -45,7 +46,7 @@
 
 
     "metalbox":
-      "1.1",
+      "1.3",
 
 
     "eslint":
