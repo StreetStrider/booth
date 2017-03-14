@@ -18,6 +18,7 @@
   {
     "test": "npm run st && npm run flow && npm run npm && npm run mocha",
 
+    "dev": "metalbox preset dev",
     "npm": "metalbox preset npm",
 
     "st": "eslint .",
