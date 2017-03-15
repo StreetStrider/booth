@@ -1,23 +1,14 @@
 /* @flow */
 
-import { createServer as Server } from 'http'
-import Socketio from 'socket.io'
-import SocketioClient from 'socket.io-client'
-
 import flyd from 'flyd'
-
 var stream = flyd.stream
 
-//
+import * as servers from './lib/servers'
+import client from  './lib/socketio-client'
 
-var http = Server().listen(9000)
 
-var io = Socketio()
-.path('/realtime')
-.serveClient(false)
-.attach(http)
-
-//
+var http = servers.http()
+var io   = servers.socketio(http)
 
 function connections (io)
 {
@@ -40,7 +31,7 @@ flyd.on(socket =>
 , connections(io))
 
 
-var io_client = SocketioClient('ws://localhost:9000', { path: '/realtime' })
+var io_client = client()
 
 io_client.emit('request', { a: 'b' })
 
