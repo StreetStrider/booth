@@ -1,8 +1,5 @@
 /* @flow */
 
-import flyd from 'flyd'
-var stream = flyd.stream
-
 import * as servers from './lib/servers'
 import client from  './lib/socketio-client'
 
@@ -12,6 +9,7 @@ import Endpoint from './lib/Endpoint'
 
 var http = servers.http()
 var io   = servers.socketio(http)
+
 var booth = Booth(io, (endp, socket) =>
 {
 	socket.on('request', data =>
@@ -21,6 +19,8 @@ var booth = Booth(io, (endp, socket) =>
 		socket.emit('done')
 	})
 })
+
+console.log('socketio', !! booth.socketio)
 
 
 var client_endp = Endpoint(client())
