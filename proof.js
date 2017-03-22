@@ -6,22 +6,13 @@ var stream = flyd.stream
 import * as servers from './lib/servers'
 import client from  './lib/socketio-client'
 
+import Booth from './lib/Booth'
 import Endpoint from './lib/Endpoint'
 
 
 var http = servers.http()
 var io   = servers.socketio(http)
-
-function connections (io)
-{
-	var s = stream()
-
-	io.on('connection', s)
-
-	return s
-}
-
-flyd.on(socket =>
+var booth = Booth(io, (endp, socket) =>
 {
 	socket.on('request', data =>
 	{
@@ -29,8 +20,7 @@ flyd.on(socket =>
 
 		socket.emit('done')
 	})
-}
-, connections(io))
+})
 
 
 var client_endp = Endpoint(client())
