@@ -6,6 +6,8 @@ var stream = flyd.stream
 import * as servers from './lib/servers'
 import client from  './lib/socketio-client'
 
+import Endpoint from './lib/Endpoint'
+
 
 var http = servers.http()
 var io   = servers.socketio(http)
@@ -31,11 +33,11 @@ flyd.on(socket =>
 , connections(io))
 
 
-var io_client = client()
+var client_endp = Endpoint(client())
 
-io_client.emit('request', { a: 'b' })
+client_endp.socket.emit('request', { a: 'b' })
 
-io_client.on('done', data =>
+client_endp.socket.on('done', data =>
 {
 	console.log('done')
 	console.log(data)
@@ -43,12 +45,12 @@ io_client.on('done', data =>
 	process.exit()
 })
 
-io_client.on('connect_error', error =>
+client_endp.socket.on('connect_error', error =>
 {
 	console.log(error)
 })
 
-io_client.on('reconnect_attempt', reconnect =>
+client_endp.socket.on('reconnect_attempt', reconnect =>
 {
 	console.log(reconnect)
 })
