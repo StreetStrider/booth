@@ -14,4 +14,13 @@ describe('ns-booth', () =>
 		expect(ns_booth('a/b')).eq('@booth/a/b')
 		expect(ns_booth('a-b')).eq('@booth/a-b')
 	})
+
+	it('works chunked', () =>
+	{
+		expect(ns_booth()).eq('@booth/')
+		expect(ns_booth('a', 'b', 'c')).eq('@booth/a/b/c')
+		expect(ns_booth('A', 'a')).eq('@booth/A/a')
+		expect(ns_booth('a/b', 'c')).eq('@booth/a/b/c')
+		expect(ns_booth('a-b', 'c')).eq('@booth/a-b/c')
+	})
 })
