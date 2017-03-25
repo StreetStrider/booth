@@ -10,6 +10,8 @@
 
   "dependencies":
   {
+    "bluebird":
+      "3.5"
   },
 
   "scripts":
