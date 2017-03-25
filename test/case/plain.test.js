@@ -10,14 +10,15 @@ import Endpoint from '../../lib/Endpoint'
 
 describe('plain socket.io instance', () =>
 {
-	var http = servers.http()
+	var port = 9000
+	var http = servers.http(port)
 	var io   = servers.socketio(http)
 
 	it('works', () =>
 	{
 		var rs
 
-		var client_endp = Endpoint(client())
+		var client_endp = Endpoint(client(port))
 
 		client_endp.socket.emit('request', { a: 'b', n: 1 })
 
