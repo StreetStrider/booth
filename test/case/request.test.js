@@ -67,5 +67,12 @@ describe('Endpoint#request', () =>
 			new Promise($rs => { rs1 = $rs }),
 			new Promise($rs => { rs2 = $rs }),
 		])
+		.then(() =>
+		{
+			return new Promise(rs =>
+			{
+				io.close(rs)
+			})
+		})
 	})
 })
