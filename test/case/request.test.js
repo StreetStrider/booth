@@ -5,8 +5,8 @@ import { expect } from 'chai'
 import * as servers from '../../lib/servers'
 import client from  '../../lib/socketio-client'
 
-import Booth from '../../lib/Booth'
-import Endpoint from '../../lib/Endpoint'
+import Booth from '../../Booth'
+import Endpoint from '../../Endpoint'
 
 describe('Endpoint#request', () =>
 {

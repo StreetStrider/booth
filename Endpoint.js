@@ -43,10 +43,10 @@
 import Promise from 'bluebird'
 var method = Promise.method
 
-import Seq from './seq'
-import  ns from './ns-booth'
+import Seq from './lib/seq'
+import  ns from './lib/ns-booth'
 
-import keys from './keys'
+import keys from './lib/keys'
 
 var timeout = 60 * 1000
 
