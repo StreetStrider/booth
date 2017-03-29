@@ -11,8 +11,7 @@ import Endpoint from '../../lib/Endpoint'
 describe('plain socket.io instance', () =>
 {
 	var port = 9000
-	var http = servers.http(port)
-	var io   = servers.socketio(http)
+	var io = servers.socketio(servers.http(port))
 
 	it('works', () =>
 	{
