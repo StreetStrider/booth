@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 
-import Seq from '../../lib/id/seq'
+import Seq from '../../lib/seq'
 
 describe('Seq', () =>
 {
