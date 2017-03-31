@@ -24,7 +24,7 @@
 
 ; type Booth$Endpoint$Realtime =
 {
-	(name: string): any, // here realtime
+	<T>(name: string): Stream<T>,
 	register (name: string): any, // TODO connect realtime
 }
 
@@ -42,6 +42,8 @@
 
 import Promise from 'bluebird'
 var method = Promise.method
+
+import most from 'most'
 
 import Seq from './lib/seq'
 import  ns from './lib/ns-booth'
@@ -128,8 +130,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	//
 	endpoint.realtime = (name) =>
 	{
-		console.log(name)
-		return 'most-stream'
+		return most.fromPromise(ns(keys.realtime, name), socket)
 	}
 
 	endpoint.realtime.register = (name) =>
