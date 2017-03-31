@@ -2,6 +2,7 @@
 /* global Booth$Socket */
 /* global $Promisable */
 /* global Bluebird$Promise */
+/* global Stream */
 
 ; type Booth$Endpoint$Request$Handler = (data: any) => $Promisable<any>
 
