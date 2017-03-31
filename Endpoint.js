@@ -24,8 +24,9 @@
 
 ; type Booth$Endpoint$Realtime =
 {
-	<T>(name: string): Stream<T>,
-	register (name: string): any, // TODO connect realtime
+	<T> (name: string): Stream<T>,
+	dispatch (name: string, data: any): void,
+	register<T> (name: string, stream: Stream<T>): void,
 }
 
 ; export type Booth$Endpoint =
@@ -133,10 +134,14 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		return most.fromPromise(ns(keys.realtime, name), socket)
 	}
 
+	endpoint.realtime.dispatch = (name, data) =>
+	{
+		socket.emit(ns(keys.realtime, name), data)
+	}
+
 	endpoint.realtime.register = (name) =>
 	{
-		console.log(name)
-		return 'most-stream push?'
+		// TODO
 	}
 
 	// endpoint.realtime.duplex?
