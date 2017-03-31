@@ -140,9 +140,12 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		socket.emit(ns(keys.realtime, name), data)
 	}
 
-	endpoint.realtime.register = (name) =>
+	endpoint.realtime.register = (name, stream) =>
 	{
-		// TODO
+		stream.observe(data =>
+		{
+			endpoint.realtime.dispatch(name, data)
+		})
 	}
 
 	// endpoint.realtime.duplex?
