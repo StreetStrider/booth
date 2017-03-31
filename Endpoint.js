@@ -25,9 +25,9 @@
 
 ; type Booth$Endpoint$Realtime =
 {
-	<T> (name: string): Stream<T>,
+	(name: string): Stream<any>,
 	dispatch (name: string, data: any): void,
-	register<T> (name: string, stream: Stream<T>): void,
+	register (name: string, stream: Stream<any>): void,
 }
 
 ; export type Booth$Endpoint =
