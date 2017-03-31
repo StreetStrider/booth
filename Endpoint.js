@@ -54,6 +54,9 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
 	var endpoint = {}
 
+	// TODO maybe use id for Endpoint instance
+	// to prevent interference
+
 	endpoint.socket = socket
 
 	endpoint.release = () =>
