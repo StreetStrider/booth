@@ -132,7 +132,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	//
 	endpoint.realtime = (name) =>
 	{
-		return most.fromPromise(ns(keys.realtime, name), socket)
+		return most.fromEvent(ns(keys.realtime, name), socket)
 	}
 
 	endpoint.realtime.dispatch = (name, data) =>
