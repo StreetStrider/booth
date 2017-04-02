@@ -16,11 +16,10 @@ describe('Endpoint#request', () =>
 	it('works', () =>
 	{
 		var r1
-		var r2
-		var r3
 
 		var rs1
 		var rs2
+		var rs3
 
 		var client_endp = Endpoint(client(port))
 
@@ -32,15 +31,17 @@ describe('Endpoint#request', () =>
 
 		Booth(io, endp =>
 		{
-			r2 = endp.request.register('ask-server', data =>
+			endp.request.register('ask-server', data =>
 			{
 				expect(data).deep.eq({ key: 'client' })
 
-				r3 = endp.request('ask-client', { key: 'server' })
+				endp.request('ask-client', { key: 'server' })
 				// eslint-disable-next-line max-nested-callbacks
 				.then(data =>
 				{
 					expect(data).deep.eq({ key_r: 'client' })
+
+					rs3()
 				})
 
 				rs1()
@@ -61,10 +62,9 @@ describe('Endpoint#request', () =>
 		return Promise.all(
 		[
 			r1,
-			r2,
-			r3,
 			new Promise($rs => { rs1 = $rs }),
 			new Promise($rs => { rs2 = $rs }),
+			new Promise($rs => { rs3 = $rs }),
 		])
 		.then(() =>
 		{
