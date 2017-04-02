@@ -69,6 +69,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		$request_handlers = {}
 		socket.removeAllListeners(ns(keys.request))
 		socket.removeAllListeners(ns(keys.request_return))
+		socket.removeAllListeners(ns(keys.realtime))
 	}
 
 	//
