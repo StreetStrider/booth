@@ -17,6 +17,15 @@
 
   "main": "Booth",
 
+  "files":
+  [
+    "Booth.js",
+    "Endpoint.js",
+    "lib",
+    "dist",
+    "flow-typed"
+  ],
+
   "peerDependencies":
   {
     "socket.io":
