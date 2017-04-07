@@ -80,3 +80,6 @@ var feed_client = most.from([ 5, 4, 3, 2, 1 ])
 
 client_endpoint.realtime.register('from-client', feed_client)
 ```
+
+## license
+ISC, copyright © 2017, Strider.
