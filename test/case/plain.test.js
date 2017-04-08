@@ -21,8 +21,10 @@ describe('plain socket.io instance', () =>
 
 		client_endp.socket.emit('request', { a: 'b', n: 1 })
 
-		Booth(io, (endp, socket) =>
+		Booth(io, endpoint =>
 		{
+			var socket = endpoint.socket
+
 			socket.on('request', data =>
 			{
 				expect(data).deep.eq({ a: 'b', n: 1 })

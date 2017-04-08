@@ -1,13 +1,11 @@
 /* @flow */
-/* global Booth$Socket */
 /* global Booth$Socketio */
 
 import type { Booth$Endpoint } from './Endpoint'
 
 export type Booth$Constructor =
 (
-	endpoint: Booth$Endpoint,
-	socket:   Booth$Socket
+	endpoint: Booth$Endpoint
 )
 => void;
 
@@ -38,7 +36,7 @@ export default function Booth
 
 		socket.once('disconnect', endpoint.release)
 
-		make(endpoint, socket)
+		make(endpoint)
 	})
 
 	return booth
