@@ -8,13 +8,13 @@
 ```js
 Booth(socket_io, endpoint =>
 {
-	// register request handler (client will do requests)
+	/* register request handler (client will do requests) */
 	endpoint.request.register('ask-server', data =>
 	{
-		return { some: 'data' } // can be Promise
+		return { some: 'data' } /* can be Promise */
 	})
 
-	// request client (client should `register`)
+	/* request client (client should `register`) */
 	endpoint.request('ask-client', { key: 'server' })
 	.then(data =>
 	{
@@ -27,7 +27,7 @@ Booth(socket_io, endpoint =>
 ```js
 var client_endpoint = Endpoint(socket_io_client)
 
-// API is symmetric with servers' one
+/* API is identical to servers' */
 client_endpoint.request('ask-server', { key: 'client' })
 .then(data =>
 {
@@ -52,10 +52,10 @@ Booth(socket_io, endpoint =>
 {
 	var feed = most.from([ 1, 2, 3, 4, 5 ])
 
-	// register realtime (push to client)
+	/* register realtime (push to client) */
 	endp.realtime.register('from-server', feed)
 
-	// take realtime feed from client
+	/* take realtime feed from client */
 	endpoint.realtime('from-client')
 	/* from here `most` API is available: */
 	.observe(data =>
@@ -69,7 +69,7 @@ Booth(socket_io, endpoint =>
 ```js
 var client_endpoint = Endpoint(socket_io_client)
 
-// API is symmetric with servers' one
+/* API is identical to servers' */
 client_endpoint.realtime('from-server')
 .observe(data =>
 {
