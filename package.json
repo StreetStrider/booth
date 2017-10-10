@@ -23,15 +23,13 @@
     "flow-typed"
   ],
 
-  "peerDependencies": { "socket.io": "2" },
-
-  "dependencies":
+  "peerDependencies":
   {
-    "bluebird":
-      "3.5",
+    "socket.io":
+      "2",
 
-    "most":
-      "1.2"
+    "flyd":
+      "0.2"
   },
 
   "scripts":
@@ -61,6 +59,15 @@
       "npm": [ "Library" ],
       "dev": [ "Library/Dev" ]
     }
+  },
+
+  "dependencies":
+  {
+    "bluebird":
+      "3.5",
+
+    "flyd":
+      "0.2"
   },
 
   "devDependencies":

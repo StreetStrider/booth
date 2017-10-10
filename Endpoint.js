@@ -2,9 +2,10 @@
 /* global Booth$Socket */
 /* global $Promisable */
 /* global Bluebird$Promise */
-/* global Stream */
+/* global flyd$Stream */
 
 ; type Booth$Endpoint$Request$Handler = (data: any) => $Promisable<any>
+
 
 ; type Booth$Endpoint$Request =
 {
@@ -23,12 +24,15 @@
 }
 
 
+; export type Booth$Stream = flyd$Stream<any>
+
 ; type Booth$Endpoint$Realtime =
 {
-	(name: string): Stream<any>,
+	(name: string): Booth$Stream,
 	dispatch (name: string, data: any): void,
-	register (name: string, stream: Stream<any>): void,
+	register (name: string, stream: Booth$Stream): void,
 }
+
 
 ; export type Booth$Endpoint =
 {
@@ -45,7 +49,9 @@
 import Promise from 'bluebird'
 var method = Promise.method
 
-import most from 'most'
+import flyd from 'flyd'
+var stream = flyd.stream
+var on = flyd.on
 
 import Seq from './lib/seq'
 import  ns from './lib/ns-booth'
@@ -144,7 +150,14 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	//
 	endpoint.realtime = (name) =>
 	{
-		return most.fromEvent(ns(keys.realtime, name), socket)
+		var s = stream()
+		var nsname = ns(keys.realtime, name)
+
+		socket.on(nsname, s)
+		on(end => end && socket.removeListener(nsname, s), s.end)
+		socket.once('disconnect', () => s.end(true))
+
+		return s
 	}
 
 	endpoint.realtime.dispatch = (name, data) =>
@@ -154,14 +167,8 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	endpoint.realtime.register = (name, stream) =>
 	{
-		stream.observe(data =>
-		{
-			endpoint.realtime.dispatch(name, data)
-		})
+		on(data => endpoint.realtime.dispatch(name, data), stream)
 	}
-
-	// endpoint.realtime.duplex?
-	// multiplexer?
 
 	return endpoint
 }

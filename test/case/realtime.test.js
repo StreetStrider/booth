@@ -4,7 +4,8 @@ import { expect } from 'chai'
 
 import Promise from 'bluebird'
 
-import most from 'most'
+import flyd from 'flyd'
+var stream = flyd.stream
 
 import * as servers from '../../lib/servers'
 import client from  '../../lib/socketio-client'
@@ -22,13 +23,10 @@ describe('Endpoint#realtime', () =>
 		var r1
 
 		var rs1
-		var rs2
 
 		var client_endp = Endpoint(client(port))
 
-		r1 = client_endp.realtime('from-server')
-		.take(5)
-		.reduce((memo, next) => memo.concat(next), [])
+		r1 = limit(client_endp.realtime('from-server'))
 		.then(data =>
 		{
 			expect(data).deep.eq([ 1, 2, 3, 4, 5 ])
@@ -36,30 +34,30 @@ describe('Endpoint#realtime', () =>
 
 		r1.then(() =>
 		{
-			var iter_client = most
-			.from([ 5, 4, 3, 2, 1, 0, -1, -2, -3, -4 ])
+			var s = stream()
 
-			client_endp.realtime.register('from-client', iter_client)
+			client_endp.realtime.register('from-client', s)
+
+			; [ 5, 4, 3, 2, 1, ':limit' ].forEach(s)
 		})
 
 		Booth(io, endp =>
 		{
-			var iter = most
-			.from([ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ])
-			.multicast()
+			var s = stream()
 
-			endp.realtime.register('from-server', iter)
+			endp.realtime.register('from-server', s)
 
-			iter.drain().then(rs1)
+			setTimeout(() =>
+			{
+				; [ 1, 2, 3, 4, 5, ':limit' ].forEach(s)
+			})
 
-			endp.realtime('from-client')
-			.take(5)
-			.reduce((memo, next) => memo.concat(next), [])
+			limit(endp.realtime('from-client'))
 			.then(data =>
 			{
 				expect(data).deep.eq([ 5, 4, 3, 2, 1 ])
 
-				rs2()
+				rs1()
 			})
 		})
 
@@ -67,7 +65,6 @@ describe('Endpoint#realtime', () =>
 		[
 			r1,
 			new Promise($rs => { rs1 = $rs }),
-			new Promise($rs => { rs2 = $rs }),
 		])
 		.then(() =>
 		{
@@ -78,3 +75,27 @@ describe('Endpoint#realtime', () =>
 		})
 	})
 })
+
+function limit (stream)
+{
+	return new Promise(rs =>
+	{
+		var buffer = []
+
+		stream.map(it =>
+		{
+			if (rs && (it !== ':limit'))
+			{
+				buffer.push(it)
+			}
+			else
+			{
+				if (rs)
+				{
+					rs(buffer)
+					rs = null
+				}
+			}
+		})
+	})
+}
