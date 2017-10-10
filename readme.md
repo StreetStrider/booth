@@ -42,26 +42,31 @@ client_endpoint.request.register('ask-client', data =>
 
 ## realtime
 
-[`most`](https://github.com/cujojs/most) is used as FRP.
+[`flyd`](https://github.com/paldepind/flyd) is used for streaming (FRP).
 
 *server*:
 ```js
-import most from 'most'
+import flyd from 'flyd'
 
 Booth(socket_io, endpoint =>
 {
-	var feed = most.from([ 1, 2, 3, 4, 5 ])
+	var feed = flyd.stream()
 
 	/* register realtime (push to client) */
 	endp.realtime.register('from-server', feed)
 
-	/* take realtime feed from client */
+	feed('next #1')
+	feed('next #2')
+	feed('next #3')
+
+	/* take another realtime feed from client */
 	endpoint.realtime('from-client')
-	/* from here `most` API is available: */
-	.observe(data =>
+	/* from here `flyd` API is available: */
+	.map(data =>
 	{
 		// …
 	})
+	/* you can use `flyd.on` instead of `stream.map` */
 })
 ```
 
@@ -71,14 +76,18 @@ var client_endpoint = Endpoint(socket_io_client)
 
 /* API is identical to servers' */
 client_endpoint.realtime('from-server')
-.observe(data =>
+.map(data =>
 {
 	// …
 })
 
-var feed_client = most.from([ 5, 4, 3, 2, 1 ])
+var feed_client = flyd.stream()
 
 client_endpoint.realtime.register('from-client', feed_client)
+
+feed_client('next #1')
+feed_client('next #2')
+feed_client('next #3')
 ```
 
 ## license
