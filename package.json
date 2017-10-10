@@ -10,10 +10,7 @@
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
 
-  "engines":
-  {
-    "node": ">=6"
-  },
+  "engines": { "node": ">=6" },
 
   "main": "Booth",
 
@@ -26,11 +23,7 @@
     "flow-typed"
   ],
 
-  "peerDependencies":
-  {
-    "socket.io":
-      "2"
-  },
+  "peerDependencies": { "socket.io": "2" },
 
   "dependencies":
   {
