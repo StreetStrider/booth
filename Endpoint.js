@@ -52,7 +52,7 @@ import  ns from './lib/ns-booth'
 
 import keys from './lib/keys'
 
-var timeout = 60 * 1000
+var timeout = 5 * 1000
 
 export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
