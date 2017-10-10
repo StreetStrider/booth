@@ -43,16 +43,22 @@
 
   "scripts":
   {
-    "test": "npm run st && npm run flow && npm run dev -- -1 && npm run mocha",
+    "start": "npm run dev",
 
-    "dev": "metalbox preset dev",
-    "npm": "metalbox preset npm",
+    "dev": "metalbox p dev",
+    "npm": "metalbox p npm",
 
-    "st": "eslint .",
+    "st":
+      "eslint .",
 
-    "flow": "flow check",
+    "flow":
+      "flow check",
 
-    "mocha": "mocha --recursive release/dev/dist/test/case/"
+    "unit":
+      "mocha --recursive release/dev/dist/test/case/",
+
+    "test":
+      "npm run st && npm run flow && npm run dev -- -1 && npm run unit"
   },
 
   "metalbox":
