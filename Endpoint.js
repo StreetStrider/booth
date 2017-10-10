@@ -58,8 +58,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
 	var endpoint = {}
 
-	// TODO maybe use id for Endpoint instance
-	// to prevent interference
+	var instance = Math.random().toString(36).slice(-5).toUpperCase()
 
 	endpoint.socket = socket
 
@@ -74,11 +73,11 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	//
 	var seq = Seq()
-	var $request_rs: Booth$Request$Rs<number> = {}
+	var $request_rs: Booth$Request$Rs<string> = {}
 
 	endpoint.request = (name, data) =>
 	{
-		var id: number = seq()
+		var id = `${ seq() }.${ instance }`
 
 		socket.emit(ns(keys.request), [ name, id, data ])
 
