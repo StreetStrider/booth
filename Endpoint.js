@@ -13,7 +13,7 @@
 	register (name: string, handler: Booth$Endpoint$Request$Handler): void,
 }
 
-; type Booth$Request$Rs<Key> =
+; type Booth$Request$Awaiters<Key> =
 {
 	[id: Key]: [ Function, Function ], // [ rj, rs ]
 }
@@ -70,7 +70,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	endpoint.release = () =>
 	{
-		$request_rs = {}
+		$request_awaiters = {}
 		$request_handlers = {}
 		socket.removeAllListeners(ns(keys.request))
 		socket.removeAllListeners(ns(keys.request_return))
@@ -79,7 +79,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	//
 	var seq = Seq()
-	var $request_rs: Booth$Request$Rs<string> = {}
+	var $request_awaiters: Booth$Request$Awaiters<string> = {}
 
 	endpoint.request = (name, data) =>
 	{
@@ -89,12 +89,12 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 		return new Promise((rs, rj) =>
 		{
-			$request_rs[id] = [ rj, rs ]
+			$request_awaiters[id] = [ rj, rs ]
 		})
 		.timeout(timeout)
 		.finally(() =>
 		{
-			delete $request_rs[id]
+			delete $request_awaiters[id]
 		})
 	}
 
@@ -137,11 +137,11 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		var [ state, id, data ] = tuple
 		if (typeof state !== 'number') return
 
-		if (id in $request_rs)
+		if (id in $request_awaiters)
 		{
 			if ((state === 0) || (state === 1))
 			{
-				$request_rs[id][state](data)
+				$request_awaiters[id][state](data)
 			}
 		}
 	})
