@@ -100,8 +100,14 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		$request_handlers[name] = method(handler)
 	}
 
-	socket.on(ns(keys.request), ([ name, id, data ]) =>
+	socket.on(ns(keys.request), (tuple) =>
 	{
+		if (! Array.isArray(tuple)) return
+		if (tuple.length < 3) return
+
+		var [ name, id, data ] = tuple
+		if (typeof name !== 'string') return
+
 		if (name in $request_handlers)
 		{
 			$request_handlers[name](data)
