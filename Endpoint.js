@@ -123,8 +123,14 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		}
 	})
 
-	socket.on(ns(keys.request_return), ([ state, id, data ]) =>
+	socket.on(ns(keys.request_return), (tuple) =>
 	{
+		if (! Array.isArray(tuple)) return
+		if (tuple.length < 3) return
+
+		var [ state, id, data ] = tuple
+		if (typeof state !== 'number') return
+
 		if (id in $request_rs)
 		{
 			if ((state === 0) || (state === 1))
