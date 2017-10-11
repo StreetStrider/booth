@@ -19,7 +19,7 @@
     "Booth.js",
     "Endpoint.js",
     "lib",
-    "dist",
+    "jsnext",
     "flow-typed"
   ],
 
@@ -46,7 +46,7 @@
       "flow check",
 
     "unit":
-      "mocha --recursive release/dev/dist/test/case/",
+      "mocha --recursive release/dev/test/case/",
 
     "test":
       "npm run st && npm run flow && npm run dev -- -1 && npm run unit"
@@ -56,8 +56,8 @@
   {
     "presets":
     {
-      "npm": [ "Library" ],
-      "dev": [ "Library/Dev" ]
+      "npm": [ "Library",     { "options": { "targets": "node-first" }} ],
+      "dev": [ "Library/Dev", { "options": { "targets": "node-first" }} ]
     }
   },
 
