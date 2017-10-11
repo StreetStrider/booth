@@ -56,6 +56,8 @@ import  ns from './lib/ns-booth'
 
 import keys from './lib/keys'
 
+import tup3 from './lib/tup3'
+
 var timeout = 5 * 1000
 
 export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
@@ -109,14 +111,9 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		handlers[name] = method(handler)
 	}
 
-	socket.on(ns(keys.request), (tuple) =>
+	socket.on(ns(keys.request),
+		tup3('string', (name: string, id: string, data: any) =>
 	{
-		if (! Array.isArray(tuple)) return
-		if (tuple.length < 3) return
-
-		var [ name, id, data ] = tuple
-		if (typeof name !== 'string') return
-
 		if (name in handlers)
 		{
 			handlers[name](data)
@@ -132,17 +129,11 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 				socket.emit(ns(keys.request_return), [ 0, id, resp ])
 			})
 		}
-	})
+	}))
 
-	// eslint-disable-next-line complexity
-	socket.on(ns(keys.request_return), (tuple) =>
+	socket.on(ns(keys.request_return),
+		tup3('number', (state: number, id: string, data: any) =>
 	{
-		if (! Array.isArray(tuple)) return
-		if (tuple.length < 3) return
-
-		var [ state, id, data ] = tuple
-		if (typeof state !== 'number') return
-
 		if (id in awaiters)
 		{
 			if ((state === 0) || (state === 1))
@@ -150,7 +141,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 				awaiters[id][state](data)
 			}
 		}
-	})
+	}))
 	/* - */
 
 
