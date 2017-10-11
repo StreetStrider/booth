@@ -87,7 +87,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	})
 
 
-	/* .request */
+	/* #request */
 	function request (name, data)
 	{
 		var id = `${ seq() }.${ instance }`
