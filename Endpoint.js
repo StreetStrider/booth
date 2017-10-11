@@ -129,6 +129,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		}
 	})
 
+	// eslint-disable-next-line complexity
 	socket.on(ns(keys.request_return), (tuple) =>
 	{
 		if (! Array.isArray(tuple)) return
