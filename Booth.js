@@ -25,11 +25,13 @@ var stream = flyd.stream
 
 import Endpoint from './Endpoint'
 
+var noop = () => {}
+
 
 export default function Booth
 (
 	socketio: Booth$Socketio,
-	make: Booth$Constructor
+	make: Booth$Constructor = noop
 )
 	: Booth$Booth
 {
