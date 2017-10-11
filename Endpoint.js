@@ -62,9 +62,12 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
 	var instance = Math.random().toString(36).slice(-5).toUpperCase()
 
-	var endpoint = {}
-
-	endpoint.socket = socket
+	var endpoint =
+	{
+		socket,
+		request,
+		realtime,
+	}
 
 	socket.once('disconnect', () =>
 	{
@@ -79,7 +82,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	var seq = Seq()
 	var $request_awaiters: Booth$Request$Awaiters<string> = {}
 
-	endpoint.request = (name, data) =>
+	function request (name, data)
 	{
 		var id = `${ seq() }.${ instance }`
 
@@ -98,7 +101,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	var $request_handlers: Booth$Request$Handlers = {}
 
-	endpoint.request.register = (name, handler) =>
+	request.register = (name, handler) =>
 	{
 		$request_handlers[name] = method(handler)
 	}
@@ -145,9 +148,8 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		}
 	})
 
-
-	//
-	endpoint.realtime = (name) =>
+	/* #realtime */
+	function realtime (name)
 	{
 		var s = stream()
 		var nsname = ns(keys.realtime, name)
@@ -159,12 +161,12 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		return s
 	}
 
-	endpoint.realtime.dispatch = (name, data) =>
+	realtime.dispatch = (name, data) =>
 	{
 		socket.emit(ns(keys.realtime, name), data)
 	}
 
-	endpoint.realtime.register = (name, stream) =>
+	realtime.register = (name, stream) =>
 	{
 		on(data => endpoint.realtime.dispatch(name, data), stream)
 	}
