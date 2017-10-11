@@ -36,8 +36,6 @@
 
 	request:  Booth$Endpoint$Request,
 	realtime: Booth$Endpoint$Realtime,
-
-	release: () => void,
 }
 
 ;

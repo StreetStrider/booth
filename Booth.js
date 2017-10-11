@@ -48,8 +48,6 @@ export default function Booth
 	{
 		var endpoint = Endpoint(socket)
 
-		socket.once('disconnect', endpoint.release)
-
 		make(endpoint)
 
 		clients(endpoint)

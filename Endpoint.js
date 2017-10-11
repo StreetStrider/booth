@@ -40,8 +40,6 @@
 
 	request:  Booth$Endpoint$Request,
 	realtime: Booth$Endpoint$Realtime,
-
-	release: () => void,
 }
 
 ;
@@ -62,20 +60,20 @@ var timeout = 5 * 1000
 
 export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
-	var endpoint = {}
-
 	var instance = Math.random().toString(36).slice(-5).toUpperCase()
+
+	var endpoint = {}
 
 	endpoint.socket = socket
 
-	endpoint.release = () =>
+	socket.once('disconnect', () =>
 	{
 		$request_awaiters = {}
 		$request_handlers = {}
 		socket.removeAllListeners(ns(keys.request))
 		socket.removeAllListeners(ns(keys.request_return))
 		socket.removeAllListeners(ns(keys.realtime))
-	}
+	})
 
 	//
 	var seq = Seq()
