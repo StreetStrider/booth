@@ -15,13 +15,17 @@ describe('plain socket.io instance', () =>
 
 	it('works', () =>
 	{
-		var rs
+		var rs1
+		var rs2
+
+		// eslint-disable-next-line max-statements-per-line
+		var p2 = new Promise($rs => { rs2 = $rs })
 
 		var client_endp = Endpoint(client(port))
 
 		client_endp.socket.emit('request', { a: 'b', n: 1 })
 
-		Booth(io, endpoint =>
+		var booth = Booth(io, endpoint =>
 		{
 			var socket = endpoint.socket
 
@@ -36,8 +40,13 @@ describe('plain socket.io instance', () =>
 
 			socket.on('done', () =>
 			{
-				rs()
+				rs1(socket)
 			})
+		})
+
+		booth.clients.map(endpoint =>
+		{
+			rs2(endpoint)
 		})
 
 		client_endp.socket.on('request-return', data =>
@@ -47,9 +56,14 @@ describe('plain socket.io instance', () =>
 			client_endp.socket.emit('done')
 		})
 
-		return new Promise($rs =>
+		// eslint-disable-next-line max-statements-per-line
+		return (new Promise($rs => { rs1 = $rs }))
+		.then(socket =>
 		{
-			rs = $rs
+			return p2.then(endpoint =>
+			{
+				expect(socket).eq(endpoint.socket)
+			})
 		})
 	})
 })
