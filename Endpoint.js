@@ -60,7 +60,13 @@ var timeout = 5 * 1000
 
 export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 {
+	var seq = Seq()
+
 	var instance = Math.random().toString(36).slice(-5).toUpperCase()
+
+	var awaiters: Booth$Request$Awaiters<string> = {}
+	var handlers: Booth$Request$Handlers         = {}
+
 
 	var endpoint =
 	{
@@ -69,19 +75,18 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		realtime,
 	}
 
+
 	socket.once('disconnect', () =>
 	{
-		$request_awaiters = {}
-		$request_handlers = {}
+		awaiters = {}
+		handlers = {}
 		socket.removeAllListeners(ns(keys.request))
 		socket.removeAllListeners(ns(keys.request_return))
 		socket.removeAllListeners(ns(keys.realtime))
 	})
 
-	//
-	var seq = Seq()
-	var $request_awaiters: Booth$Request$Awaiters<string> = {}
 
+	/* .request */
 	function request (name, data)
 	{
 		var id = `${ seq() }.${ instance }`
@@ -90,20 +95,18 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 		return new Promise((rs, rj) =>
 		{
-			$request_awaiters[id] = [ rj, rs ]
+			awaiters[id] = [ rj, rs ]
 		})
 		.timeout(timeout)
 		.finally(() =>
 		{
-			delete $request_awaiters[id]
+			delete awaiters[id]
 		})
 	}
 
-	var $request_handlers: Booth$Request$Handlers = {}
-
 	request.register = (name, handler) =>
 	{
-		$request_handlers[name] = method(handler)
+		handlers[name] = method(handler)
 	}
 
 	socket.on(ns(keys.request), (tuple) =>
@@ -114,9 +117,9 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		var [ name, id, data ] = tuple
 		if (typeof name !== 'string') return
 
-		if (name in $request_handlers)
+		if (name in handlers)
 		{
-			$request_handlers[name](data)
+			handlers[name](data)
 			.timeout(timeout)
 			.then(
 			resp =>
@@ -125,7 +128,8 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 			},
 			resp =>
 			{
-				socket.emit(ns(keys.request_return), [ 0, id, resp ]) // TODO resp?
+				/* TODO guard resp?: */
+				socket.emit(ns(keys.request_return), [ 0, id, resp ])
 			})
 		}
 	})
@@ -139,14 +143,16 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 		var [ state, id, data ] = tuple
 		if (typeof state !== 'number') return
 
-		if (id in $request_awaiters)
+		if (id in awaiters)
 		{
 			if ((state === 0) || (state === 1))
 			{
-				$request_awaiters[id][state](data)
+				awaiters[id][state](data)
 			}
 		}
 	})
+	/* - */
+
 
 	/* #realtime */
 	function realtime (name)
@@ -170,6 +176,7 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 	{
 		on(data => endpoint.realtime.dispatch(name, data), stream)
 	}
+	/* - */
 
 	return endpoint
 }
