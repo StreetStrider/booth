@@ -16,11 +16,12 @@
 
   "files":
   [
-    "Booth.js",
-    "Endpoint.js",
+    "*.js",
+    "*.js.flow",
     "lib",
     "jsnext",
-    "flow-typed"
+    "flow-typed",
+    "!.eslintrc.js"
   ],
 
   "peerDependencies":
