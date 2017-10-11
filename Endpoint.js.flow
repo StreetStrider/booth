@@ -1,0 +1,49 @@
+/* @flow */
+
+; type Booth$Endpoint$Request$Handler = (data: any) => $Promisable<any>
+
+
+; type Booth$Endpoint$Request =
+{
+	(name: string, data?: any): Bluebird$Promise<any>,
+	register (name: string, handler: Booth$Endpoint$Request$Handler): void,
+}
+
+; type Booth$Request$Awaiters<Key> =
+{
+	[id: Key]: [ Function, Function ], // [ rj, rs ]
+}
+
+; type Booth$Request$Handlers =
+{
+	[name: string]: (data: any) => Bluebird$Promise<any>,
+}
+
+
+; export type Booth$Stream = flyd$Stream<any>
+
+; type Booth$Endpoint$Realtime =
+{
+	(name: string): Booth$Stream,
+	dispatch (name: string, data: any): void,
+	register (name: string, stream: Booth$Stream): void,
+}
+
+
+; export type Booth$Endpoint =
+{
+	socket:   Booth$Socket,
+
+	request:  Booth$Endpoint$Request,
+	realtime: Booth$Endpoint$Realtime,
+
+	release: () => void,
+}
+
+;
+
+declare export default function Endpoint
+(
+	socket: Booth$Socket
+)
+: Booth$Endpoint

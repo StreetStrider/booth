@@ -1,0 +1,24 @@
+/* @flow */
+
+import type { Booth$Endpoint } from './Endpoint'
+
+export type Booth$Constructor =
+(
+	endpoint: Booth$Endpoint,
+)
+=> void;
+
+export type Booth$Clients = flyd$Stream<Booth$Endpoint>;
+
+export type Booth$Booth =
+{
+	socketio: Booth$Socketio,
+	clients:  Booth$Clients,
+};
+
+declare export default function Booth
+(
+	socketio: Booth$Socketio,
+	make?: Booth$Constructor
+)
+: Booth$Booth

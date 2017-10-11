@@ -10,7 +10,7 @@ export type Booth$Constructor =
 )
 => void;
 
-export type Booth$Clients = flyd$Stream<Booth$Endpoint>
+export type Booth$Clients = flyd$Stream<Booth$Endpoint>;
 
 export type Booth$Booth =
 {
