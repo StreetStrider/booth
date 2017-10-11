@@ -51,11 +51,10 @@ import flyd from 'flyd'
 var stream = flyd.stream
 var on = flyd.on
 
-import Seq from './lib/seq'
-import  ns from './lib/ns-booth'
-
+import Seq  from './lib/seq'
+import hashmap from './lib/hashmap'
+import ns   from './lib/ns-booth'
 import keys from './lib/keys'
-
 import tup3 from './lib/tup3'
 
 var timeout = 5 * 1000
@@ -80,8 +79,8 @@ export default function Endpoint (socket: Booth$Socket): Booth$Endpoint
 
 	socket.once('disconnect', () =>
 	{
-		awaiters = {}
-		handlers = {}
+		awaiters = hashmap()
+		handlers = hashmap()
 		socket.removeAllListeners(ns(keys.request))
 		socket.removeAllListeners(ns(keys.request_return))
 		socket.removeAllListeners(ns(keys.realtime))
