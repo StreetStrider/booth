@@ -28,6 +28,8 @@
 
   "dependencies":
   {
+    "ws":
+      "6"
   },
 
   "devDependencies":
