@@ -1,4 +1,6 @@
 
+import Emitter from 'nanoevents'
+
 export default function Endpoint (ws)
 {
 	var _ = { ws }
@@ -8,14 +10,24 @@ export default function Endpoint (ws)
 		ws.send('@' + kind + ':' + data)
 	}
 
-	var h = []
+	var emitter = new Emitter
 
-	_.recv = function recv (fn)
+	_.on = function on (...args)
 	{
-		h.push(fn)
-	}
+		if (args.length === 1)
+		{
+			let map = args[0]
 
-	_.close = () => ws.close()
+			for (let key in map)
+			{
+				emitter.on(key, map[key])
+			}
+		}
+		else if (args.length === 2)
+		{
+			emitter.on(args[0], args[1])
+		}
+	}
 
 	ws.on('message', msg =>
 	{
@@ -28,8 +40,10 @@ export default function Endpoint (ws)
 
 		if (kind.charAt(0) === '@') return
 
-		h.forEach(fn => fn(kind, data))
+		emitter.emit(kind, data)
 	})
+
+	_.close = () => ws.close()
 
 	return _
 }
