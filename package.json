@@ -10,6 +10,8 @@
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
 
+  "esm": true,
+
   "engines": { "node": ">=8" },
 
   "main": "index",
@@ -24,12 +26,16 @@
 
   "scripts":
   {
+    "start": "node -r esm ."
   },
 
   "dependencies":
   {
     "ws":
-      "6"
+      "6",
+
+    "esm":
+      "3"
   },
 
   "devDependencies":
