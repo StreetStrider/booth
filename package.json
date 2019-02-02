@@ -14,8 +14,6 @@
 
   "engines": { "node": ">=8" },
 
-  "main": "index",
-
   "files":
   [
   ],
@@ -26,7 +24,7 @@
 
   "scripts":
   {
-    "start": "node -r esm ."
+    "test": "node -r esm test"
   },
 
   "dependencies":
