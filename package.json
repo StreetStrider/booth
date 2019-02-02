@@ -1,0 +1,36 @@
+{
+     "name": "booth",
+  "version": "0.0.0",
+  "license": "ISC",
+
+  "author": "Strider <strange.transistor@gmail.com>",
+  "description": "Booth provides request-response and event stream over websocket",
+
+  "homepage":            "https://github.com/StreetStrider/booth",
+  "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
+  "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
+
+  "engines": { "node": ">=8" },
+
+  "main": "index",
+
+  "files":
+  [
+  ],
+
+  "peerDependencies":
+  {
+  },
+
+  "scripts":
+  {
+  },
+
+  "dependencies":
+  {
+  },
+
+  "devDependencies":
+  {
+  }
+}
