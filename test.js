@@ -1,38 +1,33 @@
 
-import ws from 'ws'
+import Client, { Server } from 'ws'
 
-var Client = ws
-var Server = ws.Server
-
+import { Booth } from '.'
 import { Endpoint } from '.'
 
 
-var wss = new Server({ port: 9000 })
+//
+var wss = new Booth(new Server({ port: 9000 }), Protocol)
 
-wss.on('connection', (ws) =>
+function Protocol (endp, booth)
 {
-	var endp = Endpoint(ws)
-
-	endp.on('hello', data =>
+	endp.on(
 	{
-		console.log('←', data)
-
-		defer(() =>
+		hello (data)
 		{
-			send('hello', data.toUpperCase() + '_' + data.toLowerCase())
-		})
+			console.log('←', data)
+
+			data = data.toUpperCase() + '_' + data.toLowerCase()
+
+			endp.send('hello', data)
+			console.log('→', data)
+
+			booth.close()
+		}
 	})
-
-	function send (kind, data)
-	{
-		endp.send(kind, data)
-		console.log('→', data)
-	}
-
-	endp.ws.on('close', () => wss.close())
-})
+}
 
 
+//
 var endp = Endpoint(new Client('ws://localhost:9000'))
 
 endp.ws.on('open', () =>

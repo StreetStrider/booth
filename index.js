@@ -1,4 +1,3 @@
 
-import Endpoint from './Endpoint'
-
-export { Endpoint }
+export { default as Booth }    from './Booth'
+export { default as Endpoint } from './Endpoint'
