@@ -3,6 +3,8 @@ import Endpoint from './Endpoint'
 
 export default function Booth (wss, protocol)
 {
+	wss = Wss(wss)
+
 	var booth = { wss }
 
 	wss.on('connection', (ws) =>
@@ -26,4 +28,22 @@ export default function Booth (wss, protocol)
 	booth.close = () => wss.close()
 
 	return booth
+}
+
+
+import { Server } from 'ws'
+
+function Wss (wss)
+{
+	if (is_plain(wss))
+	{
+		return new Server(wss)
+	}
+
+	return wss
+}
+
+function is_plain (object)
+{
+	return (Object.getPrototypeOf(object) === Object.prototype)
 }

@@ -1,12 +1,10 @@
 
-import { Server } from 'ws'
-
 import { Booth } from '.'
 import { Endpoint } from '.'
 
 
 //
-var wss = new Booth(new Server({ port: 9000 }), Protocol)
+var wss = new Booth({ port: 9000 }, Protocol)
 
 function Protocol (endp)
 {
