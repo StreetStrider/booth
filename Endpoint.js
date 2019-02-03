@@ -1,12 +1,9 @@
 
 import Emitter from 'nanoevents'
 
-export default function Endpoint (ws, options)
+export default function Endpoint (ws, booth)
 {
 	ws = Ws(ws)
-
-	options || (options = {})
-	var { booth = null } = options
 
 	var endp = { ws, booth }
 

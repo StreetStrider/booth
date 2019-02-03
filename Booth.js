@@ -9,7 +9,7 @@ export default function Booth (wss, protocol)
 
 	wss.on('connection', (ws) =>
 	{
-		var endp = Endpoint(ws, { booth })
+		var endp = Endpoint(ws, booth)
 
 		if (! protocol)
 		{
