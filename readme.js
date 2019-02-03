@@ -2,8 +2,9 @@
 import { Booth } from '.'
 import { Endpoint } from '.'
 
-
-//
+/*
+ * Booth(wss options, protocol)
+ */
 Booth({ port: 9000 },
 {
 	hello (data, endp)
@@ -18,7 +19,11 @@ Booth({ port: 9000 },
 })
 
 
-//
+/*
+ * Endpoint(ws options)
+ * .on(event, handler)
+ * .on({ event: handler })
+ */
 Endpoint('ws://localhost:9000')
 .on(
 {
