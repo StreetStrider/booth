@@ -1,5 +1,5 @@
 
-import Client, { Server } from 'ws'
+import { Server } from 'ws'
 
 import { Booth } from '.'
 import { Endpoint } from '.'
@@ -26,7 +26,7 @@ function Protocol (endp)
 
 
 //
-Endpoint(new Client('ws://localhost:9000'))
+Endpoint('ws://localhost:9000')
 .on(
 {
 	'@open' (endp)

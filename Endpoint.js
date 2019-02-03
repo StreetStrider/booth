@@ -3,6 +3,8 @@ import Emitter from 'nanoevents'
 
 export default function Endpoint (ws, options)
 {
+	ws = Ws(ws)
+
 	options || (options = {})
 	var { booth = null } = options
 
@@ -53,4 +55,17 @@ export default function Endpoint (ws, options)
 	ws.on('close', () => emitter.emit('@close', endp))
 
 	return endp
+}
+
+
+import Client from 'ws'
+
+function Ws (ws)
+{
+	if (typeof ws === 'string')
+	{
+		return new Client(ws)
+	}
+
+	return ws
 }
