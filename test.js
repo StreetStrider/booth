@@ -4,23 +4,18 @@ import { Endpoint } from '.'
 
 
 //
-Booth({ port: 9000 }, Protocol)
-
-function Protocol (endp)
+Booth({ port: 9000 },
 {
-	endp.on(
+	hello (data, endp)
 	{
-		hello (data)
-		{
-			console.log('←', data)
+		console.log('←', data)
 
-			data = data.toUpperCase() + '_' + data.toLowerCase()
+		data = data.toUpperCase() + '_' + data.toLowerCase()
 
-			endp.send('hello', data)
-			console.log('→', data)
-		},
-	})
-}
+		endp.send('hello', data)
+		console.log('→', data)
+	},
+})
 
 
 //
