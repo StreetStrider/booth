@@ -1,4 +1,3 @@
-
 import { Booth } from '.'
 import { Endpoint } from '.'
 
@@ -42,3 +41,8 @@ Endpoint('ws://localhost:9000')
 		process.exit()
 	},
 })
+
+/*
+	ISC.
+	Copyright © 2019, Strider.
+*/
