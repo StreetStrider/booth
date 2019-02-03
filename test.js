@@ -30,15 +30,14 @@ function Protocol (endp, booth)
 
 
 //
-var endp = Endpoint(new Client('ws://localhost:9000'))
-
-endp.on(
+Endpoint(new Client('ws://localhost:9000'))
+.on(
 {
-	'@open' ()
+	'@open' (endp)
 	{
 		endp.send('hello', 'Hello, World!')
 	},
-	hello (data)
+	hello (data, endp)
 	{
 		console.log('*', data)
 

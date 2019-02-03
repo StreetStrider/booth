@@ -40,14 +40,14 @@ export default function Endpoint (ws)
 
 		if (kind.charAt(0) === '@') return
 
-		emitter.emit(kind, data)
+		emitter.emit(kind, data, _)
 	})
 
 	_.close = () => ws.close()
 
-	ws.on('open', () => emitter.emit('@open'))
+	ws.on('open', () => emitter.emit('@open', _))
 
-	ws.on('close', () => emitter.emit('@close'))
+	ws.on('close', () => emitter.emit('@close', _))
 
 	return _
 }
