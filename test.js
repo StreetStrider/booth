@@ -4,7 +4,7 @@ import { Endpoint } from '.'
 
 
 //
-var wss = new Booth({ port: 9000 }, Protocol)
+Booth({ port: 9000 }, Protocol)
 
 function Protocol (endp)
 {
@@ -37,7 +37,7 @@ Endpoint('ws://localhost:9000')
 
 		endp.close()
 	},
-	'@close' (endp)
+	'@close' (/* endp */)
 	{
 		process.exit()
 	},
