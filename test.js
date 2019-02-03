@@ -8,7 +8,7 @@ import { Endpoint } from '.'
 //
 var wss = new Booth(new Server({ port: 9000 }), Protocol)
 
-function Protocol (endp, booth)
+function Protocol (endp)
 {
 	endp.on(
 	{

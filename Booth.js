@@ -3,11 +3,11 @@ import Endpoint from './Endpoint'
 
 export default function Booth (wss, protocol)
 {
-	var _ = { wss }
+	var booth = { wss }
 
 	wss.on('connection', (ws) =>
 	{
-		var endp = Endpoint(ws)
+		var endp = Endpoint(ws, { booth })
 
 		if (! protocol)
 		{
@@ -15,7 +15,7 @@ export default function Booth (wss, protocol)
 		}
 		else if (typeof protocol === 'function')
 		{
-			protocol(endp, _)
+			protocol(endp)
 		}
 		else if (typeof protocol === 'object')
 		{
@@ -23,7 +23,7 @@ export default function Booth (wss, protocol)
 		}
 	})
 
-	_.close = () => wss.close()
+	booth.close = () => wss.close()
 
-	return _
+	return booth
 }

@@ -1,18 +1,21 @@
 
 import Emitter from 'nanoevents'
 
-export default function Endpoint (ws)
+export default function Endpoint (ws, options)
 {
-	var _ = { ws }
+	options || (options = {})
+	var { booth = null } = options
 
-	_.send = function send (kind, data)
+	var endp = { ws, booth }
+
+	endp.send = function send (kind, data)
 	{
 		ws.send('@' + kind + ':' + data)
 	}
 
 	var emitter = new Emitter
 
-	_.on = function on (...args)
+	endp.on = function on (...args)
 	{
 		if (args.length === 1)
 		{
@@ -40,14 +43,14 @@ export default function Endpoint (ws)
 
 		if (kind.charAt(0) === '@') return
 
-		emitter.emit(kind, data, _)
+		emitter.emit(kind, data, endp)
 	})
 
-	_.close = () => ws.close()
+	endp.close = () => ws.close()
 
-	ws.on('open', () => emitter.emit('@open', _))
+	ws.on('open', () => emitter.emit('@open', endp))
 
-	ws.on('close', () => emitter.emit('@close', _))
+	ws.on('close', () => emitter.emit('@close', endp))
 
-	return _
+	return endp
 }
