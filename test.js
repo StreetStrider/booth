@@ -20,7 +20,9 @@ function Protocol (endp, booth)
 
 			endp.send('hello', data)
 			console.log('→', data)
-
+		},
+		'@close' ()
+		{
 			booth.close()
 		}
 	})
@@ -30,19 +32,16 @@ function Protocol (endp, booth)
 //
 var endp = Endpoint(new Client('ws://localhost:9000'))
 
-endp.ws.on('open', () =>
+endp.on(
 {
-	endp.send('hello', 'Hello, World!')
+	'@open' ()
+	{
+		endp.send('hello', 'Hello, World!')
+	},
+	hello (data)
+	{
+		console.log('*', data)
+
+		endp.close()
+	}
 })
-endp.on('hello', data =>
-{
-	console.log('*', data)
-
-	endp.close()
-})
-
-
-function defer (fn)
-{
-	setTimeout(fn, 500)
-}

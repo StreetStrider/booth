@@ -45,5 +45,9 @@ export default function Endpoint (ws)
 
 	_.close = () => ws.close()
 
+	ws.on('open', () => emitter.emit('@open'))
+
+	ws.on('close', () => emitter.emit('@close'))
+
 	return _
 }
