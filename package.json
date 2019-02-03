@@ -24,6 +24,7 @@
 
   "scripts":
   {
+    "st": "eslint *.js",
     "test": "node -r esm test"
   },
 
@@ -41,5 +42,10 @@
 
   "devDependencies":
   {
+    "eslint":
+      "5",
+
+    "js-outlander":
+      "StrangeTransistor/js-outlander#2.5.0"
   }
 }
