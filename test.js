@@ -21,10 +21,6 @@ function Protocol (endp, booth)
 			endp.send('hello', data)
 			console.log('→', data)
 		},
-		'@close' ()
-		{
-			booth.close()
-		}
 	})
 }
 
@@ -42,5 +38,9 @@ Endpoint(new Client('ws://localhost:9000'))
 		console.log('*', data)
 
 		endp.close()
-	}
+	},
+	'@close' (endp)
+	{
+		process.exit()
+	},
 })
