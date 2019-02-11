@@ -47,9 +47,8 @@ export default function Endpoint (ws, booth)
 
 	endp.close = () => ws.close()
 
-	ws.on('open', () => emitter.emit('@open', endp))
-
-	ws.on('close', () => emitter.emit('@close', endp))
+	ws.on('open',  () => emitter.emit('@open',  void 0, endp))
+	ws.on('close', () => emitter.emit('@close', void 0, endp))
 	ws.on('close', () =>
 	{
 		endp.ws = null

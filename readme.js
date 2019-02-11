@@ -26,7 +26,7 @@ Booth({ port: 9000 },
 Endpoint('ws://localhost:9000')
 .on(
 {
-	'@open' (endp)
+	'@open' (_, endp)
 	{
 		endp.send('hello', 'Hello, World!')
 	},
@@ -36,7 +36,7 @@ Endpoint('ws://localhost:9000')
 
 		endp.close()
 	},
-	'@close' (/* endp */)
+	'@close' (/* _, endp */)
 	{
 		process.exit()
 	},
