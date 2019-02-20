@@ -29,6 +29,8 @@ export default function Endpoint (ws, booth)
 		{
 			emitter.on(args[0], args[1])
 		}
+
+		return endp
 	}
 
 	ws.addEventListener('message', ({ data: msg }) =>
