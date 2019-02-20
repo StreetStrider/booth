@@ -37,6 +37,9 @@
     "ws":
       "6",
 
+    "isomorphic-ws":
+      "4",
+
     "nanoevents":
       "1",
 
