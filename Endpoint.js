@@ -31,7 +31,7 @@ export default function Endpoint (ws, booth)
 		}
 	}
 
-	ws.on('message', msg =>
+	ws.addEventListener('message', ({ data: msg }) =>
 	{
 		if (typeof msg    !== 'string') return
 		if (msg.charAt(0) !== '@') return
@@ -47,9 +47,9 @@ export default function Endpoint (ws, booth)
 
 	endp.close = () => ws.close()
 
-	ws.on('open',  () => emitter.emit('@open',  void 0, endp))
-	ws.on('close', () => emitter.emit('@close', void 0, endp))
-	ws.on('close', () =>
+	ws.addEventListener('open',  () => emitter.emit('@open',  void 0, endp))
+	ws.addEventListener('close', () => emitter.emit('@close', void 0, endp))
+	ws.addEventListener('close', () =>
 	{
 		endp.ws = null
 		endp.booth = null
