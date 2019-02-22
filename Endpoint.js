@@ -37,12 +37,13 @@ export default function Endpoint (ws, booth)
 	{
 		if (typeof msg    !== 'string') return
 		if (msg.charAt(0) !== '@') return
+		if (msg.charAt(1) === '@') return
 
-		var [ kind, data ] = msg.split(':', 2)
+		var colon = msg.indexOf(':')
+		if (colon === -1) return
 
-		kind = kind.slice(1)
-
-		if (kind.charAt(0) === '@') return
+		var kind = msg.slice(1, colon)
+		var data = msg.slice(colon + 1)
 
 		emitter.emit(kind, data, endp)
 	})
