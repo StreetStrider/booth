@@ -28,9 +28,10 @@
 
   "scripts":
   {
+    "start": "node -r esm readme",
+
     "st": "eslint *.js",
-    "readme": "node -r esm readme",
-    "test": "npm run st && npm run readme"
+    "test": "npm run st && npm start"
   },
 
   "dependencies":
