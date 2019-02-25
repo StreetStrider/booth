@@ -1,31 +1,33 @@
 
+import Events from './Events'
 import Endpoint from './Endpoint'
 
-export default function Booth (wss, protocol)
+export default function Booth (wss)
 {
 	wss = Wss(wss)
 
 	var booth = { wss }
 
+	var events = booth.events = Events(booth)
+
+	booth.on = function on (...args)
+	{
+		events.on(...args)
+
+		return booth
+	}
+
+	booth.close = function close ()
+	{
+		wss.close()
+	}
+
+
 	wss.on('connection', (ws) =>
 	{
-		var endp = Endpoint(ws, booth)
-
-		if (! protocol)
-		{
-			return
-		}
-		else if (typeof protocol === 'function')
-		{
-			protocol(endp)
-		}
-		else if (typeof protocol === 'object')
-		{
-			endp.on(protocol)
-		}
+		Endpoint(ws, booth)
 	})
 
-	booth.close = () => wss.close()
 
 	return booth
 }
