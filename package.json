@@ -31,7 +31,7 @@
     "start": "node -r esm readme",
 
     "st": "eslint *.js test/",
-    "unit": "node -r esm test/unix.test",
+    "unit": "rm -f /tmp/booth; node -r esm test/unix.test",
 
     "test": "npm run st && npm start && npm run unit"
   },

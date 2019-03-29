@@ -1,6 +1,4 @@
 
-import { unlinkSync as rm } from 'fs'
-
 import { Server } from 'http'
 
 import { Booth } from '..'
@@ -14,8 +12,6 @@ var server = new Server()
 server.listen(path)
 
 
-// rm(path)
-
 Booth({ server })
 .on(
 {
@@ -27,18 +23,6 @@ Booth({ server })
 
 		endp.send('hello', data)
 		console.log('→', data)
-	},
-	'@close' ()
-	{
-		setTimeout(() =>
-		{
-			rm(path)
-
-			setTimeout(() =>
-			{
-				process.exit()
-			})
-		})
 	},
 })
 
@@ -58,5 +42,6 @@ Endpoint(ws_path)
 	},
 	'@close' (/* _, endp */)
 	{
+		process.exit()
 	},
 })
