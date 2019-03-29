@@ -2,6 +2,7 @@
 import Events from './Events'
 import Endpoint from './Endpoint'
 
+
 export default function Booth (wss)
 {
 	wss = Wss(wss)
