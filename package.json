@@ -30,8 +30,10 @@
   {
     "start": "node -r esm readme",
 
-    "st": "eslint *.js",
-    "test": "npm run st && npm start"
+    "st": "eslint *.js test/",
+    "unit": "node -r esm test/unix.test",
+
+    "test": "npm run st && npm start && npm run unit"
   },
 
   "dependencies":
