@@ -1,6 +1,4 @@
 
-var noop = () => {}
-
 import Events from './Events'
 
 
@@ -10,17 +8,26 @@ export default function Endpoint (ws, booth)
 
 	if (booth)
 	{
-		var endp = { ws, booth }
 		var events = booth.events
-		endp.on = noop
+
+		var endp =
+		{
+			ws,
+			booth,
+			on () { return endp },
+		}
 	}
 	else
 	{
-		var endp = { ws }
+		var events = Events()
 
-		var events = Events(endp)
+		var endp =
+		{
+			ws,
+			on,
+		}
 
-		endp.on = function on (...args)
+		function on (...args)
 		{
 			events.on(...args)
 
@@ -31,6 +38,8 @@ export default function Endpoint (ws, booth)
 	endp.send = function send (kind, data)
 	{
 		ws.send('@' + kind + ':' + data)
+
+		return endp
 	}
 
 	endp.close = function close ()
