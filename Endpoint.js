@@ -42,8 +42,11 @@ export default function Endpoint (ws, booth)
 
 		endp.ws.addEventListener('message', (data) => events.handle(data, endp))
 
-		endp.ws.addEventListener('open',  () => events.emit('@open',  void 0, endp))
-		endp.ws.addEventListener('close', () => events.emit('@close', void 0, endp))
+		endp.ws
+		.addEventListener('open',  () => events.emit('@open',  void 0, endp))
+
+		endp.ws
+		.addEventListener('close', () => events.emit('@close', void 0, endp))
 
 		endp.ws.addEventListener('error', (e) => events.emit('@error', e, endp))
 
