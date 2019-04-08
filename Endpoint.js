@@ -33,6 +33,7 @@ export default function Endpoint (ws, booth)
 		}
 	}
 
+
 	function connect ()
 	{
 		endp.ws && endp.ws.close()
@@ -58,23 +59,11 @@ export default function Endpoint (ws, booth)
 	{
 		if (booth) return
 
-		console.log('!close')
+		if (! endp) return
 
-		if (endp)
-		{
-			endp.ws = null
+		endp.ws = null
 
-			setTimeout(() =>
-			{
-				console.log('!reconnect')
-				connect()
-			}
-			, 1e3)
-		}
-		else
-		{
-			console.log('manual close')
-		}
+		setTimeout(connect, 1e3)
 	}
 
 
