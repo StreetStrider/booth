@@ -79,12 +79,13 @@ export default function Endpoint (ws, booth)
 
 	endp.close = function close ()
 	{
+		if (! endp) return
 		if (! endp.ws) return
 
 		endp.ws.close()
 
-		delete endp.booth
 		delete endp.ws
+		delete endp.booth
 
 		endp = null
 	}
