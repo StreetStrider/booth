@@ -4,7 +4,7 @@
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
-  "description": "Booth provides request-response and event stream over websocket",
+  "description": "Booth provides symmetric Event API over websocket or unix domain socket",
 
   "homepage":            "https://github.com/StreetStrider/booth",
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
