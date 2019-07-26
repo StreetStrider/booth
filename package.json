@@ -24,6 +24,8 @@
 
   "peerDependencies":
   {
+    "ws":
+      "6"
   },
 
   "scripts":
@@ -38,9 +40,6 @@
 
   "dependencies":
   {
-    "ws":
-      "6",
-
     "isomorphic-ws":
       "4",
 
@@ -57,6 +56,10 @@
       "5",
 
     "js-outlander":
-      "StrangeTransistor/js-outlander#2.5.0"
+      "StrangeTransistor/js-outlander#2.5.0",
+
+
+    "ws":
+      "6"
   }
 }
