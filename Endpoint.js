@@ -36,25 +36,29 @@ export default function Endpoint (ws, booth)
 
 	function connect ()
 	{
-		endp.ws && endp.ws.close()
+		if (endp.ws)
+		{
+			endp.ws.close()
+		}
 
 		endp.ws = Ws(ws)
 
-		endp.ws.addEventListener('message', (data) => events.handle(data, endp))
+		ev('message', (data) => events.handle(data, endp))
 
-		endp.ws
-		.addEventListener('open',  () => events.emit('@open',  void 0, endp))
+		ev('open',   () => events.emit('@open',  void 0, endp))
+		ev('close',  () => events.emit('@close', void 0, endp))
+		ev('error', (e) => events.emit('@error',      e, endp))
 
-		endp.ws
-		.addEventListener('close', () => events.emit('@close', void 0, endp))
-
-		endp.ws.addEventListener('error', (e) => events.emit('@error', e, endp))
-
-		endp.ws.addEventListener('close', reconnect)
+		ev('close', reconnect)
 
 		if (booth)
 		{
 			setTimeout(() => events.emit('@open', void 0, endp))
+		}
+
+		function ev (name, handler)
+		{
+			endp.ws.addEventListener(name, handler)
 		}
 	}
 
