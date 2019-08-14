@@ -19,7 +19,9 @@
     "index.js",
     "Events.js",
     "Booth.js",
-    "Endpoint.js"
+    "Endpoint.js",
+
+    "nanoevents.js"
   ],
 
   "peerDependencies":
@@ -42,9 +44,6 @@
   {
     "isomorphic-ws":
       "4",
-
-    "nanoevents":
-      "1",
 
     "esm":
       "3"

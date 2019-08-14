@@ -1,5 +1,5 @@
 
-import Emitter from 'nanoevents'
+import Emitter from './nanoevents'
 
 
 export default function Events ()
