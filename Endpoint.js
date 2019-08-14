@@ -100,7 +100,18 @@ export default function Endpoint (ws, booth)
 }
 
 
-import Client from 'isomorphic-ws'
+// TODO: fix usage https://github.com/rollup/rollup-plugin-node-resolve/issues/177
+// import Client from 'isomorphic-ws'
+// var Client = window.WebSocket
+
+if (typeof window !== 'undefined')
+{
+	var Client = window.WebSocket
+}
+else
+{
+	var Client = require('isomorphic-ws')
+}
 
 function Ws (ws)
 {
