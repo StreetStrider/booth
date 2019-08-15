@@ -1,3 +1,4 @@
+/* eslint-disable */
 /*
   from:
   https://github.com/ai/nanoevents/blob/49745c1576007e0b1fa40890fb6a997ecb4078f1/index.js

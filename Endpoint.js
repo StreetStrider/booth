@@ -100,7 +100,8 @@ export default function Endpoint (ws, booth)
 }
 
 
-// TODO: fix usage https://github.com/rollup/rollup-plugin-node-resolve/issues/177
+// TODO: fix usage
+// https://github.com/rollup/rollup-plugin-node-resolve/issues/177
 // import Client from 'isomorphic-ws'
 // var Client = window.WebSocket
 
