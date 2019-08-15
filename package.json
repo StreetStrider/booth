@@ -10,8 +10,6 @@
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
 
-  "esm": true,
-
   "engines": { "node": ">=8" },
 
   "files":
@@ -37,28 +35,40 @@
     "st": "eslint *.js test/",
     "unit": "rm -f /tmp/booth; node -r esm test/unix.test",
 
-    "test": "npm run st && npm start && npm run unit"
+    "test": "npm run st && npm start && npm run unit",
+
+    "build": "gulp --once"
   },
 
   "dependencies":
   {
     "isomorphic-ws":
-      "4",
-
-    "esm":
-      "3"
+      "4"
   },
 
   "devDependencies":
   {
+    "esm":
+      "3",
+
+    "ws":
+      "6 || 7",
+
+
+    "gulp":
+      "4",
+
+    "rollup":
+      "1",
+
+    "metalpipe":
+      "StrangeTransistor/metalpipe#0.1.0",
+
+
     "eslint":
       "5",
 
     "js-outlander":
-      "StrangeTransistor/js-outlander#2.5.0",
-
-
-    "ws":
-      "6 || 7"
+      "StrangeTransistor/js-outlander#2.5.0"
   }
 }
