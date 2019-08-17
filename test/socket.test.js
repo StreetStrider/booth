@@ -1,8 +1,10 @@
-import { Booth } from '.'
-import { Endpoint } from '.'
+
+import { Booth } from '..'
+import { Endpoint } from '..'
+
 
 /*
- * Booth(wss options)
+ * Booth(options: wss options)
  * .on(event, handler)
  * .on({ event: handler })
  */
@@ -22,7 +24,7 @@ Booth({ port: 9000 })
 
 
 /*
- * Endpoint(ws options)
+ * Endpoint(uri: string (ws options))
  * .on(event, handler)
  * .on({ event: handler })
  */
@@ -44,8 +46,3 @@ Endpoint('ws://localhost:9000')
 		process.exit()
 	},
 })
-
-/*
-	ISC.
-	Copyright © 2019, Strider.
-*/

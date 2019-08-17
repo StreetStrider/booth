@@ -30,14 +30,14 @@
 
   "scripts":
   {
-    "start": "node -r esm readme",
+    "start": "node -r esm test/socket.test.js",
 
     "st": "eslint *.js test/",
-    "unit": "rm -f /tmp/booth; node -r esm test/unix.test",
+    "unit": "test/run",
 
     "test": "npm run st && npm start && npm run unit",
 
-    "build": "gulp --once"
+    "build": "gulp --final --to npm"
   },
 
   "dependencies":

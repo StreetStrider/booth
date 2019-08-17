@@ -1,0 +1,6 @@
+#! /bin/sh
+
+rm -f /tmp/booth
+
+node -r esm test/socket.test.js
+node -r esm test/unix.test

@@ -12,6 +12,11 @@ var server = new Server()
 server.listen(path)
 
 
+/*
+ * Booth({ server: http server })
+ * .on(event, handler)
+ * .on({ event: handler })
+ */
 Booth({ server })
 .on(
 {
@@ -27,6 +32,11 @@ Booth({ server })
 })
 
 
+/*
+ * Endpoint(ws_path: string)
+ * .on(event, handler)
+ * .on({ event: handler })
+ */
 Endpoint(ws_path)
 .on(
 {
