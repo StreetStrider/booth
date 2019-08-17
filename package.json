@@ -1,4 +1,6 @@
 {
+  "private": true,
+
      "name": "booth",
   "version": "0.12.0",
   "license": "ISC",
@@ -62,7 +64,7 @@
       "1",
 
     "metalpipe":
-      "StrangeTransistor/metalpipe#0.1.0",
+      "StrangeTransistor/metalpipe#0.1.1",
 
 
     "eslint":
