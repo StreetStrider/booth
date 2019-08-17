@@ -20,9 +20,9 @@
     "Events.js",
     "Booth.js",
     "Endpoint.js",
-    "Endpoint*.js",
+    "Emitter.js",
 
-    "nanoevents.js"
+    "Endpoint*.js"
   ],
 
   "peerDependencies":

@@ -1,10 +1,10 @@
 
-import Emitter from './nanoevents'
+import Emitter from './Emitter'
 
 
 export default function Events ()
 {
-	var emitter = new Emitter
+	var emitter = Emitter()
 
 	var events =
 	{
