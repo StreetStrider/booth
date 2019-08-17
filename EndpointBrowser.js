@@ -1,3 +1,5 @@
+// hard copy of Endpoint.js
+// https://github.com/rollup/rollup-plugin-node-resolve/issues/177
 
 import Events from './Events'
 
@@ -100,7 +102,7 @@ export default function Endpoint (ws, booth)
 }
 
 
-import Client from 'isomorphic-ws'
+var Client = window.WebSocket
 
 function Ws (ws)
 {
