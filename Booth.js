@@ -7,28 +7,33 @@ export default function Booth (wss)
 {
 	wss = Wss(wss)
 
-	var booth = { wss }
+	var events = Events()
 
-	var events = booth.events = Events(booth)
+	var booth =
+	{
+		wss,
+		events,
 
-	booth.on = function on (...args)
+		on,
+		close,
+	}
+
+	wss.on('connection', (ws) => Endpoint(ws, booth))
+
+	function on (...args)
 	{
 		events.on(...args)
 
 		return booth
 	}
 
-	booth.close = function close ()
+	function close ()
 	{
 		wss.close()
+
+		events = null
+		wss = null
 	}
-
-
-	wss.on('connection', (ws) =>
-	{
-		Endpoint(ws, booth)
-	})
-
 
 	return booth
 }
