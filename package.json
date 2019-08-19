@@ -45,8 +45,6 @@
 
   "dependencies":
   {
-    "isomorphic-ws":
-      "4"
   },
 
   "devDependencies":
