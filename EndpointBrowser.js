@@ -6,33 +6,35 @@ import Events from './Events'
 
 export default function Endpoint (ws, booth)
 {
+	var endp =
+	{
+		ws: null,
+		on () { return endp },
+		send,
+		close,
+	}
+
 	if (booth)
 	{
 		var events = booth.events
-
-		var endp =
-		{
-			ws: null,
-			booth,
-			on () { return endp },
-		}
 	}
 	else
 	{
 		var events = Events()
 
-		var endp =
-		{
-			ws: null,
-			on,
-		}
-
-		function on (...args)
+		endp.on = function on (...args)
 		{
 			events.on(...args)
 
 			return endp
 		}
+	}
+
+	function send (kind, data)
+	{
+		endp.ws.send('@' + kind + ':' + data)
+
+		return endp
 	}
 
 
@@ -51,23 +53,28 @@ export default function Endpoint (ws, booth)
 		ev('close',  () => events.emit('@close', void 0, endp))
 		ev('error', (e) => events.emit('@error',      e, endp))
 
-		ev('close', reconnect)
-
 		if (booth)
 		{
-			setTimeout(() => events.emit('@open', void 0, endp))
+			ev('close', close)
+		}
+		else
+		{
+			ev('close', reconnect)
 		}
 
 		function ev (name, handler)
 		{
 			endp.ws.addEventListener(name, handler)
 		}
+
+		if (booth)
+		{
+			events.emit('@open', void 0, endp)
+		}
 	}
 
 	function reconnect ()
 	{
-		if (booth) return
-
 		if (! endp) return
 
 		endp.ws = null
@@ -75,30 +82,20 @@ export default function Endpoint (ws, booth)
 		setTimeout(connect, 1e3)
 	}
 
-
-	endp.send = function send (kind, data)
-	{
-		endp.ws.send('@' + kind + ':' + data)
-
-		return endp
-	}
-
-	endp.close = function close ()
+	function close ()
 	{
 		if (! endp) return
-		if (! endp.ws) return
 
-		endp.ws.close()
-
+		endp.ws && endp.ws.close()
 		delete endp.ws
-		delete endp.booth
 
-		endp = null
+		booth  = null
+		endp   = null
+		// events = null
 	}
 
-	connect()
 
-	return endp
+	return connect(), endp
 }
 
 

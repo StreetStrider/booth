@@ -43,6 +43,10 @@ Endpoint('ws://localhost:9000')
 	},
 	'@close' (/* _, endp */)
 	{
-		process.exit()
+		setTimeout(() =>
+		{
+			process.exit()
+		}
+		, 2e3)
 	},
 })
