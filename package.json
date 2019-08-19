@@ -38,7 +38,7 @@
     "st": "eslint *.js test/",
     "unit": "test/run",
 
-    "test": "npm run st && npm start && npm run unit",
+    "test": "npm run st && npm run unit",
 
     "build": "gulp --final --to npm"
   },
