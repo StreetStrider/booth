@@ -28,7 +28,7 @@ export default function Endpoint (ws, booth)
 		}
 	}
 
-	function send (kind, data)
+	function send (kind, data = '')
 	{
 		endp.ws.send('@' + kind + ':' + data)
 
