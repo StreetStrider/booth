@@ -14,6 +14,8 @@ export default function Endpoint (ws, booth)
 		close,
 	}
 
+	var buffer = []
+
 	if (booth)
 	{
 		var events = booth.events
@@ -32,7 +34,14 @@ export default function Endpoint (ws, booth)
 
 	function send (kind, data = '')
 	{
-		endp.ws.send('@' + kind + ':' + data)
+		if (buffer)
+		{
+			buffer.push([ kind, data ])
+		}
+		else if (endp.ws)
+		{
+			endp.ws.send('@' + kind + ':' + data)
+		}
 
 		return endp
 	}
@@ -59,6 +68,7 @@ export default function Endpoint (ws, booth)
 		}
 		else
 		{
+			ev('open', flush)
 			ev('close', reconnect)
 		}
 
@@ -69,14 +79,29 @@ export default function Endpoint (ws, booth)
 
 		if (booth)
 		{
+			buffer = null
 			events.emit('@open', void 0, endp)
 		}
+	}
+
+	function flush ()
+	{
+		if (! buffer) return
+
+		var bf = buffer
+		buffer = null
+
+		bf.forEach(pair =>
+		{
+			send(...pair)
+		})
 	}
 
 	function reconnect ()
 	{
 		if (! endp) return
 
+		buffer = []
 		endp.ws = null
 
 		setTimeout(connect, 1e3)
@@ -88,6 +113,8 @@ export default function Endpoint (ws, booth)
 
 		endp.ws && endp.ws.close()
 		delete endp.ws
+
+		buffer = null
 
 		booth  = null
 		endp   = null

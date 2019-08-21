@@ -20,6 +20,10 @@ Booth({ port: 9000 })
 		endp.send('hello', data)
 		console.log('→', data)
 	},
+	ok (_, endp)
+	{
+		endp.send('ok')
+	},
 })
 
 
@@ -41,6 +45,10 @@ Endpoint('ws://localhost:9000')
 
 		endp.close()
 	},
+	ok (/* data, endp */)
+	{
+		console.log('OK')
+	},
 	'@close' (/* _, endp */)
 	{
 		setTimeout(() =>
@@ -50,3 +58,4 @@ Endpoint('ws://localhost:9000')
 		, 2e3)
 	},
 })
+.send('ok')
