@@ -45,6 +45,8 @@
 
   "dependencies":
   {
+    "isomorphic-ws":
+      "4"
   },
 
   "devDependencies":
@@ -63,7 +65,7 @@
       "1",
 
     "metalpipe":
-      "StrangeTransistor/metalpipe#0.1.1",
+      "StrangeTransistor/metalpipe#0.1.2",
 
 
     "eslint":

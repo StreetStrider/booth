@@ -137,8 +137,7 @@ export default function Endpoint (ws, booth)
 }
 
 
-// import Client from 'isomorphic-ws'
-import Client from 'ws'
+import Client from 'isomorphic-ws'
 
 function Ws (ws)
 {
