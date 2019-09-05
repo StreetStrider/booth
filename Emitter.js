@@ -14,7 +14,14 @@ export default function Emitter ()
 
 			return () =>
 			{
+				if (! ev) { return }
+
 				ev.splice(ev.indexOf(fn), 1)
+
+				eventname = null
+				fn = null
+
+				ev = null
 			}
 		},
 
