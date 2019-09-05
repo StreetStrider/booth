@@ -70,6 +70,7 @@ export default function Endpoint (ws, booth)
 		{
 			ev('open', flush)
 			ev('close', reconnect)
+			ev('open', check_reconnect)
 		}
 
 		function ev (name, handler)
@@ -105,6 +106,18 @@ export default function Endpoint (ws, booth)
 		endp.ws = null
 
 		setTimeout(connect, 1e3)
+	}
+
+	function check_reconnect ()
+	{
+		if (check_reconnect.already)
+		{
+			events.emit('@reconnect')
+		}
+		else
+		{
+			check_reconnect.already = true
+		}
 	}
 
 	function close ()
