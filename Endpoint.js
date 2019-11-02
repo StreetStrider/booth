@@ -36,7 +36,7 @@ export default function Endpoint (ws, booth)
 		{
 			buffer.push([ kind, data ])
 		}
-		else if (endp.ws)
+		else if (endp && endp.ws)
 		{
 			endp.ws.send('@' + kind + ':' + data)
 		}
