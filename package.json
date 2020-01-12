@@ -35,7 +35,7 @@
   {
     "start": "node -r esm test/socket.test.js",
 
-    "st": "eslint *.js test/",
+    "st": "eslint .",
     "unit": "test/run",
 
     "test": "npm run st && npm run unit",
@@ -69,9 +69,9 @@
 
 
     "eslint":
-      "5",
+      "6",
 
     "js-outlander":
-      "StrangeTransistor/js-outlander#2.5.0"
+      "StrangeTransistor/js-outlander#2.6.1"
   }
 }
