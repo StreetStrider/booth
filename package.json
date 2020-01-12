@@ -72,6 +72,9 @@
       "6",
 
     "js-outlander":
-      "StrangeTransistor/js-outlander#2.6.1"
+      "StrangeTransistor/js-outlander#2.6.1",
+
+    "eslint-plugin-node":
+      "11"
   }
 }
