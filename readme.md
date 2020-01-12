@@ -46,4 +46,4 @@ function handler (data, endpoint) { /* … */ }
 
 # license
 ISC.
-Copyright © 2019, Strider.
+Copyright © 2020, Strider.
