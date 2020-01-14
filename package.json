@@ -17,10 +17,14 @@
   "files":
   [
     "index.js",
-    "Events.js",
+
     "Booth.js",
     "Endpoint.js",
-    "Emitter.js"
+
+    "Events.js",
+    "Emitter.js",
+
+    "safe.js"
   ],
 
   "peerDependencies":
