@@ -2,11 +2,11 @@
 
 export default function safe (fn)
 {
-	return async () =>
+	return async (...args) =>
 	{
 		try
 		{
-			await fn()
+			await fn(...args)
 		}
 		catch (e)
 		{
