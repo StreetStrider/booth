@@ -38,10 +38,10 @@
   {
     "start": "node -r esm test/socket.test.js",
 
-    "st": "eslint .",
-    "unit": "test/run",
+       "st": "eslint .",
+     "unit": "test/run",
 
-    "test": "npm run st && npm run unit",
+     "test": "npm run st && npm run unit",
 
     "build": "gulp --final --to npm"
   },
