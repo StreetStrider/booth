@@ -1,6 +1,6 @@
 
 
-export default function safe (fn)
+export default function safe (fn, fn_report = error)
 {
 	return async (...args) =>
 	{
@@ -10,8 +10,14 @@ export default function safe (fn)
 		}
 		catch (e)
 		{
-			console.log('booth/safe:', 'error during', fn.name, fn)
-			console.error(e)
+			fn_report(e, fn)
 		}
 	}
+}
+
+
+function error (e, fn)
+{
+	console.error('booth/safe:', 'error during', fn.name, fn)
+	console.log(e)
 }
