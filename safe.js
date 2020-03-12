@@ -18,6 +18,6 @@ export default function safe (fn, fn_report = error)
 
 function error (e, fn)
 {
-	console.error('booth/safe:', 'error during', fn.name, fn)
+	console.error('booth/safe:', 'error during', '`' + fn.name + '`', fn)
 	console.log(e)
 }
