@@ -24,8 +24,7 @@
     "Events.js",
     "Emitter.js",
 
-    "safe.js",
-    "name.js"
+    "safe.js"
   ],
 
   "peerDependencies":
