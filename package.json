@@ -24,7 +24,8 @@
     "Events.js",
     "Emitter.js",
 
-    "safe.js"
+    "safe.js",
+    "recoil.js"
   ],
 
   "peerDependencies":
