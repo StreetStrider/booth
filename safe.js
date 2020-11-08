@@ -37,12 +37,9 @@ export default function safe (options, fn)
 			name = `${ name } (fn ${ fn.name })`
 		}
 	}
-	else
+	else if (fn.name)
 	{
-		if (fn.name)
-		{
-			name = `fn ${ name }`
-		}
+		name = `fn ${ name }`
 	}
 
 	var { reporter } = options
