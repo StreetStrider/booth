@@ -38,7 +38,7 @@ export default function Events ()
 
 	function handle ({ data: msg }, endp)
 	{
-		if (typeof msg    !== 'string') return
+		if (typeof msg    !== 'string') return // TODO: binary, buffer
 		if (msg.charAt(0) !== '@') return
 		if (msg.charAt(1) === '@') return
 
