@@ -68,10 +68,10 @@
       "4",
 
     "rollup":
-      "1",
+      "2",
 
     "metalpipe":
-      "1",
+      "StrangeTransistor/metalpipe#88015bd169762d1bba0d194af9198c420254fd67",
 
 
     "eslint":
