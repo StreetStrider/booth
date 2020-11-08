@@ -1,3 +1,4 @@
+// TODO: disposer
 
 import ChannelEmitter from './ChannelEmitter'
 
