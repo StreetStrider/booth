@@ -22,7 +22,7 @@
     "Endpoint.js",
 
     "Events.js",
-    "Emitter.js",
+    "ChannelEmitter.js",
 
     "safe.js",
     "recoil.js"
@@ -48,6 +48,9 @@
 
   "dependencies":
   {
+    "@streetstrider/emitter":
+      "StreetStrider/emitter#b896e5d053f716560d29d10c1b1aea7549252047",
+
     "isomorphic-ws":
       "4"
   },

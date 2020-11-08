@@ -1,10 +1,10 @@
 
-import Emitter from './Emitter'
+import ChannelEmitter from './ChannelEmitter'
 
 
 export default function Events ()
 {
-	var emitter = Emitter()
+	var emitter = ChannelEmitter()
 
 	var events =
 	{
