@@ -49,7 +49,7 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "StreetStrider/emitter#b896e5d053f716560d29d10c1b1aea7549252047",
+      "1.0.0",
 
     "isomorphic-ws":
       "4"
