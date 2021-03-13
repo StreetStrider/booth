@@ -91,10 +91,10 @@ export default function Endpoint (ws, booth)
 		var bf = buffer
 		buffer = null
 
-		bf.forEach(pair =>
+		for (var pair of bf)
 		{
 			send(...pair)
-		})
+		}
 	}
 
 	function reconnect ()
