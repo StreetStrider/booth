@@ -49,7 +49,7 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "1.0.0",
+      "~/Projects/emitter",
 
     "isomorphic-ws":
       "4"
@@ -71,7 +71,7 @@
       "2",
 
     "metalpipe":
-      "StrangeTransistor/metalpipe#88015bd169762d1bba0d194af9198c420254fd67",
+      "~/Projects/metalpipe",
 
 
     "eslint":
