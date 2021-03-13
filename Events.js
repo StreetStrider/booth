@@ -1,18 +1,11 @@
 // TODO: disposer
 
-import ChannelEmitter from './ChannelEmitter'
-
+import MultiEmitter from '@streetstrider/emitter/multi'
 
 export default function Events ()
 {
-	var emitter = ChannelEmitter()
-
-	var events =
-	{
-		on,
-		emit,
-		handle,
-	}
+	var emitter = MultiEmitter()
+	var emit = emitter.emit
 
 	function on (...args)
 	{
@@ -31,11 +24,6 @@ export default function Events ()
 		}
 	}
 
-	function emit (...args)
-	{
-		emitter.emit(...args)
-	}
-
 	function handle ({ data: msg }, endp)
 	{
 		if (typeof msg    !== 'string') return // TODO: binary, buffer
@@ -51,5 +39,5 @@ export default function Events ()
 		emitter.emit(kind, data, endp)
 	}
 
-	return events
+	return { on, emit, handle }
 }

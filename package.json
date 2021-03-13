@@ -2,7 +2,7 @@
   "private": true,
 
      "name": "booth",
-  "version": "0.14.0",
+  "version": "0.15.0-pre",
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
@@ -22,7 +22,6 @@
     "Endpoint.js",
 
     "Events.js",
-    "ChannelEmitter.js",
 
     "safe.js",
     "recoil.js"
