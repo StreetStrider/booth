@@ -1,6 +1,6 @@
-// TODO: disposer
 
 import MultiEmitter from '@streetstrider/emitter/multi'
+
 
 export default function Events ()
 {
@@ -11,16 +11,19 @@ export default function Events ()
 	{
 		if (args.length === 1)
 		{
-			let map = args[0]
+			var map = args[0]
+			var dss = []
 
-			for (let key in map)
+			for (var key in map)
 			{
-				emitter.on(key, map[key])
+				dss.push(emitter.on(key, map[key]))
 			}
+
+			return compose_disposer(dss)
 		}
 		else if (args.length === 2)
 		{
-			emitter.on(args[0], args[1])
+			return emitter.on(args[0], args[1])
 		}
 	}
 
@@ -40,4 +43,34 @@ export default function Events ()
 	}
 
 	return { on, emit, handle }
+}
+
+
+function compose_disposer (dss)
+{
+	return () =>
+	{
+		if (! dss) { return }
+
+		var e
+
+		for (var ds of dss)
+		{
+			try
+			{
+				ds()
+			}
+			catch (ds_e)
+			{
+				e || (e = ds_e)
+			}
+		}
+
+		dss = null
+
+		if (e)
+		{
+			throw e
+		}
+	}
 }
