@@ -5,6 +5,9 @@ import { Booth } from '..'
 import { Endpoint } from '..'
 
 
+console.log('UNIX')
+
+
 var path = '/tmp/booth'
 var ws_path = 'ws+unix://' + path
 
@@ -17,8 +20,9 @@ server.listen(path)
  * .on(event, handler)
  * .on({ event: handler })
  */
-Booth({ server })
-.on(
+var
+booth = Booth({ server })
+booth.on(
 {
 	hello (data, endp)
 	{
@@ -37,8 +41,9 @@ Booth({ server })
  * .on(event, handler)
  * .on({ event: handler })
  */
-Endpoint(ws_path)
-.on(
+var
+endp = Endpoint(ws_path)
+endp.on(
 {
 	'@open' (_, endp)
 	{

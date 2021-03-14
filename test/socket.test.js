@@ -3,13 +3,17 @@ import { Booth } from '..'
 import { Endpoint } from '..'
 
 
+console.log('WS')
+
+
 /*
  * Booth(options: wss options)
  * .on(event, handler)
  * .on({ event: handler })
  */
-Booth({ port: 9000 })
-.on(
+var
+booth = Booth({ port: 9000 })
+booth.on(
 {
 	hello (data, endp)
 	{
@@ -32,8 +36,9 @@ Booth({ port: 9000 })
  * .on(event, handler)
  * .on({ event: handler })
  */
-Endpoint('ws://localhost:9000')
-.on(
+var
+endp = Endpoint('ws://localhost:9000')
+endp.on(
 {
 	'@open' (_, endp)
 	{
@@ -58,4 +63,4 @@ Endpoint('ws://localhost:9000')
 		, 2e3)
 	},
 })
-.send('ok')
+endp.send('ok')

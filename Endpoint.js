@@ -2,16 +2,14 @@
 
 import Events from './Events'
 
+var noop = () => {}
+
 
 export default function Endpoint (ws, booth)
 {
-	var endp =
-	{
-		ws: null,
-		on () { return endp },
-		send,
-		close,
-	}
+	var
+	ws_connect = ws
+	ws = null
 
 	var buffer = []
 
@@ -22,12 +20,28 @@ export default function Endpoint (ws, booth)
 	else
 	{
 		var events = Events()
+	}
 
-		endp.on = function on (...args)
+	var endp =
+	{
+		on,
+		send,
+		close,
+	}
+
+	function on (...args)
+	{
+		if (booth)
 		{
-			events.on(...args)
-
-			return endp
+			return noop
+		}
+		else if (events)
+		{
+			return events.on(...args)
+		}
+		else
+		{
+			return noop
 		}
 	}
 
@@ -37,23 +51,22 @@ export default function Endpoint (ws, booth)
 		{
 			buffer.push([ kind, data ])
 		}
-		else if (endp && endp.ws)
+		else if (ws)
 		{
-			endp.ws.send('@' + kind + ':' + data)
+			ws.send('@' + kind + ':' + data)
 		}
-
-		return endp
 	}
-
 
 	function connect ()
 	{
-		if (endp.ws)
+		/*
+		if (ws)
 		{
-			endp.ws.close()
+			ws.close()
 		}
+		*/
 
-		endp.ws = Ws(ws)
+		ws = Ws(ws_connect)
 
 		ev('message', (data) => events.handle(data, endp))
 
@@ -63,20 +76,21 @@ export default function Endpoint (ws, booth)
 
 		if (booth)
 		{
-			ev('close', close)
+			ev('close', cleanup)
 		}
 		else
 		{
-			ev('open', flush)
-			ev('close', reconnect)
-			ev('open', check_reconnect)
+			ev('open',  flush)
+			ev('close', reconnect_or_cleanup)
+			ev('open',  check_reconnect)
 		}
 
 		function ev (name, handler)
 		{
-			endp.ws.addEventListener(name, handler)
+			ws.addEventListener(name, handler)
 		}
 
+		/* already opened in booth: */
 		if (booth)
 		{
 			buffer = null
@@ -86,9 +100,10 @@ export default function Endpoint (ws, booth)
 
 	function flush ()
 	{
-		if (! buffer) return
+		if (! buffer) { return }
 
-		var bf = buffer
+		var
+		bf = buffer
 		buffer = null
 
 		for (var pair of bf)
@@ -97,14 +112,19 @@ export default function Endpoint (ws, booth)
 		}
 	}
 
-	function reconnect ()
+	function reconnect_or_cleanup ()
 	{
-		if (! endp) return
+		if (! ws)
+		{
+			cleanup()
+		}
+		else
+		{
+			buffer = []
+			ws = null
 
-		buffer = []
-		endp.ws = null
-
-		setTimeout(connect, 1e3)
+			setTimeout(connect, 1e3)
+		}
 	}
 
 	function check_reconnect ()
@@ -121,20 +141,28 @@ export default function Endpoint (ws, booth)
 
 	function close ()
 	{
-		if (! endp) return
+		if (ws)
+		{
+			ws.close()
+			ws = null
+		}
+	}
 
-		endp.ws && endp.ws.close()
-		delete endp.ws
+	function cleanup ()
+	{
+		if (! endp) { return }
+
+		ws = null
+		ws_connect = null
 
 		buffer = null
+		events = null
 
 		booth  = null
 		endp   = null
-		// events = null
 	}
 
-
-	return connect(), endp
+	return (connect(), endp)
 }
 
 
