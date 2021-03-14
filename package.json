@@ -48,7 +48,7 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "~/Projects/emitter",
+      "github:StreetStrider/emitter#c93ad54f0ab53de460b6089606ede0432d9bb4d2",
 
     "isomorphic-ws":
       "4"
