@@ -59,13 +59,6 @@ export default function Endpoint (ws, booth)
 
 	function connect ()
 	{
-		/*
-		if (ws)
-		{
-			ws.close()
-		}
-		*/
-
 		ws = Ws(ws_connect)
 
 		ev('message', (data) => events.handle(data, endp))

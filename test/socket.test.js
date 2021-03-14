@@ -15,6 +15,11 @@ var
 booth = Booth({ port: 9000 })
 booth.on(
 {
+	try (_, endp)
+	{
+		console.log('try')
+		endp.close()
+	},
 	hello (data, endp)
 	{
 		console.log('←', data)
@@ -40,8 +45,12 @@ var
 endp = Endpoint('ws://localhost:9000')
 endp.on(
 {
-	'@open' (_, endp)
+	'@open' (/* _, endp */)
 	{
+	},
+	'@reconnect' (_, endp)
+	{
+		console.log('RECONNECT')
 		endp.send('hello', 'Hello, World!')
 	},
 	hello (data, endp)
@@ -49,18 +58,22 @@ endp.on(
 		console.log('*', data)
 
 		endp.close()
-	},
-	ok (/* data, endp */)
-	{
-		console.log('OK')
-	},
-	'@close' (/* _, endp */)
-	{
+
 		setTimeout(() =>
 		{
 			process.exit()
 		}
 		, 2e3)
+	},
+	ok (/* data, endp */)
+	{
+		console.log('OK')
+
+		endp.send('try')
+	},
+	'@close' (/* _, endp */)
+	{
+		console.log('END\n')
 	},
 })
 endp.send('ok')

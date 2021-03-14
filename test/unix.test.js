@@ -57,6 +57,8 @@ endp.on(
 	},
 	'@close' (/* _, endp */)
 	{
+		console.log('END\n')
+
 		setTimeout(() =>
 		{
 			process.exit()
