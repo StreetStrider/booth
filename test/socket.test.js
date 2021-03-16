@@ -36,6 +36,12 @@ booth.on(
 	{
 		endp.send('ok')
 	},
+	'@error' (e)
+	{
+		console.error('WS/Booth', e.message)
+		console.error(e.error)
+		process.exit(1)
+	},
 })
 
 
@@ -77,6 +83,12 @@ endp.on(
 	'@close' (/* _, endp */)
 	{
 		console.log('END\n')
+	},
+	'@error' (e)
+	{
+		console.error('WS/Endpoint', e.message)
+		console.error(e.error)
+		process.exit(1)
 	},
 })
 endp.send('ok')

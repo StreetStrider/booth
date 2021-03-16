@@ -33,6 +33,12 @@ booth.on(
 		endp.send('hello', data)
 		console.log('→', data)
 	},
+	'@error' (e)
+	{
+		console.error('UNIX/Booth', e.message)
+		console.error(e.error)
+		process.exit(1)
+	},
 })
 
 
@@ -64,5 +70,11 @@ endp.on(
 			process.exit()
 		}
 		, 2e3)
+	},
+	'@error' (e)
+	{
+		console.error('UNIX/Endpoint', e.message)
+		console.error(e.error)
+		process.exit(1)
 	},
 })
