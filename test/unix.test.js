@@ -11,8 +11,7 @@ var addr = Addr.Unix('/tmp/booth')
 console.log('UNIX', ...addr.view())
 
 
-var server = new Server()
-server.listen(addr.for_booth())
+var server = new Server().listen(addr.for_booth())
 
 
 /*
