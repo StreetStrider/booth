@@ -3,16 +3,16 @@ import { Server } from 'http'
 
 import { Booth } from '..'
 import { Endpoint } from '..'
+import { Addr } from '..'
 
 
-console.log('UNIX')
+var addr = Addr.Unix('/tmp/booth')
 
+console.log('UNIX', ...addr.view())
 
-var path = '/tmp/booth'
-var ws_path = 'ws+unix://' + path
 
 var server = new Server()
-server.listen(path)
+server.listen(addr.for_booth())
 
 
 /*
@@ -42,7 +42,7 @@ booth.on(
  * .on({ event: handler })
  */
 var
-endp = Endpoint(ws_path)
+endp = Endpoint(addr.for_endpoint())
 endp.on(
 {
 	'@open' (_, endp)

@@ -1,9 +1,12 @@
 
 import { Booth } from '..'
 import { Endpoint } from '..'
+import { Addr } from '..'
 
 
-console.log('WS')
+var addr = Addr.Websocket(9000)
+
+console.log('WS', ...addr.view())
 
 
 /*
@@ -12,7 +15,7 @@ console.log('WS')
  * .on({ event: handler })
  */
 var
-booth = Booth({ port: 9000 })
+booth = Booth(addr.for_booth())
 booth.on(
 {
 	try (_, endp)
@@ -42,7 +45,7 @@ booth.on(
  * .on({ event: handler })
  */
 var
-endp = Endpoint('ws://localhost:9000')
+endp = Endpoint(addr.for_endpoint())
 endp.on(
 {
 	'@open' (/* _, endp */)
