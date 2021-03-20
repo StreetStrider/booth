@@ -1,4 +1,6 @@
 
+import console from 'console-ultimate'
+
 import { Server } from 'http'
 
 import { Booth } from '..'
@@ -25,12 +27,12 @@ booth.on(
 {
 	hello (data, endp)
 	{
-		console.log('←', data)
+		console.log(2, data)
 
 		data = data.toUpperCase() + '_' + data.toLowerCase()
 
 		endp.send('hello', data)
-		console.log('→', data)
+		console.log(3, data)
 	},
 	'@error' (e)
 	{
@@ -53,10 +55,11 @@ endp.on(
 	'@open' (_, endp)
 	{
 		endp.send('hello', 'Hello, World!')
+		console.log(1)
 	},
 	hello (data, endp)
 	{
-		console.log('*', data)
+		console.log(4, data)
 
 		endp.close()
 	},
