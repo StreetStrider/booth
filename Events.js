@@ -5,7 +5,7 @@ import MultiEmitter from '@streetstrider/emitter/multi'
 export default function Events ()
 {
 	var emitter = MultiEmitter()
-	var emit = emitter.emit
+	var emit    = emitter.emit
 
 	function on (...args)
 	{
@@ -27,22 +27,7 @@ export default function Events ()
 		}
 	}
 
-	function handle ({ data: msg }, endp)
-	{
-		if (typeof msg    !== 'string') return // TODO: binary, buffer
-		if (msg.charAt(0) !== '@') return
-		if (msg.charAt(1) === '@') return
-
-		var colon = msg.indexOf(':')
-		if (colon === -1) return
-
-		var kind = msg.slice(1, colon)
-		var data = msg.slice(colon + 1)
-
-		emitter.emit(kind, data, endp)
-	}
-
-	return { on, emit, handle }
+	return { on, emit }
 }
 
 

@@ -56,11 +56,26 @@ export default function Endpoint (ws, booth)
 		}
 	}
 
+	function handle (msg, endp)
+	{
+		if (typeof msg    !== 'string') return // TODO: binary, buffer
+		if (msg.charAt(0) !== '@') return
+		if (msg.charAt(1) === '@') return // special commands
+
+		var colon = msg.indexOf(':')
+		if (colon === -1) return
+
+		var kind = msg.slice(1, colon)
+		var data = msg.slice(colon + 1)
+
+		events.emit(kind, data, endp)
+	}
+
 	function connect ()
 	{
 		ws = Ws(ws_connect)
 
-		ev('message', (data) => events.handle(data, endp))
+		ev('message', ({ data }) => handle(data, endp))
 
 		ev('open',   () => events.emit('@open',  void 0, endp))
 		ev('close',  () => events.emit('@close', void 0, endp))
