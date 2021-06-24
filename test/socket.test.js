@@ -8,6 +8,10 @@ import { Addr } from '..'
 import compose from '../util/compose'
 import safe from '../util/safe'
 import recoil from '../util/recoil'
+import json from '../util/json'
+
+import request from './request'
+import respond from './util/respond'
 
 var addr = Addr.Websocket(9000)
 
@@ -57,6 +61,13 @@ booth.on(
 		}
 		, 0)
 	}),
+	...compose('pow', respond(), json(), (data) =>
+	{
+		console.log(111, data)
+		var { base, power } = data
+
+		return Math.pow(base, power)
+	})
 	'@error' (e)
 	{
 		console.error('WS/Booth', e.message)
