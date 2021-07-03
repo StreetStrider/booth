@@ -5,9 +5,9 @@ import { Booth } from '..'
 import { Endpoint } from '..'
 import { Addr } from '..'
 
-import compose from '../util/compose'
-import safe from '../util/safe'
-import recoil from '../util/recoil'
+import compose from '../midw/compose'
+import safe from '../midw/safe'
+import recoil from '../midw/recoil'
 
 var addr = Addr.Websocket(9000)
 
