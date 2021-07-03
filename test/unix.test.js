@@ -65,7 +65,7 @@ endp.on(
 	},
 	'@close' (/* _, endp */)
 	{
-		console.log('END\n')
+		console.log('END 4\n')
 
 		setTimeout(() =>
 		{
