@@ -26,6 +26,7 @@ export default function Endpoint (ws, booth)
 		on,
 		send,
 		close,
+		aux: {},
 	}
 
 	function on (...args)
