@@ -104,6 +104,7 @@ export default function Endpoint (ws, booth)
 		if (booth)
 		{
 			events.emit('@open', void 0, endp)
+			events.emit('@connect', void 0, endp)
 
 			booth.rooms.join_maybe('@all', endp)
 		}
@@ -140,13 +141,15 @@ export default function Endpoint (ws, booth)
 
 	function check_reconnect ()
 	{
-		if (check_reconnect.already)
+		if (! check_reconnect.already)
 		{
-			events.emit('@reconnect', void 0, endp)
+			check_reconnect.already = true
+
+			events.emit('@connect', void 0, endp)
 		}
 		else
 		{
-			check_reconnect.already = true
+			events.emit('@reconnect', void 0, endp)
 		}
 	}
 

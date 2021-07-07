@@ -1,6 +1,8 @@
 
 import console from 'console-ultimate'
 
+import { expect } from 'chai'
+
 import { Booth } from '..'
 import { Endpoint } from '..'
 import { Addr } from '..'
@@ -66,6 +68,11 @@ booth.on(
 })
 
 
+var opens = 0
+var connects = 0
+var reconnects = 0
+var closes = 0
+
 /*
  * Endpoint(uri: string (ws options))
  * .on(event, handler)
@@ -77,6 +84,11 @@ endp.on(
 {
 	'@open' (/* _, endp */)
 	{
+		opens++
+	},
+	'@connect' ()
+	{
+		connects++
 	},
 	ok (/* data, endp */)
 	{
@@ -86,6 +98,8 @@ endp.on(
 	},
 	'@reconnect' (_, endp)
 	{
+		reconnects++
+
 		console.log(4)
 		endp.send('hello', 'Hello, World!')
 		endp.send('expected-error', 'Hello, World!')
@@ -104,13 +118,25 @@ endp.on(
 
 		setTimeout(() =>
 		{
+			expect(opens).eq(2)
+			expect(connects).eq(1)
+			expect(reconnects).eq(1)
+			expect(closes).eq(2)
+
 			process.exit()
 		}
 		, 2e3)
 	},
 	'@close' (/* _, endp */)
 	{
-		console.log('END 3,9\n')
+		closes++
+
+		switch (closes)
+		{
+		case 1: console.log('END 3\n'); break
+		case 2: console.log('END 9\n'); break
+		default: expect.fail()
+		}
 	},
 	'@error' (e)
 	{

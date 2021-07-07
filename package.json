@@ -88,6 +88,10 @@
       "StrangeTransistor/js-outlander#2.10.0",
 
     "eslint-plugin-node":
-      "11"
+      "11",
+
+
+    "chai":
+      "4"
   }
 }
