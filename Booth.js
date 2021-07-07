@@ -12,7 +12,6 @@ export default function Booth (wss)
 
 	var booth =
 	{
-		wss,
 		events,
 
 		on,
@@ -32,6 +31,8 @@ export default function Booth (wss)
 
 	function close ()
 	{
+		if (! wss) return
+
 		wss.close()
 
 		events = null
