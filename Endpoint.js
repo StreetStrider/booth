@@ -10,7 +10,7 @@ export default function Endpoint (ws, booth)
 	ws_connect = ws
 	ws = null
 
-	var buffer = []
+	var buffer = null
 
 	if (booth)
 	{
@@ -19,6 +19,7 @@ export default function Endpoint (ws, booth)
 	else
 	{
 		var events = Events()
+		var buffer = []
 	}
 
 	var endp =
@@ -82,6 +83,7 @@ export default function Endpoint (ws, booth)
 		ev('close',  () => events.emit('@close', void 0, endp))
 		ev('error', (e) => events.emit('@error',      e, endp))
 
+		/* must be done after user events */
 		if (booth)
 		{
 			ev('close', cleanup)
@@ -98,11 +100,12 @@ export default function Endpoint (ws, booth)
 			ws.addEventListener(name, handler)
 		}
 
-		/* already opened in booth: */
+		/* instantly opened in booth */
 		if (booth)
 		{
-			buffer = null
 			events.emit('@open', void 0, endp)
+
+			booth.rooms.join_maybe('@all', endp)
 		}
 	}
 
@@ -160,14 +163,24 @@ export default function Endpoint (ws, booth)
 	{
 		if (! endp) { return }
 
-		ws = null
-		ws_connect = null
+		try
+		{
+			if (booth)
+			{
+				booth.rooms.leave_maybe('@all', endp)
+			}
+		}
+		finally
+		{
+			ws = null
+			ws_connect = null
 
-		buffer = null
-		events = null
+			buffer = null
+			events = null
 
-		booth  = null
-		endp   = null
+			booth  = null
+			endp   = null
+		}
 	}
 
 	return (connect(), endp)

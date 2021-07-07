@@ -1,6 +1,7 @@
 
 import Events from './Events'
 import Endpoint from './Endpoint'
+import Rooms from './room/Rooms'
 
 
 export default function Booth (wss)
@@ -16,6 +17,8 @@ export default function Booth (wss)
 
 		on,
 		close,
+
+		rooms: Rooms(),
 	}
 
 	wss.on('connection', (ws) => Endpoint(ws, booth))

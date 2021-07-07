@@ -25,7 +25,8 @@
 
     "Events.js",
 
-    "midw/"
+    "midw/",
+    "room/"
   ],
 
   "peerDependencies":
@@ -52,7 +53,10 @@
       "1",
 
     "isomorphic-ws":
-      "4"
+      "4",
+
+    "aux.js":
+      "~/Projects/aux.js"
   },
 
   "devDependencies":
