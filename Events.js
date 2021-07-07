@@ -36,7 +36,7 @@ function compose_disposer (dss)
 	// eslint-disable-next-line complexity
 	return () =>
 	{
-		if (! dss) { return }
+		if (! dss) return
 
 		var e
 

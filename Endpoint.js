@@ -111,7 +111,7 @@ export default function Endpoint (ws, booth)
 
 	function flush ()
 	{
-		if (! buffer) { return }
+		if (! buffer) return
 
 		var
 		bf = buffer
@@ -161,7 +161,7 @@ export default function Endpoint (ws, booth)
 
 	function cleanup ()
 	{
-		if (! endp) { return }
+		if (! endp) return
 
 		try
 		{
