@@ -3,6 +3,8 @@ import Events from './Events'
 import Endpoint from './Endpoint'
 import Rooms from './room/Rooms'
 
+var noop = () => {}
+
 
 export default function Booth (wss)
 {
@@ -12,31 +14,35 @@ export default function Booth (wss)
 
 	var booth =
 	{
-		events,
-
 		on,
 		close,
 
 		rooms: Rooms(),
 	}
 
-	wss.on('connection', (ws) => Endpoint(ws, booth))
+	wss.on('connection', (ws) => Endpoint(ws, { booth, events }))
 
 	function on (...args)
 	{
-		events.on(...args)
-
-		return booth
+		if (events)
+		{
+			return events.on(...args)
+		}
+		else
+		{
+			return noop
+		}
 	}
 
 	function close ()
 	{
-		if (! wss) return
+		if (! booth) return
 
 		wss.close()
 
 		events = null
-		wss = null
+		wss    = null
+		booth  = null
 	}
 
 	return booth

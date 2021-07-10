@@ -4,19 +4,13 @@ import Events from './Events'
 var noop = () => {}
 
 
-export default function Endpoint (ws, booth)
+export default function Endpoint (ws, { booth, events } = {})
 {
-	var
-	ws_connect = ws
-	ws = null
+	var ws_connect = ws; ws = null
 
 	var buffer = null
 
-	if (booth)
-	{
-		var events = booth.events
-	}
-	else
+	if (! booth)
 	{
 		var events = Events()
 		var buffer = []
@@ -141,9 +135,9 @@ export default function Endpoint (ws, booth)
 
 	function check_reconnect ()
 	{
-		if (! check_reconnect.already)
+		if (! check_reconnect.yes)
 		{
-			check_reconnect.already = true
+			check_reconnect.yes = true
 
 			events.emit('@connect', void 0, endp)
 		}
