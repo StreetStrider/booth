@@ -108,9 +108,7 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (! buffer) return
 
-		var
-		bf = buffer
-		buffer = null
+		var bf = buffer; buffer = null
 
 		for (var pair of bf)
 		{
