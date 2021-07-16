@@ -26,7 +26,8 @@
     "Events.js",
 
     "midw/",
-    "room/"
+    "room/",
+    "util/"
   ],
 
   "peerDependencies":
