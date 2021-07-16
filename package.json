@@ -57,7 +57,7 @@
       "4",
 
     "aux.js":
-      "~/Projects/aux.js"
+      "^3.4"
   },
 
   "devDependencies":
