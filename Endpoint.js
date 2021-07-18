@@ -100,7 +100,7 @@ export default function Endpoint (ws, { booth, events } = {})
 			events.emit('@open', void 0, endp)
 			events.emit('@connect', void 0, endp)
 
-			booth.rooms.join_maybe('@all', endp)
+			booth.rooms.join_if_any('@all', endp)
 		}
 	}
 
@@ -158,24 +158,19 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (! endp) return
 
-		try
+		if (booth)
 		{
-			if (booth)
-			{
-				booth.rooms.leave_maybe('@all', endp)
-			}
+			booth.rooms.leave_every(endp)
 		}
-		finally
-		{
-			ws = null
-			ws_connect = null
 
-			buffer = null
-			events = null
+		ws = null
+		ws_connect = null
 
-			booth  = null
-			endp   = null
-		}
+		buffer = null
+		events = null
+
+		booth  = null
+		endp   = null
 	}
 
 	return (connect(), endp)

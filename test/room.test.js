@@ -42,8 +42,14 @@ async function Client (spec)
 
 	endp.send('spec', spec || '')
 
-	endp.on('count_all',  () => count_all++)
-	endp.on('count_spec', () => count_spec++)
+	endp.on('count_all',  () =>
+	{
+		count_all++
+	})
+	endp.on('count_spec', () =>
+	{
+		count_spec++
+	})
 
 	await wait(endp, 'specd')
 
@@ -52,24 +58,33 @@ async function Client (spec)
 
 async function test ()
 {
-	var clients =
-	[
-		await Client(),
-		await Client(),
-		await Client(true),
-	]
+	await Client()
+	await Client()
+	await Client(true)
 
-	booth.rooms.get('@all').send('count_all')
 	booth.rooms.get('@spec').send('count_spec')
-	booth.close()
-
-	await wait(clients[0], '@close')
-	await wait(clients[1], '@close')
-	await wait(clients[2], '@close')
+	booth.rooms.get('@all').send('count_all')
+	await timeout(1000)
 
 	expect(count_all).eq(3)
 	expect(count_spec).eq(1)
+
+	booth.rooms.get('@all').each(endp => endp.close())
+	await timeout(2000)
+
+	booth.rooms.get('@spec').send('count_spec')
+	booth.rooms.get('@all').send('count_all')
+	await timeout(1000)
+
+	expect(count_all).eq(6)
+	expect(count_spec).eq(1) /* was not joined automatically */
+
 	process.exit()
 }
 
 test()
+
+function timeout (ms)
+{
+	return new Promise(rs => setTimeout(rs, ms))
+}

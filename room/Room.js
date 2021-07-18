@@ -26,5 +26,10 @@ export default function Room ()
 		coll.each(endp => endp.send(kind, data))
 	}
 
-	return { join, leave, has, send }
+	function each (fn)
+	{
+		coll.each(fn)
+	}
+
+	return { join, leave, has, send, each }
 }

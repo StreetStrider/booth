@@ -33,14 +33,9 @@ export default function Rooms ()
 		maybe(name, room => room.send(kind, data))
 	}
 
-	function join_maybe (name, endp)
+	function join_if_any (name, endp)
 	{
 		maybe(name, room => room.join(endp))
-	}
-
-	function leave_maybe (name, endp)
-	{
-		maybe(name, room => room.leave(endp))
 	}
 
 	function maybe (name, fn)
@@ -51,13 +46,24 @@ export default function Rooms ()
 		}
 	}
 
+	function leave_every (endp)
+	{
+		rs.each(room =>
+		{
+			if (room.has(endp))
+			{
+				room.leave(endp)
+			}
+		})
+	}
+
 	return {
 		get,
 		list,
 		has,
 		remove,
 		send,
-		join_maybe,
-		leave_maybe,
+		join_if_any,
+		leave_every,
 	}
 }
