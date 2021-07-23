@@ -26,8 +26,7 @@
     "Events.js",
 
     "midw/",
-    "room/",
-    "util/"
+    "room/"
   ],
 
   "peerDependencies":
@@ -51,7 +50,7 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "1",
+      "https://github.com/StreetStrider/emitter.git#master",
 
     "isomorphic-ws":
       "4",

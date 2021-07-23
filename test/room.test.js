@@ -7,7 +7,7 @@ import { Booth } from '..'
 import { Endpoint } from '..'
 import { Addr } from '..'
 
-import wait from '../util/wait'
+import { when } from '..'
 
 var addr = Addr.Websocket(9000)
 
@@ -38,7 +38,7 @@ async function Client (spec)
 {
 	var endp = Endpoint(addr.for_endpoint())
 
-	await wait(endp, '@connect')
+	await when(endp, '@connect')
 
 	endp.send('spec', spec || '')
 
@@ -51,7 +51,7 @@ async function Client (spec)
 		count_spec++
 	})
 
-	await wait(endp, 'specd')
+	await when(endp, 'specd')
 
 	return endp
 }
