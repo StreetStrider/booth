@@ -50,7 +50,7 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "https://github.com/StreetStrider/emitter.git#master",
+      "^1.2",
 
     "isomorphic-ws":
       "4",
