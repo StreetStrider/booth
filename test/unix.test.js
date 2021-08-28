@@ -1,4 +1,6 @@
 
+console.info('unix.test')
+
 import console from 'console-ultimate'
 
 import { Server } from 'http'
@@ -69,9 +71,9 @@ endp.on(
 
 		setTimeout(() =>
 		{
-			process.exit()
+			server.close()
 		}
-		, 2e3)
+		, 1e3)
 	},
 	'@error' (e)
 	{

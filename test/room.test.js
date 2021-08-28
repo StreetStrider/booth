@@ -1,4 +1,6 @@
 
+console.info('room.test')
+
 import console from 'console-ultimate'
 
 import { expect } from 'chai'
@@ -17,6 +19,8 @@ console.log('WS', ...addr.view())
 var count_all  = 0
 var count_spec = 0
 
+
+var clients = []
 
 var
 booth = Booth(addr.for_booth())
@@ -37,6 +41,7 @@ booth.on(
 async function Client (spec)
 {
 	var endp = Endpoint(addr.for_endpoint())
+	clients.push(endp)
 
 	await when(endp, '@connect')
 
@@ -79,7 +84,13 @@ async function test ()
 	expect(count_all).eq(6)
 	expect(count_spec).eq(1) /* was not joined automatically */
 
-	process.exit()
+	console.log('END\n')
+
+	booth.close()
+	for (var endp of clients)
+	{
+		endp.close()
+	}
 }
 
 test()

@@ -1,4 +1,6 @@
 
+console.info('socket.test')
+
 import console from 'console-ultimate'
 
 import { expect } from 'chai'
@@ -15,6 +17,7 @@ var addr = Addr.Websocket(9000)
 
 console.log('WS', ...addr.view())
 
+var errors = 0
 
 /*
  * Booth(options: wss options)
@@ -33,6 +36,7 @@ booth.on(
 	try (_, endp)
 	{
 		console.log(3)
+		/* forces reconnect: */
 		endp.close()
 	},
 	hello (data, endp)
@@ -45,11 +49,11 @@ booth.on(
 		console.log(6, data)
 	},
 
-	...compose('expected-error', safe(), () =>
+	...compose('expected-error', safe(expected_error), function foo$ ()
 	{
 		throw new Error('foo')
 	}),
-	...compose('req', safe(), recoil(), (data) =>
+	...compose('req', recoil(), (data) =>
 	{
 		console.log(8, data)
 
@@ -66,6 +70,21 @@ booth.on(
 		process.exit(1)
 	},
 })
+
+function expected_error (info)
+{
+	console.info(info.error)
+	errors++
+
+	expect(info).an('object')
+	expect(info.error instanceof Error).eq(true)
+	expect(info.meta).deep.eq({ name: 'expected-error' })
+
+	expect(info.args[0]).eq('Hello, World!')
+
+	expect(info.fn).a('function')
+	expect(info.fn.name).eq('foo$')
+}
 
 
 var opens = 0
@@ -123,9 +142,11 @@ endp.on(
 			expect(reconnects).eq(1)
 			expect(closes).eq(2)
 
-			process.exit()
+			expect(errors).eq(1)
+
+			booth.close()
 		}
-		, 2e3)
+		, 1e3)
 	},
 	'@close' (/* _, endp */)
 	{
