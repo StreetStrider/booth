@@ -11,6 +11,7 @@ import { Addr } from '..'
 
 import compose from '../midw/compose'
 import safe from '../midw/safe'
+import json from '../midw/json'
 import recoil from '../midw/recoil'
 
 var addr = Addr.Websocket(9000)
@@ -42,13 +43,13 @@ booth.on(
 	hello (data, endp)
 	{
 		console.log(5, data)
+		expect(data).eq('Hello, World!')
 
 		data = data.toUpperCase() + '_' + data.toLowerCase()
 
 		endp.send('hello', data)
 		console.log(6, data)
 	},
-
 	...compose('expected-error', safe(expected_error), function foo$ ()
 	{
 		throw new Error('foo')
@@ -56,12 +57,19 @@ booth.on(
 	...compose('req', recoil(), (data) =>
 	{
 		console.log(8, data)
+		expect(data).eq('request')
 
 		return new Promise(rs =>
 		{
 			setTimeout(() => rs(data.toUpperCase()))
 		}
 		, 0)
+	}),
+	...compose('json', recoil(), json(), (data) =>
+	{
+		console.log(10, data)
+		expect(data).deep.eq({ json: true })
+		return [ 'a', 'b', 'c' ]
 	}),
 	'@error' (e)
 	{
@@ -126,12 +134,21 @@ endp.on(
 	hello (data, endp)
 	{
 		console.log(7, data)
+		expect(data).eq('HELLO, WORLD!_hello, world!')
 
 		endp.send('req', 'request')
 	},
 	req (data, endp)
 	{
 		console.log(9, data)
+		expect(data).eq('REQUEST')
+
+		endp.send('json', '{"json":true}')
+	},
+	...compose('json', json({ dump: false }), (data, endp) =>
+	{
+		console.log(11, data)
+		expect(data).deep.eq([ 'a', 'b', 'c' ])
 
 		endp.close()
 
@@ -147,15 +164,15 @@ endp.on(
 			booth.close()
 		}
 		, 1e3)
-	},
+	}),
 	'@close' (/* _, endp */)
 	{
 		closes++
 
 		switch (closes)
 		{
-		case 1: console.log('END 3\n'); break
-		case 2: console.log('END 9\n'); break
+		case 1: console.log('END',  3, '\n'); break
+		case 2: console.log('END', 11, '\n'); break
 		default: expect.fail()
 		}
 	},
