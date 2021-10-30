@@ -1,0 +1,19 @@
+{
+	"include":
+	[
+		"*.d.ts",
+		"test/*.ts"
+	],
+
+	"compilerOptions":
+	{
+		"noEmit": true,
+		"pretty": true,
+
+		"strict": true,
+
+		"lib": [ "ES6" ],
+		"target": "ES6",
+		"moduleResolution": "Node"
+	}
+}

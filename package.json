@@ -26,13 +26,24 @@
     "Events.js",
 
     "midw/",
-    "room/"
+    "room/",
+
+    "**/*.d.ts"
   ],
 
   "peerDependencies":
   {
     "ws":
-      "6 || 7 || 8"
+      "6 || 7 || 8",
+
+    "@types/ws":
+      "*"
+  },
+
+  "peerDependenciesMeta":
+  {
+    "@types/ws": { "optional": true },
+           "ws": { "optional": true }
   },
 
   "scripts":
@@ -41,8 +52,9 @@
 
        "st": "eslint .",
      "unit": "test/run",
+       "ts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib",
 
-     "test": "npm run st && npm run unit",
+     "test": "npm run st && npm run unit && npm run ts",
 
     "build": "gulp --final --to npm"
   },
@@ -56,7 +68,7 @@
       "4",
 
     "aux.js":
-      "^3.4"
+      "^3.5"
   },
 
   "devDependencies":
@@ -78,7 +90,7 @@
       "2",
 
     "metalpipe":
-      "~/Projects/metalpipe",
+      "https://github.com/StrangeTransistor/metalpipe.git#bccfd822c84892bca6aa3ac9c489dd9f1db0dea1",
 
 
     "eslint":
@@ -89,6 +101,19 @@
 
     "eslint-plugin-node":
       "11",
+
+
+    "dtslint":
+      "4.2",
+
+    "typescript":
+      "4.4.4",
+
+    "@types/node":
+      "16",
+
+    "@types/ws":
+      "^8.2",
 
 
     "chai":
