@@ -4,13 +4,14 @@ import WebSocket = require('ws')
 import { T_Endpoint } from './Endpoint'
 import { T_Protocol } from './Endpoint'
 import { T_Protocol_In } from './Endpoint'
+import { T_Aux } from './Endpoint'
 import { T_Disposer } from './Endpoint'
 
 export type T_Room
 <
 	In  extends T_Protocol_In,
 	Out extends T_Protocol,
-	Aux extends object,
+	Aux extends T_Aux,
 >
 	=
 {
@@ -27,7 +28,7 @@ export type T_Rooms
 <
 	In  extends T_Protocol_In,
 	Out extends T_Protocol,
-	Aux extends object,
+	Aux extends T_Aux,
 >
 	=
 {
@@ -47,7 +48,7 @@ export type T_Booth
 <
 	In  extends T_Protocol_In,
 	Out extends T_Protocol,
-	Aux extends object,
+	Aux extends T_Aux,
 >
 	=
 {
@@ -62,7 +63,7 @@ export default function Booth
 <
 	In  extends T_Protocol_In,
 	Out extends T_Protocol,
-	Aux extends object,
+	Aux extends T_Aux,
 >
 (
 	wss: WebSocket.Server | WebSocket.ServerOptions

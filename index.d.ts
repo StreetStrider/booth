@@ -3,6 +3,7 @@ export { T_Handler } from './Endpoint'
 export { T_Protocol } from './Endpoint'
 export { T_Protocol_In } from './Endpoint'
 export { T_Endpoint } from './Endpoint'
+export { T_Aux } from './Endpoint'
 
 export { T_Room }  from './Booth'
 export { T_Rooms } from './Booth'

@@ -2,7 +2,7 @@
 import { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
-export type T_Handler = (data: string, endp: T_Endpoint<T_Protocol_In, T_Protocol, object>) => void
+export type T_Handler = (data: string, endp: T_Endpoint<T_Protocol_In, T_Protocol, T_Aux>) => void
 
 export type T_Protocol = { [key: string]: T_Handler }
 export type T_Protocol_In = T_Protocol
@@ -16,6 +16,8 @@ export type T_Protocol_In = T_Protocol
 	'@error': T_Handler,
 }
 
+export type T_Aux = { [key: string]: unknown }
+
 export type T_Disposer = () => void
 
 
@@ -23,7 +25,7 @@ export type T_Endpoint
 <
 	In  extends T_Protocol_In = T_Protocol_In,
 	Out extends T_Protocol    = T_Protocol,
-	Aux extends object        = object,
+	Aux extends T_Aux         = T_Aux,
 >
 	=
 {
@@ -39,7 +41,7 @@ export default function Endpoint
 <
 	In  extends T_Protocol_In = T_Protocol_In,
 	Out extends T_Protocol    = T_Protocol,
-	Aux extends object        = object,
+	Aux extends T_Aux         = T_Aux,
 >
 (
 	ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string
