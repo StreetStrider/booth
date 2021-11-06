@@ -2,11 +2,10 @@
 import { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
-export type T_Handler = (data: string, endp: T_Endpoint<T_Protocol_In, T_Protocol, T_Aux>) => void
+export type T_Handler = (data: string, endp: T_Endpoint<T_Protocol, T_Protocol, T_Aux>) => void
 
 export type T_Protocol = { [key: string]: T_Handler }
-export type T_Protocol_In = T_Protocol
-&
+export type T_Protocol_In =
 {
 	'@connect':   T_Handler,
 	'@reconnect': T_Handler,
@@ -23,14 +22,14 @@ export type T_Disposer = () => void
 
 export type T_Endpoint
 <
-	In  extends T_Protocol_In = T_Protocol_In,
-	Out extends T_Protocol    = T_Protocol,
-	Aux extends T_Aux         = T_Aux,
+	In  extends T_Protocol = T_Protocol,
+	Out extends T_Protocol = T_Protocol,
+	Aux extends T_Aux      = T_Aux,
 >
 	=
 {
-	on (map: Partial<In>): T_Disposer;
-	on <Key extends keyof In> (key: Key, handler: In[Key]): T_Disposer;
+	on (map: Partial<In & T_Protocol_In>): T_Disposer;
+	on <Key extends keyof (In & T_Protocol_In)> (key: Key, handler: (In & T_Protocol_In)[Key]): T_Disposer;
 	send <Kind extends keyof Out> (kind: Kind, data?: Parameters<Out[Kind]>[0]): void;
 	close (): void;
 	aux: Aux;
@@ -39,9 +38,9 @@ export type T_Endpoint
 
 export default function Endpoint
 <
-	In  extends T_Protocol_In = T_Protocol_In,
-	Out extends T_Protocol    = T_Protocol,
-	Aux extends T_Aux         = T_Aux,
+	In  extends T_Protocol = T_Protocol,
+	Out extends T_Protocol = T_Protocol,
+	Aux extends T_Aux      = T_Aux,
 >
 (
 	ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string

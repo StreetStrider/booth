@@ -3,13 +3,12 @@ import WebSocket = require('ws')
 
 import { T_Endpoint } from './Endpoint'
 import { T_Protocol } from './Endpoint'
-import { T_Protocol_In } from './Endpoint'
 import { T_Aux } from './Endpoint'
 import { T_Disposer } from './Endpoint'
 
 export type T_Room
 <
-	In  extends T_Protocol_In,
+	In  extends T_Protocol,
 	Out extends T_Protocol,
 	Aux extends T_Aux,
 >
@@ -26,7 +25,7 @@ export type T_Room
 
 export type T_Rooms
 <
-	In  extends T_Protocol_In,
+	In  extends T_Protocol,
 	Out extends T_Protocol,
 	Aux extends T_Aux,
 >
@@ -46,14 +45,13 @@ export type T_Rooms
 
 export type T_Booth
 <
-	In  extends T_Protocol_In,
+	In  extends T_Protocol,
 	Out extends T_Protocol,
 	Aux extends T_Aux,
 >
 	=
 {
-	on (map: Partial<In>): T_Disposer;
-	on <Key extends keyof In> (key: Key, handler: In[Key]): T_Disposer;
+	on: T_Endpoint<In, Out, Aux>['on'];
 	close (): void;
 	rooms: T_Rooms<In, Out, Aux>;
 }
@@ -61,7 +59,7 @@ export type T_Booth
 
 export default function Booth
 <
-	In  extends T_Protocol_In,
+	In  extends T_Protocol,
 	Out extends T_Protocol,
 	Aux extends T_Aux,
 >
