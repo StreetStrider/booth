@@ -2,7 +2,7 @@
 import { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
-export type T_Handler = (data: string, endp: T_Endpoint<T_Protocol, T_Protocol, T_Aux>) => void
+export type T_Handler <In = string, Out = void> = (data: In, endp: T_Endpoint<T_Protocol, T_Protocol, T_Aux>) => Out
 
 export type T_Protocol = { [key: string]: T_Handler }
 export type T_Protocol_In =
