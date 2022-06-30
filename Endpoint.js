@@ -6,14 +6,14 @@ var noop = () => {}
 
 export default function Endpoint (ws, { booth, events } = {})
 {
-	var ws_connect = ws; ws = null
+	var ws_connect = ws; (ws = null)
 
 	var buffer = null
 
 	if (! booth)
 	{
-		var events = Events()
-		var buffer = []
+		events = Events()
+		buffer = []
 	}
 
 	var endp =
@@ -108,7 +108,7 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (! buffer) return
 
-		var bf = buffer; buffer = null
+		var bf = buffer; (buffer = null)
 
 		for (var pair of bf)
 		{

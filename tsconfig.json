@@ -4,6 +4,10 @@
 		"**/*.d.ts",
 		"test/*.ts"
 	],
+	"exclude":
+	[
+		"release/"
+	],
 
 	"compilerOptions":
 	{
