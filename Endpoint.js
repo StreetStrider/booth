@@ -1,5 +1,5 @@
 
-import Events from './Events'
+import Events from './_/Events'
 
 var noop = () => {}
 
@@ -69,6 +69,7 @@ export default function Endpoint (ws, { booth, events } = {})
 
 	function connect ()
 	{
+		// TODO: Transport()
 		ws = Ws(ws_connect)
 
 		ev('message', ({ data }) => handle(data, endp))
@@ -179,6 +180,7 @@ export default function Endpoint (ws, { booth, events } = {})
 
 import Client from 'isomorphic-ws'
 
+// TODO: Transport()
 function Ws (ws)
 {
 	if (typeof ws === 'string')

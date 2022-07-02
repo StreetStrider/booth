@@ -1,7 +1,8 @@
 
-import Events from './Events'
+import Events from './_/Events'
+import Rooms  from './_/Rooms'
+
 import Endpoint from './Endpoint'
-import Rooms from './room/Rooms'
 
 var noop = () => {}
 

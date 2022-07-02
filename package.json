@@ -2,7 +2,7 @@
   "private": true,
 
      "name": "booth",
-  "version": "0.15.0-pre",
+  "version": "0.16.0-pre",
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
@@ -12,7 +12,7 @@
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
 
-  "engines": { "node": ">=8" },
+  "engines": { "node": ">=8.3" },
 
   "files":
   [
@@ -26,7 +26,7 @@
     "Events.js",
 
     "midw/",
-    "room/",
+    "_/",
 
     "**/*.d.ts"
   ],
@@ -42,8 +42,8 @@
 
   "peerDependenciesMeta":
   {
-    "@types/ws": { "optional": true },
-           "ws": { "optional": true }
+           "ws": { "optional": true },
+    "@types/ws": { "optional": true }
   },
 
   "scripts":
@@ -90,14 +90,14 @@
       "2",
 
     "metalpipe":
-      "https://github.com/StrangeTransistor/metalpipe.git#bccfd822c84892bca6aa3ac9c489dd9f1db0dea1",
+      "https://github.com/StrangeTransistor/metalpipe.git#e335123b083b4cf67ac73ca12ef2f14632c8e6fe",
 
 
     "eslint":
-      "7",
+      "8",
 
     "js-outlander":
-      "StrangeTransistor/js-outlander#2.10.0",
+      "StrangeTransistor/js-outlander#2.11.0",
 
     "eslint-plugin-node":
       "11",
@@ -107,10 +107,10 @@
       "4.2",
 
     "typescript":
-      "4.4.4",
+      "4.7.4",
 
     "@types/node":
-      "16",
+      "18",
 
     "@types/ws":
       "^8.2",

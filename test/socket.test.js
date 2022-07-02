@@ -20,6 +20,15 @@ console.log('WS', ...addr.view())
 
 var errors = 0
 
+var buffer = []
+function track (...args)
+{
+	var [ n ] = args
+
+	buffer.push(n)
+	console.log(...args)
+}
+
 /*
  * Booth(options: wss options)
  * .on(event, handler)
@@ -31,24 +40,24 @@ booth.on(
 {
 	ok (_, endp)
 	{
-		console.log(1)
+		track(1)
 		endp.send('ok')
 	},
 	try (_, endp)
 	{
-		console.log(3)
+		track(3)
 		/* forces reconnect: */
 		endp.close()
 	},
 	hello (data, endp)
 	{
-		console.log(5, data)
+		track(5, data)
 		expect(data).eq('Hello, World!')
 
 		data = data.toUpperCase() + '_' + data.toLowerCase()
 
 		endp.send('hello', data)
-		console.log(6, data)
+		track(6, data)
 	},
 	...compose('expected-error', safe(expected_error), function foo$ ()
 	{
@@ -56,7 +65,7 @@ booth.on(
 	}),
 	...compose('req', recoil(), (data) =>
 	{
-		console.log(8, data)
+		track(8, data)
 		expect(data).eq('request')
 
 		return new Promise(rs =>
@@ -67,7 +76,7 @@ booth.on(
 	}),
 	...compose('json', recoil(), json(), (data) =>
 	{
-		console.log(10, data)
+		track(10, data)
 		expect(data).deep.eq({ json: true })
 		return [ 'a', 'b', 'c' ]
 	}),
@@ -119,7 +128,7 @@ endp.on(
 	},
 	ok (/* data, endp */)
 	{
-		console.log(2)
+		track(2)
 
 		endp.send('try')
 	},
@@ -127,27 +136,27 @@ endp.on(
 	{
 		reconnects++
 
-		console.log(4)
+		track(4)
 		endp.send('hello', 'Hello, World!')
 		endp.send('expected-error', 'Hello, World!')
 	},
 	hello (data, endp)
 	{
-		console.log(7, data)
+		track(7, data)
 		expect(data).eq('HELLO, WORLD!_hello, world!')
 
 		endp.send('req', 'request')
 	},
 	req (data, endp)
 	{
-		console.log(9, data)
+		track(9, data)
 		expect(data).eq('REQUEST')
 
 		endp.send('json', '{"json":true}')
 	},
 	...compose('json', json({ dump: false }), (data, endp) =>
 	{
-		console.log(11, data)
+		track(11, data)
 		expect(data).deep.eq([ 'a', 'b', 'c' ])
 
 		endp.close()
@@ -161,6 +170,8 @@ endp.on(
 
 			expect(errors).eq(1)
 
+			expect(buffer).deep.eq([ 1, 2, 3, 'END 3', 4, 5, 6, 7, 8, 9, 10, 11, 'END 11' ])
+
 			booth.close()
 		}
 		, 1e3)
@@ -171,8 +182,8 @@ endp.on(
 
 		switch (closes)
 		{
-		case 1: console.log('END',  3, '\n'); break
-		case 2: console.log('END', 11, '\n'); break
+		case 1: track('END 3', '\n'); break
+		case 2: track('END 11', '\n'); break
 		default: expect.fail()
 		}
 	},

@@ -3,6 +3,8 @@ console.info('unix.test')
 
 import console from 'console-ultimate'
 
+import { expect } from 'chai'
+
 import { Server } from 'http'
 
 import { Booth } from '..'
@@ -13,6 +15,15 @@ import { Addr } from '..'
 var addr = Addr.Unix('/tmp/booth')
 
 console.log('UNIX', ...addr.view())
+
+var buffer = []
+function track (...args)
+{
+	var [ n ] = args
+
+	buffer.push(n)
+	console.log(...args)
+}
 
 
 var server = new Server().listen(addr.for_booth())
@@ -29,12 +40,12 @@ booth.on(
 {
 	hello (data, endp)
 	{
-		console.log(2, data)
+		track(2, data)
 
 		data = data.toUpperCase() + '_' + data.toLowerCase()
 
 		endp.send('hello', data)
-		console.log(3, data)
+		track(3, data)
 	},
 	'@error' (e)
 	{
@@ -57,20 +68,22 @@ endp.on(
 	'@open' (_, endp)
 	{
 		endp.send('hello', 'Hello, World!')
-		console.log(1)
+		track(1)
 	},
 	hello (data, endp)
 	{
-		console.log(4, data)
+		track(4, data)
 
 		endp.close()
 	},
 	'@close' (/* _, endp */)
 	{
-		console.log('END 4\n')
+		track('END 4', '\n')
 
 		setTimeout(() =>
 		{
+			expect(buffer).deep.eq([ 1, 2, 3, 4, 'END 4' ])
+
 			server.close()
 		}
 		, 1e3)
