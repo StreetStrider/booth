@@ -5,3 +5,4 @@ rm -f /tmp/booth
 node -r esm test/socket.test
 node -r esm test/unix.test
 node -r esm test/room.test
+node -r esm test/error.test

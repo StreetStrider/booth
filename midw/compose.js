@@ -1,4 +1,5 @@
-/* eslint complexity: [ 2, 8 ] */
+/* eslint complexity: [ 1, 8 ] */
+/* eslint max-statements: [ 1, 21 ] */
 
 
 export default function compose (...handlers)
@@ -39,4 +40,22 @@ export default function compose (...handlers)
 	}
 
 	return { [meta.name]: last }
+}
+
+
+export function compose_every (...handlers)
+{
+	if (! handlers.length) { throw new TypeError('no_handlers') }
+
+	var object = handlers.pop()
+
+	if (typeof object !== 'object') { throw new TypeError('no_object_to_apply') }
+	object = { ...object }
+
+	for (var key in object)
+	{
+		object[key] = compose(key, ...handlers, object[key])[key]
+	}
+
+	return object
 }
