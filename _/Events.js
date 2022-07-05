@@ -33,30 +33,12 @@ export default function Events ()
 
 function compose_disposer (dss)
 {
-	// eslint-disable-next-line complexity
 	return () =>
 	{
 		if (! dss) return
 
-		var e
-
-		for (var ds of dss)
-		{
-			try
-			{
-				ds()
-			}
-			catch (ds_e)
-			{
-				e || (e = ds_e)
-			}
-		}
+		for (var ds of dss) ds()
 
 		dss = null
-
-		if (e)
-		{
-			throw e
-		}
 	}
 }
