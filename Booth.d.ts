@@ -1,70 +1,71 @@
 
 import WebSocket = require('ws')
 
-import { T_Endpoint } from './Endpoint'
-import { T_Protocol } from './Endpoint'
-import { T_Aux } from './Endpoint'
-import { T_Disposer } from './Endpoint'
+import { Data } from './Endpoint'
+import { Endpoint } from './Endpoint'
+import { Protocol } from './Endpoint'
+import { Aux as Aux_Base } from './Endpoint'
+import { Disposer } from './Endpoint'
 
-export type T_Room
+export type Room
 <
-	In  extends T_Protocol,
-	Out extends T_Protocol,
-	Aux extends T_Aux,
+	In  extends Protocol,
+	Out extends Protocol,
+	Aux extends Aux_Base,
 >
 	=
 {
-	join  (endp: T_Endpoint<In, Out, Aux>): void;
-	leave (endp: T_Endpoint<In, Out, Aux>): void;
+	join  (endp: Endpoint<In, Out, Aux>): void;
+	leave (endp: Endpoint<In, Out, Aux>): void;
 
-	has (endp: T_Endpoint<In, Out, Aux>): boolean;
+	has (endp: Endpoint<In, Out, Aux>): boolean;
 
-	send <Kind extends keyof Out> (kind: Kind, data?: Parameters<Out[Kind]>[0]): void;
-	each (fn: (endp: T_Endpoint<In, Out, Aux>) => void): void;
+	send <Kind extends keyof Out> (kind: Kind, data?: Data): void;
+	each (fn: (endp: Endpoint<In, Out, Aux>) => void): void;
 }
 
-export type T_Rooms
+export type Rooms
 <
-	In  extends T_Protocol,
-	Out extends T_Protocol,
-	Aux extends T_Aux,
+	In  extends Protocol,
+	Out extends Protocol,
+	Aux extends Aux_Base,
 >
 	=
 {
-	get (name: string): T_Room<In, Out, Aux>;
+	get (name: string): Room<In, Out, Aux>;
 	list (): string[];
 	has (name: string): boolean;
 	remove (name: string): void;
 
-	send <Kind extends keyof Out> (name: string, kind: Kind, data?: Parameters<Out[Kind]>[0]): void;
+	send <Kind extends keyof Out> (name: string, kind: Kind, data?: Data): void;
 
-	join_if_any (name: string, endp: T_Endpoint<In, Out, Aux>): void;
-	leave_every (endp: T_Endpoint<In, Out, Aux>): void;
+	join_if_any (name: string, endp: Endpoint<In, Out, Aux>): void;
+	leave_every (endp: Endpoint<In, Out, Aux>): void;
 }
 
 
-export type T_Booth
+export type Booth
 <
-	In  extends T_Protocol,
-	Out extends T_Protocol,
-	Aux extends T_Aux,
+	In  extends Protocol,
+	Out extends Protocol,
+	Aux extends Aux_Base,
 >
 	=
 {
-	on: T_Endpoint<In, Out, Aux>['on'];
+	on: Endpoint<In, Out, Aux>['on'];
 	close (): void;
-	rooms: T_Rooms<In, Out, Aux>;
+	rooms: Rooms<In, Out, Aux>;
 }
 
 
 export default function Booth
 <
-	In  extends T_Protocol,
-	Out extends T_Protocol,
-	Aux extends T_Aux,
+	In  extends Protocol,
+	Out extends Protocol,
+	Aux extends Aux_Base,
 >
 (
 	wss: WebSocket.Server | WebSocket.ServerOptions
 )
 	:
-T_Booth<In, Out, Aux>
+Booth<In, Out, Aux>

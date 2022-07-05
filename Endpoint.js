@@ -44,7 +44,7 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (buffer)
 		{
-			buffer.push([ kind, data ])
+			buffer.push([ kind, (data || '') ])
 		}
 		else if (ws)
 		{

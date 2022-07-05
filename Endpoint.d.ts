@@ -2,48 +2,63 @@
 import { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
-export type T_Handler <In = string, Out = void> = (data: In, endp: T_Endpoint<T_Protocol, T_Protocol, T_Aux>) => Out
+export type Kind = string
+export type Data = string
 
-export type T_Protocol = { [key: string]: T_Handler }
-export type T_Protocol_In =
+export type Protocol = { [ key: Kind ]: Handler }
+
+export type Handler = (data: Data, endp: Endpoint) => void
+export type Handler_Composition = { [ key: string ]: Handler }
+
+export type Protocol_Client_Defaults =
 {
-	'@connect':   T_Handler,
-	'@reconnect': T_Handler,
+	'@connect':   Handler,
+	'@reconnect': Handler,
 
-	'@open':  T_Handler,
-	'@close': T_Handler,
-	'@error': T_Handler,
+	'@open':  Handler,
+	'@close': Handler,
+	'@error': Handler,
 }
 
-export type T_Aux = { [key: string]: unknown }
+export type Aux = { [ key: string ]: unknown }
+type Aux_Base = Aux
 
-export type T_Disposer = () => void
+export type Disposer = () => void
 
 
-export type T_Endpoint
+export type Endpoint
 <
-	In  extends T_Protocol = T_Protocol,
-	Out extends T_Protocol = T_Protocol,
-	Aux extends T_Aux      = T_Aux,
+	In  extends Protocol = Protocol_Client_Defaults,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 	=
 {
-	on (map: Partial<In & T_Protocol_In>): T_Disposer;
-	on <Key extends keyof (In & T_Protocol_In)> (key: Key, handler: (In & T_Protocol_In)[Key]): T_Disposer;
-	send <Kind extends keyof Out> (kind: Kind, data?: Parameters<Out[Kind]>[0]): void;
-	close (): void;
-	aux: Aux;
+	on (map: Partial<In & Protocol_Client_Defaults>)
+		: Disposer,
+
+	on <Key extends keyof (In & Protocol_Client_Defaults)>
+		(key: Key, handler: (In & Protocol_Client_Defaults)[Key])
+			: Disposer,
+
+	send <Kind extends keyof Out>
+		(kind: Kind, data?: Data)
+			: void,
+
+	close (): void,
+
+	aux: Aux,
 }
 
 
 export default function Endpoint
 <
-	In  extends T_Protocol = T_Protocol,
-	Out extends T_Protocol = T_Protocol,
-	Aux extends T_Aux      = T_Aux,
+	In  extends Protocol = Protocol_Client_Defaults,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 (
 	ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string
 )
 	:
-T_Endpoint<In, Out, Aux>
+Endpoint<In, Out, Aux>

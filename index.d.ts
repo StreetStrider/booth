@@ -1,17 +1,17 @@
 
-export { T_Handler } from './Endpoint'
-export { T_Protocol } from './Endpoint'
-export { T_Protocol_In } from './Endpoint'
-export { T_Endpoint } from './Endpoint'
-export { T_Aux } from './Endpoint'
+export { Handler } from './Endpoint'
+export { Protocol } from './Endpoint'
+export { Protocol_Client_Defaults } from './Endpoint'
+// export type { Endpoint } from './Endpoint'
+export { Aux } from './Endpoint'
 
-export { T_Room }  from './Booth'
-export { T_Rooms } from './Booth'
-export { T_Booth } from './Booth'
+export { Room }  from './Booth'
+export { Rooms } from './Booth'
+// export type { Booth } from './Booth'
 
 export { default as Booth }    from './Booth'
 export { default as Endpoint } from './Endpoint'
 export         * as Addr       from './Addr'
 
-export { multi as once }       from '@streetstrider/emitter/once'
-export { multi as when }       from '@streetstrider/emitter/when'
+export { multi as once } from '@streetstrider/emitter/once'
+export { multi as when } from '@streetstrider/emitter/when'

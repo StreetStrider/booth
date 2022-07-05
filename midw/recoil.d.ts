@@ -1,4 +1,7 @@
 
-import { T_Handler } from '../Endpoint'
+import { Data } from '../Endpoint'
+import { Handler } from '../Endpoint'
 
-export default function <In, Out> (): T_Handler<In, Out>
+import { Transformer } from './compose'
+
+export default function (): (fn: Transformer<Data, Data>) => Handler
