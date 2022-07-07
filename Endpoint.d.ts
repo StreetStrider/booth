@@ -6,6 +6,7 @@ export type Kind = string
 export type Data = string
 
 export type Protocol = { [ key: Kind ]: Handler }
+export type Protocol_Kinds <Kinds extends Kind> = { [ key in Kinds ]: Handler }
 
 export type Handler = (data: Data, endp: Endpoint) => void
 export type Handler_Composition = { [ key: string ]: Handler }

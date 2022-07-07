@@ -46,9 +46,9 @@ export type Rooms
 
 export type Booth
 <
-	In  extends Protocol,
-	Out extends Protocol,
-	Aux extends Aux_Base,
+	In  extends Protocol = Protocol,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 	=
 {
@@ -60,9 +60,9 @@ export type Booth
 
 export default function Booth
 <
-	In  extends Protocol,
-	Out extends Protocol,
-	Aux extends Aux_Base,
+	In  extends Protocol = Protocol,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 (
 	wss: WebSocket.Server | WebSocket.ServerOptions

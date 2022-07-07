@@ -73,6 +73,9 @@
 
   "devDependencies":
   {
+    "booth":
+      "./",
+
     "esm":
       "3",
 

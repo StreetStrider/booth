@@ -5,7 +5,7 @@ export type Websocket <Port extends number> =
 {
 	readonly port: Port;
 	for_booth (): { port: Port };
-	for_endpoint (host: string): string;
+	for_endpoint (host?: string): string;
 	view ():
 	[
 		ReturnType<Websocket<Port>['for_booth']>,
