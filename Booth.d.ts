@@ -9,9 +9,9 @@ import { Disposer } from './Endpoint'
 
 export type Room
 <
-	In  extends Protocol,
-	Out extends Protocol,
-	Aux extends Aux_Base,
+	In  extends Protocol = Protocol,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 	=
 {
@@ -26,9 +26,9 @@ export type Room
 
 export type Rooms
 <
-	In  extends Protocol,
-	Out extends Protocol,
-	Aux extends Aux_Base,
+	In  extends Protocol = Protocol,
+	Out extends Protocol = Protocol,
+	Aux extends Aux_Base = Aux_Base,
 >
 	=
 {

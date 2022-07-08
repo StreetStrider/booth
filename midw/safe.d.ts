@@ -12,4 +12,4 @@ export type Descr =
 
 export type Reporter = (descr: Descr) => void
 
-export default function <In, Out> (fn_report: Reporter): Middleware_Id<In, Out>
+export default function <In, Out> (fn_report?: Reporter): Middleware_Id<In, Out>
