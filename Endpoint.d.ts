@@ -2,43 +2,48 @@
 import { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
+
 export type Kind = string
 export type Data = string
 
-export type Protocol <Keys extends Kind = Kind> = { [ key in Keys ]: Handler }
-
-export type Handler = (data: Data, endp: Endpoint) => void
-export type Handler_Composition = { [ key: string ]: Handler }
-
+export type Protocol <Keys extends Kind = Kind> = { [ key in Keys ]: true }
 export type Protocol_Client_Defaults =
 {
-	'@connect':   Handler,
-	'@reconnect': Handler,
+	'@connect':   true,
+	'@reconnect': true,
 
-	'@open':  Handler,
-	'@close': Handler,
-	'@error': Handler,
+	'@open':  true,
+	'@close': true,
+	'@error': true,
 }
+
+
+export type Handler <Endp extends Endpoint = Endpoint>
+	= (data: Data, endp: Endp) => void
+
+export type Handler_Composition <Endp extends Endpoint = Endpoint>
+	= { [ key: string ]: Handler<Endp> }
+
 
 export type Aux = { [ key: string ]: unknown }
 type Aux_Base = Aux
 
+
 export type Disposer = () => void
 
 
-export type Endpoint
+export interface Endpoint
 <
-	In  extends Protocol = Protocol_Client_Defaults,
+	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
 >
-	=
 {
-	on (map: Partial<In & Protocol_Client_Defaults>)
+	on (map: Partial<{ [ key in keyof (In & Protocol_Client_Defaults) ]: Handler<this> }>)
 		: Disposer,
 
 	on <Key extends keyof (In & Protocol_Client_Defaults)>
-		(key: Key, handler: (In & Protocol_Client_Defaults)[Key])
+		(key: Key, handler: Handler<this>)
 			: Disposer,
 
 	send <Kind extends keyof Out>
@@ -53,7 +58,7 @@ export type Endpoint
 
 export default function Endpoint
 <
-	In  extends Protocol = Protocol_Client_Defaults,
+	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
 >

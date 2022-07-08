@@ -16,13 +16,28 @@ function main ()
 	const booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
 
 	booth.on('ping', (_1, _2) => {})
+	booth.on('ping', (data, endp) =>
+	{
+		data // $ExpectType string
+		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
+	})
 	booth.on('pong', (_1, _2) => {}) // $ExpectError
 	booth.on('stat', (_1, _2) => {})
 	booth.on('stat', null)           // $ExpectError
-	booth.on('stat', (data, endp) =>
+
+	booth.on(
 	{
-		data // $ExpectType string
-		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol<string>, Aux>
+		stat () {},
+		ping (data, endp)
+		{
+			data // $ExpectType string
+			endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
+		},
+	})
+	booth.on(
+	{
+		pong () {}, // $ExpectError
+		stat () {},
 	})
 
 	const endp = Endpoint<Protocol_E, Protocol_B>(addr.for_endpoint())
@@ -32,13 +47,30 @@ function main ()
 	endp.send('stat')
 	endp.send('stat', 1) // $ExpectError
 
+	endp.on('@connect', () => {})
 	endp.on('ping', (_1, _2) => {}) // $ExpectError
 	endp.on('pong', (_1, _2) => {})
-	endp.on('stat', (_1, _2) => {})
-	endp.on('stat', null)           // $ExpectError
-	endp.on('stat', (data, endp) =>
+	endp.on('pong', (data, endp) =>
 	{
 		data // $ExpectType string
-		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol<string>, Aux>
+		endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux>
+	})
+	endp.on('stat', (_1, _2) => {})
+	endp.on('stat', null)           // $ExpectError
+
+	endp.on(
+	{
+		'@connect': () => {},
+		stat () {},
+		pong (data, endp)
+		{
+			data // $ExpectType string
+			endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux>
+		},
+	})
+	endp.on(
+	{
+		ping () {}, // $ExpectError
+		stat () {},
 	})
 }
