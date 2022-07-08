@@ -1,7 +1,6 @@
 
 export { Handler } from './Endpoint'
 export { Protocol } from './Endpoint'
-export { Protocol_Kinds } from './Endpoint' // TODO: rm
 export { Protocol_Client_Defaults } from './Endpoint'
 // export type { Endpoint } from './Endpoint'
 export { Aux } from './Endpoint'

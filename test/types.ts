@@ -1,13 +1,13 @@
 
 import { Addr } from 'booth'
 
-import { Protocol_Kinds } from 'booth'
+import { Protocol } from 'booth'
 
 import { Booth } from 'booth'
 import { Endpoint } from 'booth'
 
-type Protocol_B = Protocol_Kinds<'ping' | 'stat'>
-type Protocol_E = Protocol_Kinds<'pong' | 'stat'>
+type Protocol_B = Protocol<'ping' | 'stat'>
+type Protocol_E = Protocol<'pong' | 'stat'>
 
 function main ()
 {
@@ -22,7 +22,7 @@ function main ()
 	booth.on('stat', (data, endp) =>
 	{
 		data // $ExpectType string
-		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol, Aux>
+		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol<string>, Aux>
 	})
 
 	const endp = Endpoint<Protocol_E, Protocol_B>(addr.for_endpoint())
@@ -39,6 +39,6 @@ function main ()
 	endp.on('stat', (data, endp) =>
 	{
 		data // $ExpectType string
-		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol, Aux>
+		endp // $ExpectType Endpoint<Protocol_Client_Defaults, Protocol<string>, Aux>
 	})
 }
