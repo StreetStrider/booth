@@ -50,13 +50,13 @@ export default function Booth (wss)
 }
 
 
-import { Server } from 'ws'
+import { WebSocketServer } from 'ws'
 
 function Wss (wss)
 {
 	if (is_plain(wss))
 	{
-		return new Server(wss)
+		return new WebSocketServer(wss)
 	}
 
 	return wss
