@@ -10,17 +10,17 @@ symmetric usage via `Endpoint()` on both client and server sides.
 /*
  * options: WebSocket.Server options
  */
-var booth = Booth(options)
+const booth = Booth(options)
 
 /* port */
-var booth = Booth({ port: 9000 })
+const booth = Booth({ port: 9000 })
 
 /*
  * httpServer instance
  * for using inside working http server
  * or with unix domain socket
  */
-var booth = Booth({ server })
+const booth = Booth({ server })
 
 booth.on('name', handler)
 booth.on({ name: handler })
