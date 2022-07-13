@@ -17,7 +17,7 @@ export type Middleware
 	=
 		(fn: In) => Out
 
-export type Middleware_Id <In, Out>
+export type Middleware_Eq <In, Out>
 	= Middleware<Transformer<In, Out>, Transformer<In, Out>>
 
 

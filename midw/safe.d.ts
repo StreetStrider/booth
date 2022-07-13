@@ -1,6 +1,6 @@
 
 import { Meta } from './compose'
-import { Middleware_Id } from './compose'
+import { Middleware_Eq } from './compose'
 
 export type Descr =
 {
@@ -12,4 +12,4 @@ export type Descr =
 
 export type Reporter = (descr: Descr) => void
 
-export default function <In, Out> (fn_report?: Reporter): Middleware_Id<In, Out>
+export default function <In = string, Out = void> (fn_report?: Reporter): Middleware_Eq<In, Out>
