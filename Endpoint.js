@@ -52,8 +52,10 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 	}
 
-	function handle (msg, endp)
+	function handle (event)
 	{
+		var msg = event.data
+
 		if (typeof msg    !== 'string') return // TODO: binary, buffer
 		if (msg.charAt(0) !== '@') return
 		if (msg.charAt(1) === '@') return // special commands
@@ -72,7 +74,7 @@ export default function Endpoint (ws, { booth, events } = {})
 		// TODO: Transport()
 		ws = Ws(ws_connect)
 
-		ev('message', ({ data }) => handle(data, endp))
+		ev('message', handle)
 
 		ev('open',   () => events.emit('@open',  void 0, endp))
 		ev('close',  () => events.emit('@close', void 0, endp))
