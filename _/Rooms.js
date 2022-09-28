@@ -30,20 +30,12 @@ export default function Rooms ()
 
 	function send (name, kind, data = '')
 	{
-		maybe(name, room => room.send(kind, data))
+		rs.over(name, room => room.send(kind, data))
 	}
 
 	function join_if_any (name, endp)
 	{
-		maybe(name, room => room.join(endp))
-	}
-
-	function maybe (name, fn)
-	{
-		if (has(name))
-		{
-			fn(get(name))
-		}
+		rs.over(name, room => room.join(endp))
 	}
 
 	function leave_every (endp)

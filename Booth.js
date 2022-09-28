@@ -1,10 +1,11 @@
 
+import noop from 'aux.js/noop'
+import is_plain from 'aux.js/is-plain'
+
 import Events from './_/Events'
 import Rooms  from './_/Rooms'
 
 import Endpoint from './Endpoint'
-
-var noop = () => {}
 
 
 export default function Booth (wss)
@@ -50,6 +51,7 @@ export default function Booth (wss)
 }
 
 
+// *
 import { WebSocketServer } from 'ws'
 
 function Wss (wss)
@@ -60,9 +62,4 @@ function Wss (wss)
 	}
 
 	return wss
-}
-
-function is_plain (object)
-{
-	return (Object.getPrototypeOf(object) === Object.prototype)
 }

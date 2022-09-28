@@ -1,7 +1,7 @@
 
-import Events from './_/Events'
+import noop from 'aux.js/noop'
 
-var noop = () => {}
+import Events from './_/Events'
 
 
 export default function Endpoint (ws, { booth, events } = {})
@@ -180,6 +180,7 @@ export default function Endpoint (ws, { booth, events } = {})
 }
 
 
+// *
 import Client from 'isomorphic-ws'
 
 // TODO: Transport()
