@@ -5,25 +5,32 @@ import console from 'console-ultimate'
 
 import { expect } from 'chai'
 
+import { join } from 'path'
 import { Server } from 'http'
 
 import { Booth } from '..'
 import { Endpoint } from '..'
 import { Addr } from '..'
 
+import { tmp } from './kit'
+import { Aof } from './kit'
 
-var addr = Addr.Unix('/tmp/booth')
 
-console.log('UNIX', ...addr.view())
-
-var buffer = []
-function track (...args)
+var aof = Aof('unix', () =>
+[
+	[ 1 ],
+	[ 2, '>', 'Hello, World!' ],
+	[ 3, '<', 'HELLO, WORLD!_hello, world!' ],
+	[ 4, 'HELLO, WORLD!_hello, world!' ],
+],
+() =>
 {
-	var [ n ] = args
+	endp.close()
+	server.close()
+})
 
-	buffer.push(n)
-	console.log(...args)
-}
+var addr = Addr.Unix(join(tmp, 'unix.sock'))
+console.log('UNIX', ...addr.view())
 
 
 var server = new Server().listen(addr.for_booth())
@@ -40,18 +47,17 @@ booth.on(
 {
 	hello (data, endp)
 	{
-		track(2, data)
+		aof.track(2, '>', data)
 
 		data = data.toUpperCase() + '_' + data.toLowerCase()
 
 		endp.send('hello', data)
-		track(3, data)
+
+		aof.track(3, '<', data)
 	},
-	'@error' (e)
+	'@error' ()
 	{
-		console.error('UNIX/Booth', e.message)
-		console.error(e.error)
-		process.exit(1)
+		expect.fail()
 	},
 })
 
@@ -68,30 +74,16 @@ endp.on(
 	'@open' (_, endp)
 	{
 		endp.send('hello', 'Hello, World!')
-		track(1)
-	},
-	hello (data, endp)
-	{
-		track(4, data)
 
-		endp.close()
+		aof.track(1)
 	},
-	'@close' (/* _, endp */)
+	hello (data /*, endp */)
 	{
-		track('END 4', '\n')
-
-		setTimeout(() =>
-		{
-			expect(buffer).deep.eq([ 1, 2, 3, 4, 'END 4' ])
-
-			server.close()
-		}
-		, 1e3)
+		aof.track(4, data)
+		aof.end_check()
 	},
-	'@error' (e)
+	'@error' ()
 	{
-		console.error('UNIX/Endpoint', e.message)
-		console.error(e.error)
-		process.exit(1)
+		expect.fail()
 	},
 })

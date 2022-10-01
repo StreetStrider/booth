@@ -11,10 +11,24 @@ import { Addr } from '..'
 
 import { compose_every } from '../midw/compose'
 import safe from '../midw/safe'
-// import json from '../midw/json'
-// import recoil from '../midw/recoil'
+
+import { Aof } from './kit'
+
+
+var aof = Aof('errortest', () =>
+[
+	[ 1, 'expected_foo1' ],
+	[ 2, 'expected_foo2' ],
+	[ 3, 'expected_foo3' ],
+],
+() =>
+{
+	endp.close()
+	booth.close()
+})
 
 var addr = Addr.Websocket(9000)
+console.log('ERRORTEST', ...addr.view())
 
 var errors = 0
 
@@ -30,19 +44,23 @@ function expected_error (info)
 	expect(info.fn.name).eq(info.meta.name)
 	expect(info.error.message).eq(`expected_${ info.meta.name }`)
 
+	aof.track(errors, info.error.message)
+
 	if (errors === 3)
 	{
-		process.exit()
+		aof.end_check()
 	}
 }
 
-Booth(addr.for_booth())
-.on(
+
+var
+booth = Booth(addr.for_booth())
+booth.on(
 {
 	...compose_every(safe(expected_error),
 	{
-		foo1 (/* _, endp */) { throw new Error('expected_foo1') },
-		foo2 (/* _, endp */) { throw new Error('expected_foo2') },
+		foo1 (/* _, endp */) { endp.send('foo2'); throw new Error('expected_foo1') },
+		foo2 (/* _, endp */) { endp.send('foo3'); throw new Error('expected_foo2') },
 		foo3 (/* _, endp */) { throw new Error('expected_foo3') },
 	}),
 })
@@ -50,5 +68,3 @@ Booth(addr.for_booth())
 var
 endp = Endpoint(addr.for_endpoint())
 endp.send('foo1')
-endp.send('foo2')
-endp.send('foo3')

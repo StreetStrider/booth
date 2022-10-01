@@ -14,20 +14,52 @@ import safe from '../midw/safe'
 import json from '../midw/json'
 import recoil from '../midw/recoil'
 
-var addr = Addr.Websocket(9000)
+import { Aof } from './kit'
 
+
+var opens = 0
+var connects = 0
+var reconnects = 0
+var closes = 0
+
+var aof = Aof('socket', () =>
+[
+	[ 'open', 0 ],
+	[ 'connect', 0 ],
+	[ 1 ],
+	[ 2 ],
+	[ 3 ],
+	[ 'close', 1 ],
+	[ 'open', 1 ],
+	[ 'reconnect', 0 ],
+	[ 4, '>', 'Hello, World!' ],
+	[ 5, '<', 'HELLO, WORLD!_hello, world!' ],
+	[ 6, 'HELLO, WORLD!_hello, world!' ],
+	[ 7, '>', 'request' ],
+	[ 8, 'REQUEST' ],
+	[ 9, '>', { json: true } ],
+	[ 10, [ 'a', 'b', 'c' ] ],
+	[ 'error', { name: 'expected-error' } ],
+	[ 'close', 2 ],
+],
+() =>
+{
+	booth.close()
+
+	expect(opens).eq(2)
+	expect(connects).eq(1)
+	expect(reconnects).eq(1)
+	expect(closes).eq(2)
+})
+
+var addr = Addr.Websocket(9000)
 console.log('WS', ...addr.view())
 
-var errors = 0
-
-var buffer = []
-function track (...args)
+setTimeout(() =>
 {
-	var [ n ] = args
+	endp.send('ok')
+})
 
-	buffer.push(n)
-	console.log(...args)
-}
 
 /*
  * Booth(options: wss options)
@@ -40,33 +72,36 @@ booth.on(
 {
 	ok (_, endp)
 	{
-		track(1)
+		aof.track(1)
+
 		endp.send('ok')
 	},
 	try (_, endp)
 	{
-		track(3)
+		aof.track(3)
+
 		/* forces reconnect: */
 		endp.close()
 	},
 	hello (data, endp)
 	{
-		track(5, data)
-		expect(data).eq('Hello, World!')
+		aof.track(4, '>', data)
 
-		data = data.toUpperCase() + '_' + data.toLowerCase()
+		data = (data.toUpperCase() + '_' + data.toLowerCase())
 
 		endp.send('hello', data)
-		track(6, data)
+
+		aof.track(5, '<', data)
 	},
 	...compose('expected-error', safe(expected_error), function foo$ ()
 	{
+		endp.close()
+
 		throw new Error('foo')
 	}),
 	...compose('req', recoil(), (data) =>
 	{
-		track(8, data)
-		expect(data).eq('request')
+		aof.track(7, '>', data)
 
 		return new Promise(rs =>
 		{
@@ -76,22 +111,19 @@ booth.on(
 	}),
 	...compose('json', recoil(), json(), (data) =>
 	{
-		track(10, data)
-		expect(data).deep.eq({ json: true })
+		aof.track(9, '>', data)
+
 		return [ 'a', 'b', 'c' ]
 	}),
-	'@error' (e)
+	'@error' ()
 	{
-		console.error('WS/Booth', e.message)
-		console.error(e.error)
-		process.exit(1)
+		expect.fail()
 	},
 })
 
 function expected_error (info)
 {
-	console.info(info.error)
-	errors++
+	aof.track('error', info.meta)
 
 	expect(info).an('object')
 	expect(info.error instanceof Error).eq(true)
@@ -104,11 +136,6 @@ function expected_error (info)
 }
 
 
-var opens = 0
-var connects = 0
-var reconnects = 0
-var closes = 0
-
 /*
  * Endpoint(uri: string (ws options))
  * .on(event, handler)
@@ -120,78 +147,61 @@ endp.on(
 {
 	'@open' (/* _, endp */)
 	{
+		aof.track('open', opens)
+
 		opens++
 	},
 	'@connect' ()
 	{
+		aof.track('connect', connects)
+
 		connects++
 	},
 	ok (/* data, endp */)
 	{
-		track(2)
+		aof.track(2)
 
 		endp.send('try')
 	},
 	'@reconnect' (_, endp)
 	{
+		aof.track('reconnect', reconnects)
+
 		reconnects++
 
-		track(4)
 		endp.send('hello', 'Hello, World!')
-		endp.send('expected-error', 'Hello, World!')
 	},
 	hello (data, endp)
 	{
-		track(7, data)
-		expect(data).eq('HELLO, WORLD!_hello, world!')
+		aof.track(6, data)
 
 		endp.send('req', 'request')
 	},
 	req (data, endp)
 	{
-		track(9, data)
-		expect(data).eq('REQUEST')
+		aof.track(8, data)
 
 		endp.send('json', '{"json":true}')
 	},
 	...compose('json', json({ dump: false }), (data, endp) =>
 	{
-		track(11, data)
-		expect(data).deep.eq([ 'a', 'b', 'c' ])
+		aof.track(10, data)
 
-		endp.close()
-
-		setTimeout(() =>
-		{
-			expect(opens).eq(2)
-			expect(connects).eq(1)
-			expect(reconnects).eq(1)
-			expect(closes).eq(2)
-
-			expect(errors).eq(1)
-
-			expect(buffer).deep.eq([ 1, 2, 3, 'END 3', 4, 5, 6, 7, 8, 9, 10, 11, 'END 11' ])
-
-			booth.close()
-		}
-		, 1e3)
+		endp.send('expected-error', 'Hello, World!')
 	}),
 	'@close' (/* _, endp */)
 	{
 		closes++
 
-		switch (closes)
+		aof.track('close', closes)
+
+		if (closes === 2)
 		{
-		case 1: track('END 3', '\n'); break
-		case 2: track('END 11', '\n'); break
-		default: expect.fail()
+			aof.end_check()
 		}
 	},
-	'@error' (e)
+	'@error' ()
 	{
-		console.error('WS/Endpoint', e.message)
-		console.error(e.error)
-		process.exit(1)
+		expect.fail()
 	},
 })
-endp.send('ok')

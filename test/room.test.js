@@ -1,3 +1,4 @@
+/* eslint max-statements: [ 2, 23 ] */
 
 console.info('room.test')
 
@@ -11,91 +12,107 @@ import { Addr } from '..'
 
 import { when } from '..'
 
+import { Aof } from './kit'
+
+
+var aof = Aof('room')
+
 var addr = Addr.Websocket(9000)
-
 console.log('WS', ...addr.view())
-
-
-var count_all  = 0
-var count_spec = 0
-
-
-var clients = []
 
 var
 booth = Booth(addr.for_booth())
 booth.rooms.get('@all')
 booth.on(
 {
-	spec (yes, endp)
+	join_special (yes, endp)
 	{
 		if (yes)
 		{
-			booth.rooms.get('@spec').join(endp)
+			booth.rooms.get('@special').join(endp)
 		}
 
-		endp.send('specd')
+		endp.send('join_special$')
 	},
 })
 
-async function Client (spec)
+async function Client (name, join_special)
 {
 	var endp = Endpoint(addr.for_endpoint())
-	clients.push(endp)
 
 	await when(endp, '@connect')
 
-	endp.send('spec', spec || '')
+	endp.send('join_special', (join_special || ''))
 
-	endp.on('count_all',  () =>
+	endp.on('for_all',  () =>
 	{
-		count_all++
+		aof.track('all', name)
 	})
-	endp.on('count_spec', () =>
+	endp.on('for_special', () =>
 	{
-		count_spec++
+		aof.track('special', name)
 	})
 
-	await when(endp, 'specd')
+	await when(endp, 'join_special$')
 
 	return endp
 }
 
+function when_all (clients, name)
+{
+	return Promise.all(clients.map(endp => when(endp, name)))
+}
+
+
+test()
+
 async function test ()
 {
-	await Client()
-	await Client()
-	await Client(true)
+	var clients = []
 
-	booth.rooms.get('@spec').send('count_spec')
-	booth.rooms.get('@all').send('count_all')
-	await timeout(1000)
+	clients.push(await Client('A'))
+	clients.push(await Client('B'))
 
-	expect(count_all).eq(3)
-	expect(count_spec).eq(1)
+	var client_special = await Client('C', true)
+	clients.push(client_special)
+
+	booth.rooms.get('@all').send('for_all')
+	await when_all(clients, 'for_all')
+
+	booth.rooms.get('@special').send('for_special')
+	await when(client_special, 'for_special')
 
 	booth.rooms.get('@all').each(endp => endp.close())
-	await timeout(2000)
+	await when_all(clients, '@reconnect')
 
-	booth.rooms.get('@spec').send('count_spec')
-	booth.rooms.get('@all').send('count_all')
-	await timeout(1000)
+	booth.rooms.get('@all').send('for_all')
+	await when_all(clients, 'for_all')
 
-	expect(count_all).eq(6)
-	expect(count_spec).eq(1) /* was not joined automatically */
+	booth.rooms.get('@special').send('for_special')
+	await null
+	/* await nothing */
 
-	console.log('END\n')
-
-	booth.close()
 	for (var endp of clients)
 	{
 		endp.close()
 	}
-}
 
-test()
+	aof.end()
 
-function timeout (ms)
-{
-	return new Promise(rs => setTimeout(rs, ms))
+	var v = aof.view()
+
+	v.splice(0, 3, ...v.slice(0, 3).sort())
+	v.splice(4, 7, ...v.slice(4, 7).sort())
+
+	expect(v).deep.eq([
+		[ 'all', 'A' ],
+		[ 'all', 'B' ],
+		[ 'all', 'C' ],
+		[ 'special', 'C' ],
+		[ 'all', 'A' ],
+		[ 'all', 'B' ],
+		[ 'all', 'C' ],
+	])
+
+	booth.close()
 }
