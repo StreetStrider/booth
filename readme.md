@@ -36,7 +36,7 @@ Endpoint(ws_uri)
 Endpoint('ws://localhost:9000')
 
 /* unix domain socket */
-Endpoint('ws+unix://localhost:9000')
+Endpoint('ws+unix:///tmp/booth/unix.sock')
 
 endpoint.on('name', handler)
 endpoint.on({ name: handler })
