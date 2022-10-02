@@ -21,10 +21,6 @@
     "Booth.js",
     "Endpoint.js",
 
-    "Addr.js",
-
-    "Events.js",
-
     "midw/",
     "_/",
 
