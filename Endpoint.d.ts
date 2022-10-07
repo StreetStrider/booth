@@ -26,7 +26,7 @@ export type Handler_Composition <Endp extends Endpoint = Endpoint>
 
 
 export type Aux = { [ key: string ]: unknown }
-type Aux_Base = Aux
+export type Aux_Base = Aux
 
 
 export type Disposer = () => void

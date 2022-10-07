@@ -6,10 +6,13 @@ import { Protocol } from 'booth'
 import { Booth } from 'booth'
 import { Endpoint } from 'booth'
 
+import { once } from 'booth'
+import { when } from 'booth'
+
 type Protocol_B = Protocol<'ping' | 'stat'>
 type Protocol_E = Protocol<'pong' | 'stat'>
 
-function main ()
+async function main ()
 {
 	const addr = Addr.Websocket(9000)
 
@@ -73,4 +76,30 @@ function main ()
 		ping () {}, // $ExpectError
 		stat () {},
 	})
+
+	// *
+	once(booth, 'ping', (data, endp) =>
+	{
+		data // $ExpectType string
+		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
+	})
+
+	once(booth, 'pong', (_1, _2) => {}) // $ExpectError
+
+	once(endp, 'pong', (data, endp) =>
+	{
+		data // $ExpectType string
+		endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux>
+	})
+
+	once(endp, 'ping', (_1, _2) => {}) // $ExpectError
+
+	// *
+	await when(booth, 'ping') // $ExpectType string
+
+	await when(booth, 'pong') // $ExpectError
+
+	await when(endp, 'pong') // $ExpectType string
+
+	await when(endp, 'ping') // $ExpectError
 }
