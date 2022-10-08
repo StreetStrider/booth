@@ -1,3 +1,4 @@
+/* eslint max-statements: [ 2, 21 ] */
 
 console.info('once-when-request.test')
 
@@ -25,9 +26,18 @@ import { Aof } from './kit'
 var aof = Aof('once-when-request', () =>
 [
 	[ 1, 'OK' ],
+
 	[ 2, 'OK' ],
+	[ 2, 'OK' ],
+	[ 2, 'OK' ],
+
 	[ 3, 'OK' ],
+
 	[ 4, 'OK' ],
+	[ 4, 'OK' ],
+	[ 4, 'OK' ],
+
+	[ 5, 'Timeout' ],
 ],
 () =>
 {
@@ -50,7 +60,7 @@ booth.on(
 
 	...compose('req_slow', recoil(), async () =>
 	{
-		await delay(500)
+		await delay(250)
 		return 'OK'
 	}),
 
@@ -76,6 +86,12 @@ endp.on(
 		endp.send('req')
 		aof.track(2, await when(endp, 'req'))
 
+		endp.send('req')
+		aof.track(2, await when(endp, 'req', Infinity))
+
+		endp.send('req')
+		aof.track(2, await when(endp, 'req', 10e3))
+
 		endp.send('req_slow')
 		once(endp, 'req_slow', (data) =>
 		{
@@ -84,6 +100,22 @@ endp.on(
 
 		endp.send('req_slow')
 		aof.track(4, await when(endp, 'req_slow'))
+
+		endp.send('req_slow')
+		aof.track(4, await when(endp, 'req_slow', Infinity))
+
+		endp.send('req_slow')
+		aof.track(4, await when(endp, 'req_slow', 10e3))
+
+		try
+		{
+			endp.send('req_slow')
+			aof.track('x', await when(endp, 'req_slow', 100))
+		}
+		catch (e)
+		{
+			aof.track(5, e.message)
+		}
 
 		aof.end_check()
 	},

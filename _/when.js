@@ -7,9 +7,17 @@ import once from './once'
 export default function when (emitter, key, timeout = 5e3)
 {
 	timeout || (timeout = Infinity)
+
 	if (timeout === Infinity)
 	{
-		return new Promise(rs => once(emitter, key, rs))
+		try
+		{
+			return new Promise(rs => once(emitter, key, rs))
+		}
+		finally
+		{
+			emitter = null
+		}
 	}
 
 	var ds
@@ -18,9 +26,18 @@ export default function when (emitter, key, timeout = 5e3)
 		ds = once(emitter, key, rs)
 	})
 
-	var wait = Promise.race([ result, Timeout(timeout) ])
-
-	wait.finally(ds)
-
-	return wait
+	try
+	{
+		return Promise.race([ result, Timeout(timeout) ])
+		.finally(() =>
+		{
+			ds()
+			ds = null
+		})
+	}
+	finally
+	{
+		emitter = null
+		result  = null
+	}
 }
