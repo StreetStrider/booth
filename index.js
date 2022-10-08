@@ -5,3 +5,4 @@ export         * as Addr       from './_/Addr'
 
 export { default as once } from './_/once'
 export { default as when } from './_/when'
+export { default as request } from './_/request'

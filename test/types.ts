@@ -8,6 +8,7 @@ import { Endpoint } from 'booth'
 
 import { once } from 'booth'
 import { when } from 'booth'
+import { request } from 'booth'
 
 type Protocol_B = Protocol<'ping' | 'stat'>
 type Protocol_E = Protocol<'pong' | 'stat'>
@@ -96,10 +97,18 @@ async function main ()
 
 	// *
 	await when(booth, 'ping') // $ExpectType string
+	await when(booth, 'ping', 1e3) // $ExpectType string
 
 	await when(booth, 'pong') // $ExpectError
 
 	await when(endp, 'pong') // $ExpectType string
 
 	await when(endp, 'ping') // $ExpectError
+
+	// *
+	await request(endp, 'pong') // $ExpectType string
+	await request(endp, 'pong', 'data') // $ExpectType string
+	await request(endp, 'pong', 'data', 1e3) // $ExpectType string
+
+	await request(endp, 'ping') // $ExpectError
 }

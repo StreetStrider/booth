@@ -1,4 +1,4 @@
-/* eslint max-statements: [ 2, 21 ] */
+/* eslint max-statements: [ 2, 27 ] */
 
 console.info('once-when-request.test')
 
@@ -14,6 +14,7 @@ import { Addr } from '..'
 
 import { once } from '..'
 import { when } from '..'
+import { request } from '..'
 
 import compose from '../midw/compose'
 // import safe from '../midw/safe'
@@ -38,6 +39,12 @@ var aof = Aof('once-when-request', () =>
 	[ 4, 'OK 8' ],
 
 	[ 5, 'Timeout' ],
+
+	[ 6, 'OK 12' ],
+	[ 6, 'OK 12' ],
+	[ 6, 'OK 12' ],
+
+	[ 7, 'Timeout' ],
 ],
 () =>
 {
@@ -115,6 +122,22 @@ endp.on(
 		catch (e)
 		{
 			aof.track(5, e.message)
+		}
+
+		await when(endp, 'req_slow', Infinity) // skip
+
+		aof.track(6, await request(endp, 'req_slow', 6))
+		aof.track(6, await request(endp, 'req_slow', 6, Infinity))
+		aof.track(6, await request(endp, 'req_slow', 6, 10e3))
+
+		try
+		{
+			endp.send('req_slow', 4)
+			aof.track(6, await request(endp, 'req_slow', 6, 100))
+		}
+		catch (e)
+		{
+			aof.track(7, e.message)
 		}
 
 		aof.end_check()
