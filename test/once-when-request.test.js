@@ -26,25 +26,23 @@ import { Aof } from './kit'
 
 var aof = Aof('once-when-request', () =>
 [
-	[ 1, 'OK 2' ],
-	[ 1, 'OK 2' ],
+	[ 1, 'OK 110' ],
+	[ 1, 'OK 110' ],
+	[ 1, 'OK 111' ],
+	[ 1, 'OK 112' ],
 
-	[ 2, 'OK 4' ],
-	[ 2, 'OK 4' ],
+	[ 2, 'OK 120' ],
+	[ 2, 'OK 120' ],
+	[ 2, 'OK 121' ],
+	[ 2, 'OK 122' ],
 
-	[ 3, 'OK 6' ],
-	[ 3, 'OK 6' ],
+	[ 3, 'Timeout' ],
 
-	[ 4, 'OK 8' ],
-	[ 4, 'OK 8' ],
+	[ 4, 'OK 140' ],
+	[ 4, 'OK 141' ],
+	[ 4, 'OK 142' ],
 
 	[ 5, 'Timeout' ],
-
-	[ 6, 'OK 12' ],
-	[ 6, 'OK 12' ],
-	[ 6, 'OK 12' ],
-
-	[ 7, 'Timeout' ],
 ],
 () =>
 {
@@ -62,13 +60,13 @@ booth.on(
 {
 	...compose('req', recoil(), (data) =>
 	{
-		return `OK ${ 2 * data }`
+		return `OK ${ +data + 100 }`
 	}),
 
 	...compose('req_slow', recoil(), async (data) =>
 	{
 		await delay(250)
-		return `OK ${ 2 * data }`
+		return `OK ${ +data + 100 }`
 	}),
 
 	'@error' ()
@@ -84,60 +82,59 @@ endp.on(
 {
 	async '@open' (_, endp)
 	{
-		endp.send('req', 1)
+		endp.send('req', 10)
 		once(endp, 'req', (data) =>
 		{
 			aof.track(1, data)
 		})
 
-		// endp.send('req', 2) // sent by prev
+		// endp.send('req', 0) // sent by prev
 		aof.track(1, await when(endp, 'req'))
 
-		endp.send('req', 2)
-		aof.track(2, await when(endp, 'req', Infinity))
+		endp.send('req', 11)
+		aof.track(1, await when(endp, 'req', Infinity))
 
-		endp.send('req', 2)
-		aof.track(2, await when(endp, 'req', 10e3))
+		endp.send('req', 12)
+		aof.track(1, await when(endp, 'req', 10e3))
 
-		endp.send('req_slow', 3)
+		endp.send('req_slow', 20)
 		once(endp, 'req_slow', (data) =>
 		{
-			aof.track(3, data)
+			aof.track(2, data)
 		})
 
-		// endp.send('req_slow', 4) // sent by prev
-		aof.track(3, await when(endp, 'req_slow'))
+		// endp.send('req_slow', 0) // sent by prev
+		aof.track(2, await when(endp, 'req_slow'))
 
-		endp.send('req_slow', 4)
-		aof.track(4, await when(endp, 'req_slow', Infinity))
+		endp.send('req_slow', 21)
+		aof.track(2, await when(endp, 'req_slow', Infinity))
 
-		endp.send('req_slow', 4)
-		aof.track(4, await when(endp, 'req_slow', 10e3))
+		endp.send('req_slow', 22)
+		aof.track(2, await when(endp, 'req_slow', 10e3))
 
 		try
 		{
-			endp.send('req_slow', 4)
+			endp.send('req_slow', 0)
 			aof.track('x', await when(endp, 'req_slow', 100))
 		}
 		catch (e)
 		{
-			aof.track(5, e.message)
+			aof.track(3, e.message)
 		}
 
 		await when(endp, 'req_slow', Infinity) // skip
 
-		aof.track(6, await request(endp, 'req_slow', 6))
-		aof.track(6, await request(endp, 'req_slow', 6, Infinity))
-		aof.track(6, await request(endp, 'req_slow', 6, 10e3))
+		aof.track(4, await request(endp, 'req_slow', 40))
+		aof.track(4, await request(endp, 'req_slow', 41, Infinity))
+		aof.track(4, await request(endp, 'req_slow', 42, 10e3))
 
 		try
 		{
-			endp.send('req_slow', 4)
-			aof.track(6, await request(endp, 'req_slow', 6, 100))
+			aof.track('x', await request(endp, 'req_slow', 0, 100))
 		}
 		catch (e)
 		{
-			aof.track(7, e.message)
+			aof.track(5, e.message)
 		}
 
 		aof.end_check()
