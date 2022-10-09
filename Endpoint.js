@@ -74,22 +74,27 @@ export default function Endpoint (ws, { booth, events } = {})
 		// TODO: Transport()
 		ws = Ws(ws_connect)
 
-		ev('message', handle)
+		/* before user */
+		if (! booth)
+		{
+			ev('open', flush)
+		}
 
 		ev('open',   () => events.emit('@open',  void 0, endp))
 		ev('close',  () => events.emit('@close', void 0, endp))
 		ev('error', (e) => events.emit('@error',      e, endp))
 
-		/* must be done after user events */
-		if (booth)
+		ev('message', handle)
+
+		/* after user */
+		if (! booth)
 		{
-			ev('close', cleanup)
+			ev('open',  connect_or_reconnect)
+			ev('close', reconnect_or_cleanup)
 		}
 		else
 		{
-			ev('open',  flush)
-			ev('close', reconnect_or_cleanup)
-			ev('open',  check_reconnect)
+			ev('close', cleanup)
 		}
 
 		function ev (name, handler)
@@ -97,7 +102,7 @@ export default function Endpoint (ws, { booth, events } = {})
 			ws.addEventListener(name, handler)
 		}
 
-		/* instantly opened in booth */
+		/* instantly opened when in booth */
 		if (booth)
 		{
 			events.emit('@open', void 0, endp)
@@ -111,9 +116,9 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (! buffer) return
 
-		var bf = buffer; (buffer = null)
+		var buffer_flush = buffer; (buffer = null)
 
-		for (var pair of bf)
+		for (var pair of buffer_flush)
 		{
 			send(...pair)
 		}
@@ -134,11 +139,11 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 	}
 
-	function check_reconnect ()
+	function connect_or_reconnect ()
 	{
-		if (! check_reconnect.yes)
+		if (! connect_or_reconnect.yes)
 		{
-			check_reconnect.yes = true
+			connect_or_reconnect.yes = true
 
 			events.emit('@connect', void 0, endp)
 		}
