@@ -48,7 +48,14 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 		else if (ws)
 		{
-			ws.send('@' + kind + ':' + data)
+			if (typeof kind === 'string')
+			{
+				ws.send(`@${ kind }:${ String(data) }`)
+			}
+			else
+			{
+				ws.send(kind)
+			}
 		}
 	}
 
@@ -56,9 +63,9 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		var msg = event.data
 
-		if (typeof msg    !== 'string') return // TODO: binary, buffer
+		if (typeof msg    !== 'string') return handle_binary(msg)
 		if (msg.charAt(0) !== '@') return
-		if (msg.charAt(1) === '@') return // special commands
+		if (msg.charAt(1) === '@') return
 
 		var colon = msg.indexOf(':')
 		if (colon === -1) return
@@ -67,6 +74,11 @@ export default function Endpoint (ws, { booth, events } = {})
 		var data = msg.slice(colon + 1)
 
 		events.emit(kind, data, endp)
+	}
+
+	function handle_binary (data)
+	{
+		events.emit('@binary', data, endp)
 	}
 
 	function connect ()
