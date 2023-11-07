@@ -44,15 +44,15 @@
 
   "scripts":
   {
-    "start": "node -r esm test/socket.test.js",
+      "start": "node -r esm test/socket.test.js",
 
-       "st": "eslint .",
-     "unit": "test/run",
-       "ts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib",
+         "st": "eslint .",
+       "unit": "test/run",
+         "ts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib",
 
-     "test": "npm run st && npm run unit && npm run ts",
+       "test": "npm run st && npm run unit && npm run ts",
 
-    "build": "gulp --final --to npm"
+    "release": "gulp --final --to npm"
   },
 
   "dependencies":
@@ -83,13 +83,13 @@
 
 
     "gulp":
-      "4",
+      "4.0.2",
 
     "rollup":
-      "2",
+      "4.3.0",
 
     "metalpipe":
-      "https://github.com/StrangeTransistor/metalpipe.git#8606a6b6cb1a82a78b1ba7430476fb1c1a18b446",
+      "https://github.com/StrangeTransistor/metalpipe.git#6909d53089c861bdcfcf6aed6f57936322ee2712",
 
 
     "eslint":
