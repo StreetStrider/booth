@@ -1,6 +1,5 @@
 
-import noop from 'aux.js/noop'
-import is_plain from 'aux.js/is-plain'
+import is_plain from 'is-plain-obj'
 
 import Events from './_/Events'
 import Rooms  from './_/Rooms'
@@ -32,7 +31,7 @@ export default function Booth (wss)
 		}
 		else
 		{
-			return noop
+			return () => {}
 		}
 	}
 

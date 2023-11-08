@@ -1,6 +1,4 @@
 
-import noop from 'aux.js/noop'
-
 import Events from './_/Events'
 
 
@@ -28,7 +26,7 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (booth)
 		{
-			return noop
+			return () => {}
 		}
 		else if (events)
 		{
@@ -36,7 +34,7 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 		else
 		{
-			return noop
+			return () => {}
 		}
 	}
 

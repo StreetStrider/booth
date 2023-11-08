@@ -64,7 +64,10 @@
       "5",
 
     "aux.js":
-      "^3.6"
+      "3.6.1",
+
+    "is-plain-obj":
+      "3.0.0"
   },
 
   "devDependencies":
