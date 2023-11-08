@@ -1,6 +1,9 @@
 /* eslint complexity: [ 1, 8 ] */
 /* eslint max-statements: [ 1, 21 ] */
 
+// TODO: rate limiting recoil
+// TODO: id-based request-response (turnaround)
+
 
 export default function compose (...handlers)
 {
