@@ -2,7 +2,7 @@
   "private": true,
 
      "name": "booth",
-  "version": "0.16.0-pre",
+  "version": "0.15.0-pre",
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
