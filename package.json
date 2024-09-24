@@ -89,7 +89,7 @@
       "4.0.2",
 
     "rollup":
-      "4.3.0",
+      "4.22.4",
 
     "metalpipe":
       "https://github.com/StrangeTransistor/metalpipe.git#6909d53089c861bdcfcf6aed6f57936322ee2712",
