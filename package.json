@@ -1,8 +1,6 @@
 {
-  "private": true,
-
      "name": "booth",
-  "version": "0.15.0-pre",
+  "version": "0.15.0",
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
@@ -58,10 +56,10 @@
   "dependencies":
   {
     "@streetstrider/emitter":
-      "^1.2",
+      "1.2.1",
 
     "isomorphic-ws":
-      "5",
+      "5.0.0",
 
     "aux.js":
       "3.6.1",
