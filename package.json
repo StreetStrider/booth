@@ -92,21 +92,21 @@
       "4.3.0",
 
     "metalpipe":
-      "https://github.com/StrangeTransistor/metalpipe.git#6909d53089c861bdcfcf6aed6f57936322ee2712",
+      "https://github.com/StrangeTransistor/metalpipe.git#6ea7e3221c465fab3724d88eac5207479d591145",
 
 
     "eslint":
       "8",
 
-    "js-outlander":
-      "StrangeTransistor/js-outlander#2.12.0",
+    "outlander":
+      "StrangeTransistor/outlander#2.12.0",
 
     "eslint-plugin-node":
       "11",
 
 
     "dtslint":
-      "4.2",
+      "4.2.1",
 
     "typescript":
       "5.2.2",
@@ -120,5 +120,13 @@
 
     "chai":
       "4"
+  },
+
+  "pnpm":
+  {
+    "overrides":
+    {
+      "@definitelytyped/utils": "0.1.4"
+    }
   }
 }
