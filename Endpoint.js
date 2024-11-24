@@ -38,7 +38,7 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 	}
 
-	function send (kind, data = '')
+	function send (kind, data = '') /* eslint-disable-line complexity */
 	{
 		if (buffer)
 		{
