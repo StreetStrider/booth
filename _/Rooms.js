@@ -1,7 +1,7 @@
 
-import Registry from 'aux.js/registry'
+import Registry from 'aux.js/registry.js'
 
-import Room from './Room'
+import Room from './Room.js'
 
 
 export default function Rooms ()

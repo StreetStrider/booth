@@ -1,6 +1,6 @@
 {
      "name": "booth",
-  "version": "0.15.0",
+  "version": "0.16.0-workon",
   "license": "ISC",
 
   "author": "Strider <strange.transistor@gmail.com>",
@@ -10,7 +10,9 @@
   "repository": { "url": "https://github.com/StreetStrider/booth.git", "type": "git" },
   "bugs":       { "url": "https://github.com/StreetStrider/booth/issues" },
 
-  "engines": { "node": ">=8.3" },
+  "engines": { "node": ">= 18" },
+
+  "type": "module",
 
   "files":
   [
@@ -25,13 +27,17 @@
     "**/*.d.ts"
   ],
 
+  "exports":
+  {
+    ".": "./index.js",
+    "./midw/*": "./midw/*.js"
+  },
+
   "peerDependencies":
   {
-    "ws":
-      "6 || 7 || 8",
+    "ws": "6 || 7 || 8",
 
-    "@types/ws":
-      "*"
+    "@types/ws": "*"
   },
 
   "peerDependenciesMeta":
@@ -42,7 +48,7 @@
 
   "scripts":
   {
-      "start": "node -r esm test/socket.test.js",
+      "start": "node test/socket.test.js",
 
          "st": "eslint .",
        "unit": "test/run",
@@ -50,13 +56,13 @@
 
        "test": "npm run st && npm run unit && npm run ts",
 
-    "release": "gulp --final --to npm"
+    "release": "gulp --gulpfile gulpfile.cjs --final --to npm"
   },
 
   "dependencies":
   {
     "@streetstrider/emitter":
-      "1.2.1",
+      "1.4.0",
 
     "isomorphic-ws":
       "5.0.0",
@@ -72,9 +78,6 @@
   {
     "booth":
       "./",
-
-    "esm":
-      "3",
 
     "console-ultimate":
       "3",

@@ -3,9 +3,9 @@
 rm -rf /tmp/booth
 mkdir  /tmp/booth
 
-node -r esm test/socket.test && \
-node -r esm test/unix.test   && \
-node -r esm test/room.test   && \
-node -r esm test/error.test  && \
-node -r esm test/buffer.test && \
-node -r esm test/once-when-request.test
+node test/socket.test && \
+node test/unix.test   && \
+node test/room.test   && \
+node test/error.test  && \
+node test/buffer.test && \
+node test/once-when-request.test

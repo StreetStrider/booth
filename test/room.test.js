@@ -6,13 +6,13 @@ import console from 'console-ultimate'
 
 import { expect } from 'chai'
 
-import { Booth } from '..'
-import { Endpoint } from '..'
-import { Addr } from '..'
+import { Booth } from 'booth'
+import { Endpoint } from 'booth'
+import { Addr } from 'booth'
 
-import { when } from '..'
+import { when } from 'booth'
 
-import { Aof } from './kit'
+import { Aof } from './kit.js'
 
 
 var aof = Aof('room')

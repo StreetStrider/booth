@@ -1,5 +1,5 @@
 
-import Collection from 'aux.js/collection'
+import Collection from 'aux.js/collection.js'
 
 
 export default function Room ()

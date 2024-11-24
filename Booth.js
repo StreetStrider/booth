@@ -1,10 +1,10 @@
 
 import is_plain from 'is-plain-obj'
 
-import Events from './_/Events'
-import Rooms  from './_/Rooms'
+import Events from './_/Events.js'
+import Rooms  from './_/Rooms.js'
 
-import Endpoint from './Endpoint'
+import Endpoint from './Endpoint.js'
 
 
 export default function Booth (wss)

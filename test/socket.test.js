@@ -5,16 +5,16 @@ import console from 'console-ultimate'
 
 import { expect } from 'chai'
 
-import { Booth } from '..'
-import { Endpoint } from '..'
-import { Addr } from '..'
+import { Booth } from 'booth'
+import { Endpoint } from 'booth'
+import { Addr } from 'booth'
 
-import compose from '../midw/compose'
-import safe from '../midw/safe'
-import json from '../midw/json'
-import recoil from '../midw/recoil'
+import compose from 'booth/midw/compose'
+import safe from 'booth/midw/safe'
+import json from 'booth/midw/json'
+import recoil from 'booth/midw/recoil'
 
-import { Aof } from './kit'
+import { Aof } from './kit.js'
 
 
 var opens = 0

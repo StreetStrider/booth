@@ -1,5 +1,5 @@
 
-import Events from './_/Events'
+import Events from './_/Events.js'
 
 
 export default function Endpoint (ws, { booth, events } = {})

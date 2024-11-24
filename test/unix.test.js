@@ -8,12 +8,12 @@ import { expect } from 'chai'
 import { join } from 'path'
 import { Server } from 'http'
 
-import { Booth } from '..'
-import { Endpoint } from '..'
-import { Addr } from '..'
+import { Booth } from 'booth'
+import { Endpoint } from 'booth'
+import { Addr } from 'booth'
 
-import { tmp } from './kit'
-import { Aof } from './kit'
+import { tmp } from './kit.js'
+import { Aof } from './kit.js'
 
 
 var aof = Aof('unix', () =>
