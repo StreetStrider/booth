@@ -1,11 +1,18 @@
 #! /bin/sh
 
+set -e
+
 rm -rf /tmp/booth
 mkdir  /tmp/booth
 
-node test/socket.test && \
-node test/unix.test   && \
-node test/room.test   && \
-node test/error.test  && \
-node test/buffer.test && \
+node test/socket.test
+node test/unix.test
+node test/room.test
+node test/error.test
+node test/buffer.test
 node test/once-when-request.test
+
+# deno run -R=. -R=/tmp/booth -W=/tmp/booth -N=localhost,0.0.0.0 -E ./test/socket.test.js
+#
+# https://github.com/denoland/deno/issues/19507
+# https://github.com/denoland/deno/pull/25470

@@ -2,11 +2,11 @@
 var dump = JSON.stringify
 var load = JSON.parse
 
-import { join } from 'path'
-import { openSync as open } from 'fs'
-import { closeSync as close } from 'fs'
-import { readFileSync as read } from 'fs'
-import { writeFileSync as write } from 'fs'
+import { join } from 'node:path'
+import { openSync as open } from 'node:fs'
+import { closeSync as close } from 'node:fs'
+import { readFileSync as read } from 'node:fs'
+import { writeFileSync as write } from 'node:fs'
 
 import { expect } from 'chai'
 
