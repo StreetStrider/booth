@@ -1,7 +1,7 @@
 
-import { Data } from '../Endpoint'
-import { Handler } from '../Endpoint'
+import type { Data } from '../Endpoint.js'
+import type { Handler } from '../Endpoint.js'
 
-import { Transformer } from './compose'
+import type { Transformer } from './compose.js'
 
 export default function (): (fn: Transformer<Data, Data>) => Handler

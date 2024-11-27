@@ -1,11 +1,11 @@
 
-import { Data } from '../Endpoint'
-import { Aux_Base } from '../Endpoint'
-import { Protocol } from '../Endpoint'
-import { Protocol_Client_Defaults } from '../Endpoint'
-import { Endpoint } from '../Endpoint'
+import type { Data } from '../Endpoint.js'
+import type { Aux_Base } from '../Endpoint.js'
+import type { Protocol } from '../Endpoint.js'
+import type { Protocol_Client_Defaults } from '../Endpoint.js'
+import type { Endpoint } from '../Endpoint.js'
 
-import { Booth } from '../Booth'
+import type { Booth } from '../Booth.js'
 
 export default function
 <

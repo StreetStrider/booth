@@ -1,7 +1,7 @@
 
-import { Endpoint } from '../Endpoint'
-import { Handler } from '../Endpoint'
-import { Handler_Composition } from '../Endpoint'
+import type { Endpoint } from '../Endpoint.js'
+import type { Handler } from '../Endpoint.js'
+import type { Handler_Composition } from '../Endpoint.js'
 
 export type Promising <T> = T | Promise<T>
 

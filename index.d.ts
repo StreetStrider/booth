@@ -1,19 +1,18 @@
 
-export { default as Booth }    from './Booth'
-export { default as Endpoint } from './Endpoint'
-export         * as Addr       from './_/Addr'
+export { default as Booth }    from './Booth.js'
+export { default as Endpoint } from './Endpoint.js'
+export         * as Addr       from './_/Addr.js'
 
-export { default as once } from './_/once'
-export { default as when } from './_/when'
-export { default as request } from './_/request'
+export { default as once } from './_/once.js'
+export { default as when } from './_/when.js'
+export { default as request } from './_/request.js'
 
-// * types
-export { Handler } from './Endpoint'
-export { Protocol } from './Endpoint'
-export { Protocol_Client_Defaults } from './Endpoint'
-/* export type { Endpoint } from './Endpoint' */
-export { Aux } from './Endpoint'
+export type { Handler } from './Endpoint.js'
+export type { Protocol } from './Endpoint.js'
+export type { Protocol_Client_Defaults } from './Endpoint.js'
+/* export type { Endpoint } from './Endpoint.js' */
+export type { Aux } from './Endpoint.js'
 
-export { Room }  from './Booth'
-export { Rooms } from './Booth'
-/* export type { Booth } from './Booth' */
+export { Room }  from './Booth.js'
+export { Rooms } from './Booth.js'
+/* export type { Booth } from './Booth.js' */

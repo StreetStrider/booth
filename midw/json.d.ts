@@ -1,6 +1,6 @@
 
-import { Transformer } from './compose'
-import { Middleware }  from './compose'
+import type { Transformer } from './compose.js'
+import type { Middleware }  from './compose.js'
 
 export type Options =
 {

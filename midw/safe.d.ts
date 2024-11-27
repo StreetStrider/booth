@@ -1,6 +1,6 @@
 
-import { Meta } from './compose'
-import { Middleware_Eq } from './compose'
+import type { Meta } from './compose.js'
+import type { Middleware_Eq } from './compose.js'
 
 export type Descr =
 {

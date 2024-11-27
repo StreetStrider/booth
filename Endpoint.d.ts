@@ -1,5 +1,5 @@
 
-import { ClientRequestArgs } from 'http'
+import type { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
 
