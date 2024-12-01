@@ -22,6 +22,7 @@
     "Endpoint.js",
 
     "midw/",
+    "transport/",
     "_/",
 
     "**/*.d.ts"
@@ -30,7 +31,8 @@
   "exports":
   {
     ".": "./index.js",
-    "./midw/*": "./midw/*.js"
+    "./midw/*": "./midw/*.js",
+    "./transport/*": "./transport/*.js"
   },
 
   "peerDependencies":
@@ -71,7 +73,10 @@
       "3.6.1",
 
     "is-plain-obj":
-      "4.1.0"
+      "4.1.0",
+
+    "typescript-event-target":
+      "1.1.1"
   },
 
   "devDependencies":

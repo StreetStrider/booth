@@ -1,5 +1,6 @@
 
 import Events from './_/Events.js'
+import Ws from './transport/Websocket.js'
 
 
 export default function Endpoint (ws, { booth, events } = {})
@@ -82,7 +83,14 @@ export default function Endpoint (ws, { booth, events } = {})
 	function connect ()
 	{
 		// TODO: Transport()
-		ws = Ws(ws_connect)
+		if (typeof ws_connect === 'string')
+		{
+			ws = Ws(ws_connect)
+		}
+		else
+		{
+			ws = ws_connect
+		}
 
 		/* before user */
 		if (! booth)
@@ -192,19 +200,4 @@ export default function Endpoint (ws, { booth, events } = {})
 	}
 
 	return (connect(), endp)
-}
-
-
-// *
-import Client from 'isomorphic-ws'
-
-// TODO: Transport()
-function Ws (ws)
-{
-	if (typeof ws === 'string')
-	{
-		return new Client(ws)
-	}
-
-	return ws
 }
