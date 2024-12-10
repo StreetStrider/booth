@@ -15,7 +15,7 @@ export default function
 (
 	endpoint: Endpoint<In, Out, Aux>,
 	key: keyof (In & Protocol_Client_Defaults),
-	data?: Data,
+	data?: Data | number,
 	timeout?: number,
 )
 	: Promise<Data>

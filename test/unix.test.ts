@@ -1,7 +1,7 @@
 
-console.info('unix.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('unix.test')
 
 import { expect } from 'chai'
 

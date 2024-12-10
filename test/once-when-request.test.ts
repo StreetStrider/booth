@@ -1,12 +1,14 @@
 /* eslint max-statements: [ 2, 27 ] */
 
-console.info('once-when-request.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('once-when-request.test')
 
 import delay from 'aux.js/async/delay.js'
 
 import { expect } from 'chai'
+
+import type { Protocol } from 'booth'
 
 import { Booth } from 'booth'
 import { Endpoint } from 'booth'
@@ -22,6 +24,10 @@ import compose from 'booth/midw/compose'
 import recoil from 'booth/midw/recoil'
 
 import { Aof } from './kit.js'
+
+
+type Protocol_B = Protocol<'req' | 'req_slow'>
+type Protocol_E = Protocol<'req' | 'req_slow'>
 
 
 var aof = Aof('once-when-request', () =>
@@ -55,15 +61,15 @@ console.log('WS', ...addr.view())
 
 
 var
-booth = Booth(addr.for_booth())
+booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
 booth.on(
 {
-	...compose('req', recoil(), (data) =>
+	...compose('req', recoil(), (data: string) =>
 	{
 		return `OK ${ +data + 100 }`
 	}),
 
-	...compose('req_slow', recoil(), async (data) =>
+	...compose('req_slow', recoil(), async (data: string) =>
 	{
 		await delay(250)
 		return `OK ${ +data + 100 }`
@@ -77,7 +83,7 @@ booth.on(
 
 
 var
-endp = Endpoint(addr.for_endpoint())
+endp = Endpoint<Protocol_E, Protocol_B>(addr.for_endpoint())
 endp.on(
 {
 	async '@open' (_, endp)
@@ -117,7 +123,7 @@ endp.on(
 			endp.send('req_slow', 0)
 			aof.track('x', await when(endp, 'req_slow', 100))
 		}
-		catch (e)
+		catch (e: any)
 		{
 			aof.track(3, e.message)
 		}
@@ -132,7 +138,7 @@ endp.on(
 		{
 			aof.track('x', await request(endp, 'req_slow', 0, 100))
 		}
-		catch (e)
+		catch (e: any)
 		{
 			aof.track(5, e.message)
 		}

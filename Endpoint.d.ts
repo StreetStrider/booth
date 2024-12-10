@@ -2,30 +2,33 @@
 import type { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
+import type { PayloadBinary } from './Transport.js'
 
 export type Kind = string
 export type Data = string
 
-export type Protocol <Keys extends Kind = Kind> = { [ key in Keys ]: true }
+export type Protocol <Keys extends Kind = Kind> = Record<Keys, string>
 export type Protocol_Client_Defaults =
 {
-	'@connect':   true,
-	'@reconnect': true,
+	'@connect':   void,
+	'@reconnect': void,
 
-	'@open':  true,
-	'@close': true,
-	'@error': true,
+	'@binary': PayloadBinary,
+
+	'@open':  void,
+	'@close': void,
+	'@error': WebSocket.ErrorEvent,
 }
 
 
-export type Handler <Endp extends Endpoint = Endpoint>
+export type Handler <Endp extends Endpoint = Endpoint, Data>
 	= (data: Data, endp: Endp) => void
 
 export type Handler_Composition <Endp extends Endpoint = Endpoint>
-	= { [ key: string ]: Handler<Endp> }
+	= { [ key: string ]: Handler<Endp, string> }
 
 
-export type Aux = { [ key: string ]: unknown }
+export type Aux = Record<string, unknown>
 export type Aux_Base = Aux
 
 
@@ -39,16 +42,23 @@ export interface Endpoint
 	Aux extends Aux_Base = Aux_Base,
 >
 {
-	on (map: Partial<{ [ key in keyof (In & Protocol_Client_Defaults) ]: Handler<this> }>)
-		: Disposer,
-
 	on <Key extends keyof (In & Protocol_Client_Defaults)>
-		(key: Key, handler: Handler<this>)
+		(map: { [ K in Key ]?: Handler<this, (In & Protocol_Client_Defaults)[K]> })
+			: Disposer,
+
+	on <Key extends keyof In>
+		(key: Key, handler: Handler<this, In[Key]>)
+			: Disposer,
+
+	on <Key extends keyof Protocol_Client_Defaults>
+		(key: Key, handler: Handler<this, Protocol_Client_Defaults[Key]>)
 			: Disposer,
 
 	send <Kind extends keyof Out>
-		(kind: Kind, data?: Data)
+		(kind: Kind, data?: string extends Out[Kind] ? (Out[Kind] | number) : Out[Kind])
 			: void,
+
+	send (data: PayloadBinary): void,
 
 	close (): void,
 

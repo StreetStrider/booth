@@ -1,8 +1,8 @@
 /* eslint max-statements: [ 2, 23 ] */
 
-console.info('room.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('room.test')
 
 import { expect } from 'chai'
 
@@ -36,7 +36,7 @@ booth.on(
 	},
 })
 
-async function Client (name, join_special)
+async function Client (name: string, join_special?: string)
 {
 	var endp = Endpoint(addr.for_endpoint())
 
@@ -58,7 +58,7 @@ async function Client (name, join_special)
 	return endp
 }
 
-function when_all (clients, name)
+function when_all (clients: any[], name: string)
 {
 	return Promise.all(clients.map(endp => when(endp, name)))
 }
@@ -73,7 +73,7 @@ async function test ()
 	clients.push(await Client('A'))
 	clients.push(await Client('B'))
 
-	var client_special = await Client('C', true)
+	var client_special = await Client('C', 'yes')
 	clients.push(client_special)
 
 	booth.rooms.get('@all').send('for_all')

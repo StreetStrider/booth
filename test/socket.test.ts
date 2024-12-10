@@ -1,12 +1,15 @@
 
-console.info('socket.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('socket.test')
 
 import { expect } from 'chai'
 
+import type { Protocol } from 'booth'
+import type { Endpoint } from 'booth/endpoint'
+
 import { Booth } from 'booth'
-import { Endpoint } from 'booth'
+import { Endpoint as Endp } from 'booth'
 import { Addr } from 'booth'
 
 import compose from 'booth/midw/compose'
@@ -61,13 +64,17 @@ setTimeout(() =>
 })
 
 
+type Protocol_B = Protocol<'ok' | 'try' | 'hello' | 'expected-error' | 'req' | 'json'>
+type Protocol_E = Protocol<'ok' | 'hello' | 'expected-error' | 'req' | 'json'>
+
+
 /*
  * Booth(options: wss options)
  * .on(event, handler)
  * .on({ event: handler })
  */
 var
-booth = Booth(addr.for_booth())
+booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
 booth.on(
 {
 	ok (_, endp)
@@ -99,17 +106,16 @@ booth.on(
 
 		throw new Error('foo')
 	}),
-	...compose('req', recoil(), (data) =>
+	...compose('req', recoil(), (data: string) =>
 	{
 		aof.track(7, '>', data)
 
 		return new Promise(rs =>
 		{
 			setTimeout(() => rs(data.toUpperCase()))
-		}
-		, 0)
+		})
 	}),
-	...compose('json', recoil(), json(), (data) =>
+	...compose('json', recoil(), json(), (data: string) =>
 	{
 		aof.track(9, '>', data)
 
@@ -121,7 +127,7 @@ booth.on(
 	},
 })
 
-function expected_error (info)
+function expected_error (info: any)
 {
 	aof.track('error', info.meta)
 
@@ -142,7 +148,7 @@ function expected_error (info)
  * .on({ event: handler })
  */
 var
-endp = Endpoint(addr.for_endpoint())
+endp = Endp<Protocol_E, Protocol_B>(addr.for_endpoint())
 endp.on(
 {
 	'@open' (/* _, endp */)
@@ -183,7 +189,7 @@ endp.on(
 
 		endp.send('json', '{"json":true}')
 	},
-	...compose('json', json({ dump: false }), (data, endp) =>
+	...compose('json', json({ dump: false }), (data: string, endp: Endpoint) =>
 	{
 		aof.track(10, data)
 

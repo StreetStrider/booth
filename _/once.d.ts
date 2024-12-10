@@ -14,11 +14,12 @@ export default function
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
+	Key extends keyof (In & Protocol_Client_Defaults),
 >
 (
 	endpoint: Endpoint<In, Out, Aux>,
-	key: keyof (In & Protocol_Client_Defaults),
-	fn: Handler<Endpoint<In, Out, Aux>>,
+	key: Key,
+	fn: Handler<Endpoint<In, Out, Aux>, (In & Protocol_Client_Defaults)[Key]>,
 )
 	: Disposer
 
@@ -27,10 +28,11 @@ export default function
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
+	Key extends keyof (In & Protocol_Client_Defaults),
 >
 (
 	booth: Booth<In, Out, Aux>,
-	key: keyof (In & Protocol_Client_Defaults),
-	fn: Handler<Endpoint<In, Out, Aux>>,
+	key: Key,
+	fn: Handler<Endpoint<In, Out, Aux>, (In & Protocol_Client_Defaults)[Key]>,
 )
 	: Disposer

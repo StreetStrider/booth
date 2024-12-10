@@ -1,7 +1,7 @@
 
 import { Addr } from 'booth'
 
-import { Protocol } from 'booth'
+import type { Protocol } from 'booth'
 
 import { Booth } from 'booth'
 import { Endpoint } from 'booth'
@@ -49,7 +49,7 @@ async function main ()
 	endp.send('ping')
 	endp.send('pong')    // $ExpectError
 	endp.send('stat')
-	endp.send('stat', 1) // $ExpectError
+	endp.send('stat', true) // $ExpectError
 
 	endp.on('@connect', () => {})
 	endp.on('ping', (_1, _2) => {}) // $ExpectError

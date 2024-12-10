@@ -1,3 +1,4 @@
+// TODO: new compose design, better types
 
 import type { Endpoint } from '../Endpoint.js'
 import type { Handler } from '../Endpoint.js'
@@ -40,3 +41,6 @@ declare function compose (name: string, mw1: Middleware<any, any>, mw2: Middlewa
 declare function compose (meta: Meta, mw1: Middleware<any, any>, mw2: Middleware<any, any>, mw3: Middleware<any, any>, hn: Handler): Handler_Composition
 
 export default compose
+
+
+export const compose_every: any // TODO: any

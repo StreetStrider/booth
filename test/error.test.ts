@@ -1,7 +1,7 @@
 
-console.info('error.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('error.test')
 
 import { expect } from 'chai'
 
@@ -32,7 +32,7 @@ console.log('ERRORTEST', ...addr.view())
 
 var errors = 0
 
-function expected_error (info)
+function expected_error (info: any)
 {
 	errors++
 

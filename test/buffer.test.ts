@@ -1,8 +1,8 @@
 /* eslint max-statements: [ 2, 27 ] */
 
-console.info('buffer.test')
+import 'console-ultimate'
 
-import console from 'console-ultimate'
+console.info('buffer.test')
 
 import { expect } from 'chai'
 
@@ -37,17 +37,16 @@ booth.on(
 	{
 	},
 	*/
-	'@binary' (data, endp)
+	'@binary' ($data, endp)
 	{
-		expect(data instanceof Buffer).eq(true)
+		expect($data instanceof Buffer).eq(true)
 
-		data = data.toString()
+		let data: any = $data.toString()
+
 		aof.track(1, data)
-
 		data = data.toUpperCase()
-		data = Buffer.from(data)
 
-		endp.send(data)
+		endp.send(Buffer.from(data))
 	},
 	'@error' ()
 	{
@@ -68,8 +67,7 @@ endp.on(
 	{
 		expect(data instanceof Buffer).eq(true)
 
-		data = data.toString()
-		aof.track(2, data)
+		aof.track(2, data.toString())
 
 		aof.end_check()
 	},

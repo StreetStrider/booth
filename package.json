@@ -31,6 +31,8 @@
   "exports":
   {
     ".": "./index.js",
+    "./endpoint": "./Endpoint.js",
+    "./booth": "./Booth.js",
     "./midw/*": "./midw/*.js",
     "./transport/*": "./transport/*.js"
   },
@@ -56,7 +58,7 @@
        "unit": "test/run",
          "ts": "dtslint --expectOnly --localTs ./node_modules/typescript/lib",
 
-       "test": "npm run st && npm run unit && npm run ts",
+       "test": "pnpm run st && pnpm run unit && pnpm run ts",
 
     "release": "gulp --gulpfile gulpfile.cjs --final --to npm"
   },
@@ -83,6 +85,9 @@
   {
     "booth":
       "./",
+
+    "tsx":
+      "4",
 
     "console-ultimate":
       "4.1.0",
@@ -122,6 +127,9 @@
 
     "@types/ws":
       "^8.2",
+
+    "@types/chai":
+      "5.0.1",
 
 
     "chai":
