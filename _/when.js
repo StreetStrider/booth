@@ -1,8 +1,7 @@
 
-import $Timeout from 'aux.js/async/timeout.js'
-const Timeout = $Timeout.default
-
 import once from './once.js'
+
+import { timeout as Timeout } from './timeout.js'
 
 
 export default function when (emitter, key, timeout = 5e3)

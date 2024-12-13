@@ -4,8 +4,6 @@ import 'console-ultimate'
 
 console.info('once-when-request.test')
 
-import delay from 'aux.js/async/delay.js'
-
 import { expect } from 'chai'
 
 import type { Protocol } from 'booth'
@@ -22,6 +20,8 @@ import compose from 'booth/midw/compose'
 // import safe from 'booth/midw/safe'
 // import json from 'booth/midw/json'
 import recoil from 'booth/midw/recoil'
+
+import delay from '../_/delay.js'
 
 import { Aof } from './kit.js'
 

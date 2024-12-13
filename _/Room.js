@@ -1,34 +1,34 @@
 
-import Collection from 'aux.js/collection.js'
+import Seq from './seq.js'
 
 
 export default function Room ()
 {
-	var coll = Collection()
+	var seq = Seq()
 
 	function join (endp)
 	{
-		coll.add(endp)
+		seq.add(endp)
 	}
 
 	function leave (endp)
 	{
-		coll.remove(endp)
+		seq.remove(endp)
 	}
 
 	function has (endp)
 	{
-		return coll.has(endp)
+		return seq.has(endp)
 	}
 
 	function send (kind, data = '')
 	{
-		coll.each(endp => endp.send(kind, data))
+		seq.each(endp => endp.send(kind, data))
 	}
 
 	function each (fn)
 	{
-		coll.each(fn)
+		seq.each(fn)
 	}
 
 	return { join, leave, has, send, each }

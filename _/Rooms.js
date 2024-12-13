@@ -1,46 +1,46 @@
 
-import Registry from 'aux.js/registry.js'
+import Reg from './reg.js'
 
 import Room from './Room.js'
 
 
 export default function Rooms ()
 {
-	var rs = Registry(Room)
+	var reg = Reg(Room)
 
 	function get (name)
 	{
-		return rs.get(name)
+		return reg.get(name)
 	}
 
 	function list ()
 	{
-		return rs.keys()
+		return reg.keys()
 	}
 
 	function has (name)
 	{
-		return rs.has(name)
+		return reg.has(name)
 	}
 
 	function remove (name)
 	{
-		rs.remove(name)
+		reg.remove(name)
 	}
 
 	function send (name, kind, data = '')
 	{
-		rs.over(name, room => room.send(kind, data))
+		reg.over(name, room => room.send(kind, data))
 	}
 
 	function join_if_any (name, endp)
 	{
-		rs.over(name, room => room.join(endp))
+		reg.over(name, room => room.join(endp))
 	}
 
 	function leave_every (endp)
 	{
-		rs.each(room =>
+		reg.each(room =>
 		{
 			if (room.has(endp))
 			{
