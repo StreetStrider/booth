@@ -28,8 +28,7 @@ export type Handler_Composition <Endp extends Endpoint = Endpoint>
 	= { [ key: string ]: Handler<Endp, string> }
 
 
-export type Aux = Record<string, unknown>
-export type Aux_Base = Aux
+export type Aux_Base = Record<string, unknown>
 
 
 export type Disposer = () => void

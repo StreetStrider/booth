@@ -4,7 +4,7 @@ import WebSocket = require('ws')
 import type { Data } from './Endpoint.js'
 import type { Endpoint } from './Endpoint.js'
 import type { Protocol } from './Endpoint.js'
-import type { Aux as Aux_Base } from './Endpoint.js'
+import type { Aux_Base } from './Endpoint.js'
 import type { Disposer } from './Endpoint.js'
 
 export type Room
