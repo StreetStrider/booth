@@ -7,8 +7,9 @@ import type { PayloadBinary } from './Transport.js'
 export type Kind = string
 export type Data = string
 
+/* TODO: proper combination */
 export type Protocol <Keys extends Kind = Kind> = Record<Keys, string>
-export type Protocol_Client_Defaults =
+export type Protocol_Core =
 {
 	'@connect':   void,
 	'@reconnect': void,
@@ -19,6 +20,7 @@ export type Protocol_Client_Defaults =
 	'@close': void,
 	'@error': WebSocket.ErrorEvent,
 }
+export type Protocol_All <In> = (In & Protocol_Core)
 
 
 export type Handler <Endp extends Endpoint = Endpoint, Data>
@@ -41,16 +43,16 @@ export interface Endpoint
 	Aux extends Aux_Base = Aux_Base,
 >
 {
-	on <Key extends keyof (In & Protocol_Client_Defaults)>
-		(map: { [ K in Key ]?: Handler<this, (In & Protocol_Client_Defaults)[K]> })
+	on <Key extends keyof Protocol_All<In>>
+		(map: { [ K in Key ]?: Handler<this, Protocol_All<In>[K]> })
 			: Disposer,
 
 	on <Key extends keyof In>
 		(key: Key, handler: Handler<this, In[Key]>)
 			: Disposer,
 
-	on <Key extends keyof Protocol_Client_Defaults>
-		(key: Key, handler: Handler<this, Protocol_Client_Defaults[Key]>)
+	on <Key extends keyof Protocol_Core>
+		(key: Key, handler: Handler<this, Protocol_Core[Key]>)
 			: Disposer,
 
 	send <Kind extends keyof Out>

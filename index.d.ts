@@ -9,7 +9,8 @@ export { default as request } from './_/request.js'
 
 export type { Handler } from './Endpoint.js'
 export type { Protocol } from './Endpoint.js'
-export type { Protocol_Client_Defaults } from './Endpoint.js'
+export type { Protocol_Core } from './Endpoint.js'
+export type { Protocol_All } from './Endpoint.js'
 /* export type { Endpoint } from './Endpoint.js' */
 export type { Aux_Base } from './Endpoint.js'
 

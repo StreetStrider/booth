@@ -2,7 +2,7 @@
 import type { Data } from '../Endpoint.js'
 import type { Aux_Base } from '../Endpoint.js'
 import type { Protocol } from '../Endpoint.js'
-import type { Protocol_Client_Defaults } from '../Endpoint.js'
+import type { Protocol_All } from '../Endpoint.js'
 import type { Endpoint } from '../Endpoint.js'
 
 
@@ -14,7 +14,7 @@ export default function
 >
 (
 	endpoint: Endpoint<In, Out, Aux>,
-	key: keyof (In & Protocol_Client_Defaults),
+	key: keyof Protocol_All<In>,
 	data?: Data | number,
 	timeout?: number,
 )
