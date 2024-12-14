@@ -10,20 +10,20 @@ symmetric usage via `Endpoint()` on both client and server sides.
 /*
  * options: WebSocket.Server options
  */
-const booth = Booth(options)
+const dispatch = Dispatch(options)
 
 /* port */
-const booth = Booth({ port: 9000 })
+const dispatch = Dispatch({ port: 9000 })
 
 /*
  * httpServer instance
  * for using inside working http server
  * or with unix domain socket
  */
-const booth = Booth({ server })
+const dispatch = Dispatch({ server })
 
-booth.on('name', handler)
-booth.on({ name: handler })
+dispatch.on('name', handler)
+dispatch.on({ name: handler })
 
 function handler (data, endpoint) { /* … */ }
 

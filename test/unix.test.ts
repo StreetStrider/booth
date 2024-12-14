@@ -8,7 +8,7 @@ import { expect } from 'chai'
 import { join } from 'path'
 import { Server } from 'http'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
@@ -33,17 +33,17 @@ var addr = Addr.Unix(join(tmp, 'unix.sock'))
 console.log('UNIX', ...addr.view())
 
 
-var server = new Server().listen(addr.for_booth())
+var server = new Server().listen(addr.for_dispatch())
 
 
 /*
- * Booth({ server: http server })
+ * Dispatch({ server: http server })
  * .on(event, handler)
  * .on({ event: handler })
  */
 var
-booth = Booth({ server })
-booth.on(
+dispatch = Dispatch({ server })
+dispatch.on(
 {
 	hello (data, endp)
 	{

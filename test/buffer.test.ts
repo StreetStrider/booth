@@ -6,7 +6,7 @@ console.info('buffer.test')
 
 import { expect } from 'chai'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
@@ -21,7 +21,7 @@ var aof = Aof('buffer', () =>
 () =>
 {
 	endp.close()
-	booth.close()
+	dispatch.close()
 })
 
 var addr = Addr.Websocket(9000)
@@ -29,8 +29,8 @@ console.log('WS', ...addr.view())
 
 
 var
-booth = Booth(addr.for_booth())
-booth.on(
+dispatch = Dispatch(addr.for_dispatch())
+dispatch.on(
 {
 	/*
 	'@message' (data, endp)

@@ -8,7 +8,7 @@ import { expect } from 'chai'
 import type { Protocol } from 'booth'
 import type { Endpoint } from 'booth/endpoint'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint as Endp } from 'booth'
 import { Addr } from 'booth'
 
@@ -47,7 +47,7 @@ var aof = Aof('socket', () =>
 ],
 () =>
 {
-	booth.close()
+	dispatch.close()
 
 	expect(opens).eq(2)
 	expect(connects).eq(1)
@@ -69,13 +69,13 @@ type Protocol_E = Protocol<'ok' | 'hello' | 'expected-error' | 'req' | 'json'>
 
 
 /*
- * Booth(options: wss options)
+ * Dispatch(options: wss options)
  * .on(event, handler)
  * .on({ event: handler })
  */
 var
-booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
-booth.on(
+dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
+dispatch.on(
 {
 	ok (_, endp)
 	{

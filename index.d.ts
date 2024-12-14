@@ -1,5 +1,5 @@
 
-export { default as Booth }    from './Booth.js'
+export { default as Dispatch } from './Dispatch.js'
 export { default as Endpoint } from './Endpoint.js'
 export         * as Addr       from './_/Addr.js'
 
@@ -13,6 +13,6 @@ export type { Protocol_Client_Defaults } from './Endpoint.js'
 /* export type { Endpoint } from './Endpoint.js' */
 export type { Aux } from './Endpoint.js'
 
-export { Room }  from './Booth.js'
-export { Rooms } from './Booth.js'
-/* export type { Booth } from './Booth.js' */
+export type { Room }  from './Dispatch.js'
+export type { Rooms } from './Dispatch.js'
+/* export type { Dispatch } from './Dispatch.js' */

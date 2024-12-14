@@ -5,7 +5,7 @@ console.info('error.test')
 
 import { expect } from 'chai'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
@@ -24,7 +24,7 @@ var aof = Aof('errortest', () =>
 () =>
 {
 	endp.close()
-	booth.close()
+	dispatch.close()
 })
 
 var addr = Addr.Websocket(9000)
@@ -54,8 +54,8 @@ function expected_error (info: any)
 
 
 var
-booth = Booth(addr.for_booth())
-booth.on(
+dispatch = Dispatch(addr.for_dispatch())
+dispatch.on(
 {
 	...compose_every(safe(expected_error),
 	{

@@ -44,7 +44,7 @@ export type Rooms
 }
 
 
-export type Booth
+export type Dispatch
 <
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
@@ -58,7 +58,7 @@ export type Booth
 }
 
 
-export default function Booth
+export default function Dispatch
 <
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
@@ -68,4 +68,4 @@ export default function Booth
 	wss: WebSocket.Server | WebSocket.ServerOptions
 )
 	:
-Booth<In, Out, Aux>
+Dispatch<In, Out, Aux>

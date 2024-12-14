@@ -3,13 +3,13 @@ import Events from './_/Events.js'
 import Ws from './transport/Websocket.js'
 
 
-export default function Endpoint (ws, { booth, events } = {})
+export default function Endpoint (ws, { dispatch, events } = {})
 {
 	var ws_connect = ws; (ws = null)
 
 	var buffer = null
 
-	if (! booth)
+	if (! dispatch)
 	{
 		events = Events()
 		buffer = []
@@ -25,7 +25,7 @@ export default function Endpoint (ws, { booth, events } = {})
 
 	function on (...args)
 	{
-		if (booth)
+		if (dispatch)
 		{
 			return () => {}
 		}
@@ -93,7 +93,7 @@ export default function Endpoint (ws, { booth, events } = {})
 		}
 
 		/* before user */
-		if (! booth)
+		if (! dispatch)
 		{
 			ev('open', flush)
 		}
@@ -105,7 +105,7 @@ export default function Endpoint (ws, { booth, events } = {})
 		ev('message', handle)
 
 		/* after user */
-		if (! booth)
+		if (! dispatch)
 		{
 			ev('open',  connect_or_reconnect)
 			ev('close', reconnect_or_cleanup)
@@ -120,13 +120,13 @@ export default function Endpoint (ws, { booth, events } = {})
 			ws.addEventListener(name, handler)
 		}
 
-		/* instantly opened when in booth */
-		if (booth)
+		/* instantly opened when in dispatch */
+		if (dispatch)
 		{
 			events.emit('@open', void 0, endp)
 			events.emit('@connect', void 0, endp)
 
-			booth.rooms.join_if_any('@all', endp)
+			dispatch.rooms.join_if_any('@all', endp)
 		}
 	}
 
@@ -184,9 +184,9 @@ export default function Endpoint (ws, { booth, events } = {})
 	{
 		if (! endp) return
 
-		if (booth)
+		if (dispatch)
 		{
-			booth.rooms.leave_every(endp)
+			dispatch.rooms.leave_every(endp)
 		}
 
 		ws = null
@@ -195,8 +195,8 @@ export default function Endpoint (ws, { booth, events } = {})
 		buffer = null
 		events = null
 
-		booth  = null
-		endp   = null
+		dispatch = null
+		endp     = null
 	}
 
 	return (connect(), endp)

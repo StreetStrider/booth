@@ -1,5 +1,5 @@
 
-export { default as Booth }    from './Booth.js'
+export { default as Dispatch } from './Dispatch.js'
 export { default as Endpoint } from './Endpoint.js'
 export         * as Addr       from './_/Addr.js'
 

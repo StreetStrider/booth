@@ -18,7 +18,7 @@
   [
     "index.js",
 
-    "Booth.js",
+    "Dispatch.js",
     "Endpoint.js",
 
     "midw/",
@@ -32,7 +32,7 @@
   {
     ".": "./index.js",
     "./endpoint": "./Endpoint.js",
-    "./booth": "./Booth.js",
+    "./dispatch": "./Dispatch.js",
     "./midw/*": "./midw/*.js",
     "./transport/*": "./transport/*.js"
   },

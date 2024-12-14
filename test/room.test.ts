@@ -6,7 +6,7 @@ console.info('room.test')
 
 import { expect } from 'chai'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
@@ -21,15 +21,15 @@ var addr = Addr.Websocket(9000)
 console.log('WS', ...addr.view())
 
 var
-booth = Booth(addr.for_booth())
-booth.rooms.get('@all')
-booth.on(
+dispatch = Dispatch(addr.for_dispatch())
+dispatch.rooms.get('@all')
+dispatch.on(
 {
 	join_special (yes, endp)
 	{
 		if (yes)
 		{
-			booth.rooms.get('@special').join(endp)
+			dispatch.rooms.get('@special').join(endp)
 		}
 
 		endp.send('join_special$')
@@ -76,19 +76,19 @@ async function test ()
 	var client_special = await Client('C', 'yes')
 	clients.push(client_special)
 
-	booth.rooms.get('@all').send('for_all')
+	dispatch.rooms.get('@all').send('for_all')
 	await when_all(clients, 'for_all')
 
-	booth.rooms.get('@special').send('for_special')
+	dispatch.rooms.get('@special').send('for_special')
 	await when(client_special, 'for_special')
 
-	booth.rooms.get('@all').each(endp => endp.close())
+	dispatch.rooms.get('@all').each(endp => endp.close())
 	await when_all(clients, '@reconnect')
 
-	booth.rooms.get('@all').send('for_all')
+	dispatch.rooms.get('@all').send('for_all')
 	await when_all(clients, 'for_all')
 
-	booth.rooms.get('@special').send('for_special')
+	dispatch.rooms.get('@special').send('for_special')
 	await null
 	/* await nothing */
 
@@ -114,5 +114,5 @@ async function test ()
 		[ 'all', 'C' ],
 	])
 
-	booth.close()
+	dispatch.close()
 }

@@ -7,13 +7,13 @@ import Rooms  from './_/Rooms.js'
 import Endpoint from './Endpoint.js'
 
 
-export default function Booth (wss)
+export default function Dispatch (wss)
 {
 	wss = Wss(wss)
 
 	var events = Events()
 
-	var booth =
+	var dispatch =
 	{
 		on,
 		close,
@@ -21,7 +21,7 @@ export default function Booth (wss)
 		rooms: Rooms(),
 	}
 
-	wss.on('connection', (ws) => Endpoint(ws, { booth, events }))
+	wss.on('connection', (ws) => Endpoint(ws, { dispatch, events }))
 
 	function on (...args)
 	{
@@ -37,16 +37,16 @@ export default function Booth (wss)
 
 	function close ()
 	{
-		if (! booth) return
+		if (! dispatch) return
 
 		wss.close()
 
 		events = null
 		wss    = null
-		booth  = null
+		dispatch  = null
 	}
 
-	return booth
+	return dispatch
 }
 
 

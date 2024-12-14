@@ -8,7 +8,7 @@ import { expect } from 'chai'
 
 import type { Protocol } from 'booth'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
@@ -53,7 +53,7 @@ var aof = Aof('once-when-request', () =>
 () =>
 {
 	endp.close()
-	booth.close()
+	dispatch.close()
 })
 
 var addr = Addr.Websocket(9000)
@@ -61,8 +61,8 @@ console.log('WS', ...addr.view())
 
 
 var
-booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
-booth.on(
+dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
+dispatch.on(
 {
 	...compose('req', recoil(), (data: string) =>
 	{

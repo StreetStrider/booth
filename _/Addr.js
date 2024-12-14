@@ -2,7 +2,7 @@
 
 export function Websocket (port)
 {
-	function for_booth ()
+	function for_dispatch ()
 	{
 		return { port }
 	}
@@ -14,16 +14,16 @@ export function Websocket (port)
 
 	function view ()
 	{
-		return [ for_booth(), for_endpoint() ]
+		return [ for_dispatch(), for_endpoint() ]
 	}
 
-	return { port, view, for_booth, for_endpoint }
+	return { port, view, for_dispatch, for_endpoint }
 }
 
 
 export function Unix (path)
 {
-	function for_booth ()
+	function for_dispatch ()
 	{
 		return { path }
 	}
@@ -35,8 +35,8 @@ export function Unix (path)
 
 	function view ()
 	{
-		return [ for_booth(), for_endpoint() ]
+		return [ for_dispatch(), for_endpoint() ]
 	}
 
-	return { path, view, for_booth, for_endpoint }
+	return { path, view, for_dispatch, for_endpoint }
 }

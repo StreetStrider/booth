@@ -7,7 +7,7 @@ import type { Protocol } from '../Endpoint.js'
 import type { Protocol_Client_Defaults } from '../Endpoint.js'
 import type { Endpoint } from '../Endpoint.js'
 
-import type { Booth } from '../Booth.js'
+import type { Dispatch } from '../Dispatch.js'
 
 export default function
 <
@@ -31,7 +31,7 @@ export default function
 	Key extends keyof (In & Protocol_Client_Defaults),
 >
 (
-	booth: Booth<In, Out, Aux>,
+	dispatch: Dispatch<In, Out, Aux>,
 	key: Key,
 	fn: Handler<Endpoint<In, Out, Aux>, (In & Protocol_Client_Defaults)[Key]>,
 )

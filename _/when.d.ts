@@ -5,7 +5,7 @@ import type { Protocol } from '../Endpoint.js'
 import type { Protocol_Client_Defaults } from '../Endpoint.js'
 import type { Endpoint } from '../Endpoint.js'
 
-import type { Booth } from '../Booth.js'
+import type { Dispatch } from '../Dispatch.js'
 
 export default function
 <
@@ -27,7 +27,7 @@ export default function
 	Aux extends Aux_Base = Aux_Base,
 >
 (
-	booth: Booth<In, Out, Aux>,
+	dispatch: Dispatch<In, Out, Aux>,
 	key: keyof (In & Protocol_Client_Defaults),
 	timeout?: number,
 )

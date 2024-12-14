@@ -3,7 +3,7 @@ import { Addr } from 'booth'
 
 import type { Protocol } from 'booth'
 
-import { Booth } from 'booth'
+import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 
 import { once } from 'booth'
@@ -17,19 +17,19 @@ async function main ()
 {
 	const addr = Addr.Websocket(9000)
 
-	const booth = Booth<Protocol_B, Protocol_E>(addr.for_booth())
+	const dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 
-	booth.on('ping', (_1, _2) => {})
-	booth.on('ping', (data, endp) =>
+	dispatch.on('ping', (_1, _2) => {})
+	dispatch.on('ping', (data, endp) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
 	})
-	booth.on('pong', (_1, _2) => {}) // $ExpectError
-	booth.on('stat', (_1, _2) => {})
-	booth.on('stat', null)           // $ExpectError
+	dispatch.on('pong', (_1, _2) => {}) // $ExpectError
+	dispatch.on('stat', (_1, _2) => {})
+	dispatch.on('stat', null)           // $ExpectError
 
-	booth.on(
+	dispatch.on(
 	{
 		stat () {},
 		ping (data, endp)
@@ -38,7 +38,7 @@ async function main ()
 			endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
 		},
 	})
-	booth.on(
+	dispatch.on(
 	{
 		pong () {}, // $ExpectError
 		stat () {},
@@ -79,13 +79,13 @@ async function main ()
 	})
 
 	// *
-	once(booth, 'ping', (data, endp) =>
+	once(dispatch, 'ping', (data, endp) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux>
 	})
 
-	once(booth, 'pong', (_1, _2) => {}) // $ExpectError
+	once(dispatch, 'pong', (_1, _2) => {}) // $ExpectError
 
 	once(endp, 'pong', (data, endp) =>
 	{
@@ -96,10 +96,10 @@ async function main ()
 	once(endp, 'ping', (_1, _2) => {}) // $ExpectError
 
 	// *
-	await when(booth, 'ping') // $ExpectType string
-	await when(booth, 'ping', 1e3) // $ExpectType string
+	await when(dispatch, 'ping') // $ExpectType string
+	await when(dispatch, 'ping', 1e3) // $ExpectType string
 
-	await when(booth, 'pong') // $ExpectError
+	await when(dispatch, 'pong') // $ExpectError
 
 	await when(endp, 'pong') // $ExpectType string
 
