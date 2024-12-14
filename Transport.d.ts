@@ -8,7 +8,7 @@ export type PayloadBinary = (ArrayBuffer | Blob | TypedArray | DataView)
 export type Payload = (string | PayloadBinary)
 
 
-type Events = TypedEventTarget<
+export type Events = TypedEventTarget<
 {
 	open:    void,
 	close:   void,
@@ -18,10 +18,11 @@ type Events = TypedEventTarget<
 
 export interface Transport extends Events
 {
-	capabilities:
+	capabilities?:
 	{
-		binary: boolean,
+		binary?: boolean,
 	},
 
 	send (payload: PayloadBinary): void,
+	close (): void,
 }
