@@ -7,7 +7,7 @@ export function Websocket (port)
 		return { port }
 	}
 
-	function for_endpoint (host = 'localhost')
+	function for_endpoint (host = '127.0.0.1')
 	{
 		return `ws://${ host }:${ port }`
 	}

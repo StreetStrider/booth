@@ -1,9 +1,14 @@
 #! /bin/sh
 
+#
+# process.versions.deno, process.versions.node
+#
+
 set -e
 
 rm -rf /tmp/booth
 mkdir  /tmp/booth
+
 
 tsx test/socket.test.ts
 tsx test/unix.test.ts
@@ -12,7 +17,20 @@ tsx test/error.test.ts
 tsx test/buffer.test.ts
 tsx test/once-when-request.test.ts
 
-# deno run -R=. -R=/tmp/booth -W=/tmp/booth -N=localhost,0.0.0.0 -E ./test/socket.test.js
-#
-# https://github.com/denoland/deno/issues/19507
-# https://github.com/denoland/deno/pull/25470
+
+rm -rf /tmp/booth
+mkdir  /tmp/booth
+
+
+Deno ()
+{
+	deno run -R=. -R=/tmp/booth -W=/tmp/booth/ -N=0.0.0.0,127.0.0.1 -E "${1}"
+}
+
+
+Deno ./test/socket.test.ts
+# Deno test/unix.test.ts
+Deno test/room.test.ts
+Deno test/error.test.ts
+# Deno test/buffer.test.ts
+Deno test/once-when-request.test.ts

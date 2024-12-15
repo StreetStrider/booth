@@ -5,8 +5,8 @@ console.info('unix.test')
 
 import { expect } from 'chai'
 
-import { join } from 'path'
-import { Server } from 'http'
+import { join } from 'node:path'
+import { Server } from 'node:http'
 
 import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'

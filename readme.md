@@ -33,6 +33,7 @@ function handler (data, endpoint) { /* … */ }
 Endpoint(ws_uri)
 
 /* websocket */
+Endpoint('ws://127.0.0.1:9000')
 Endpoint('ws://localhost:9000')
 
 /* unix domain socket */
