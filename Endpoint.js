@@ -1,19 +1,24 @@
 
 import Events from './_/Events.js'
-import Ws from './transport/Websocket.js'
+import Websocket from './transport/Websocket.js'
 
 
-export default function Endpoint (ws, { dispatch, events } = {})
+export default function Endpoint (transport, { ws, dispatch, events } = {})
 {
-	var ws_connect = ws; (ws = null)
-
 	var buffer = null
-
 	if (! dispatch)
 	{
 		events = Events()
 		buffer = []
 	}
+
+	var $ws
+	if (dispatch)
+	{
+		$ws = ws
+		ws = null
+	}
+
 
 	var endp =
 	{
@@ -45,15 +50,15 @@ export default function Endpoint (ws, { dispatch, events } = {})
 		{
 			buffer.push([ kind, (data || '') ])
 		}
-		else if (ws)
+		else if ($ws)
 		{
 			if (typeof kind === 'string')
 			{
-				ws.send(`@${ kind }:${ String(data) }`)
+				$ws.send(`@${ kind }:${ String(data) }`)
 			}
 			else
 			{
-				ws.send(kind)
+				$ws.send(kind)
 			}
 		}
 	}
@@ -80,17 +85,24 @@ export default function Endpoint (ws, { dispatch, events } = {})
 		events.emit('@binary', data, endp)
 	}
 
-	function connect ()
+	function connect () /* eslint-disable-line complexity */
 	{
-		// TODO: Transport()
-		if (typeof ws_connect === 'string')
+		if (! dispatch)
 		{
-			ws = Ws(ws_connect)
+			if (typeof transport === 'function')
+			{
+				$ws = transport()
+			}
+			else if (typeof transport === 'string')
+			{
+				$ws = Websocket(transport)
+			}
+			else
+			{
+				throw new TypeError('unknown_transport')
+			}
 		}
-		else
-		{
-			ws = ws_connect
-		}
+
 
 		/* before user */
 		if (! dispatch)
@@ -117,7 +129,7 @@ export default function Endpoint (ws, { dispatch, events } = {})
 
 		function ev (name, handler)
 		{
-			ws.addEventListener(name, handler)
+			$ws.addEventListener(name, handler)
 		}
 
 		/* instantly opened when in dispatch */
@@ -134,9 +146,10 @@ export default function Endpoint (ws, { dispatch, events } = {})
 	{
 		if (! buffer) return
 
-		var buffer_flush = buffer; (buffer = null)
+		const buffer_flush = buffer
+		buffer = null
 
-		for (var pair of buffer_flush)
+		for (const pair of buffer_flush)
 		{
 			send(...pair)
 		}
@@ -144,14 +157,14 @@ export default function Endpoint (ws, { dispatch, events } = {})
 
 	function reconnect_or_cleanup ()
 	{
-		if (! ws)
+		if (! $ws)
 		{
 			cleanup()
 		}
 		else
 		{
 			buffer = []
-			ws = null
+			$ws = null
 
 			setTimeout(connect, 1e3)
 		}
@@ -173,10 +186,10 @@ export default function Endpoint (ws, { dispatch, events } = {})
 
 	function close ()
 	{
-		if (ws)
+		if ($ws)
 		{
-			ws.close()
-			ws = null
+			$ws.close()
+			$ws = null
 		}
 	}
 
@@ -189,14 +202,13 @@ export default function Endpoint (ws, { dispatch, events } = {})
 			dispatch.rooms.leave_every(endp)
 		}
 
-		ws = null
-		ws_connect = null
-
 		buffer = null
-		events = null
+		$ws = null
 
 		dispatch = null
-		endp     = null
+		events = null
+
+		endp = null
 	}
 
 	return (connect(), endp)

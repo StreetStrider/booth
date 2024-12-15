@@ -2,6 +2,7 @@
 import type { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
+import type { Transport } from './Transport.js'
 import type { PayloadBinary } from './Transport.js'
 
 export type Kind = string
@@ -74,7 +75,8 @@ export default function Endpoint
 	Aux extends Aux_Base = Aux_Base,
 >
 (
-	ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string
+	// ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string
+	transport: ((() => Transport) | string),
 )
 	:
 Endpoint<In, Out, Aux>
