@@ -3,6 +3,7 @@ import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
 
+/* TODO: Transport */
 export default function Endpoint (transport, { ws, dispatch, events } = {})
 {
 	var buffer = null
