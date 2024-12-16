@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 // TODO: new compose design, better types
 
 import type { Endpoint } from '../Endpoint.js'

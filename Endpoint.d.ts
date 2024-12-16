@@ -1,5 +1,5 @@
 
-import type { ClientRequestArgs } from 'http'
+// import type { ClientRequestArgs } from 'http'
 import WebSocket = require('ws')
 
 import type { Transport } from './Transport.js'

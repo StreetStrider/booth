@@ -1,6 +1,7 @@
 
 import node from 'outlander/node'
 import globals from 'outlander/globals'
+import typescript from 'outlander/typescript'
 
 
 export default
@@ -16,10 +17,22 @@ export default
 			},
 		},
 	},
+
 	{
 		files: [ '**/*.js' ],
 	},
 	{
 		ignores: [ 'release/**', 'gulpfile.cjs' ],
+	},
+
+	...typescript,
+	{
+		files: [ '**/*.d.ts' ],
+
+		rules:
+		{
+			'node/no-missing-import': 0,
+			'node/no-unpublished-import': 0,
+		}
 	},
 ]

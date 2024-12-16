@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 
 import type { Transformer } from './compose.js'
 import type { Middleware }  from './compose.js'
