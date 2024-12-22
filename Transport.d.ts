@@ -1,20 +1,26 @@
 /* eslint max-len: 0 */
 // import type { EventEmitter } from 'node:events'
 
-import WebSocket = require('ws')
+// type Data = string | Buffer | ArrayBuffer | Buffer[];
+// export type TypedArray = (Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array)
+// export type PayloadBinary = (ArrayBuffer | Blob | TypedArray | DataView)
+// import type { BufferLike } from 'ws'
+// import type { ErrorEvent } from '@types/ws'
+// import WebSocket = require('ws')
+
+export type BinarySend = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)
+export type BinaryRecv = (Buffer | ArrayBuffer | Buffer[])
 
 import type { TypedEmitter } from 'tiny-typed-emitter'
 
-export type TypedArray = (Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array)
-export type PayloadBinary = (ArrayBuffer | Blob | TypedArray | DataView)
-export type Payload = (string | PayloadBinary)
+export type Payload = (string | BinaryRecv)
 
 export type Events =
 {
 	open:    () => void,
 	close:   () => void,
-	error:   (event: WebSocket.ErrorEvent) => void,
-	message: (event: { data: Payload }) => void,
+	error:   (event: Error) => void,
+	message: (event: { data: Payload, type?: string }) => void,
 }
 
 export interface Transport extends TypedEmitter<Events>
@@ -24,6 +30,17 @@ export interface Transport extends TypedEmitter<Events>
 		binary?: boolean,
 	},
 
-	send (payload: PayloadBinary): void,
+	send (payload: string): void,
 	close (): void,
+}
+
+export type TransportBinary = Transport
+&
+{
+	capabilities:
+	{
+		binary: true,
+	},
+
+	send (payload: BinaryRecv): void,
 }

@@ -1,3 +1,7 @@
+// https://github.com/websockets/ws/blob/master/doc/ws.md
+// https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/ws/index.d.ts
+// https://github.com/websockets/ws/blob/master/lib
+
 
 export { default as Dispatch } from './Dispatch.js'
 export { default as Endpoint } from './Endpoint.js'

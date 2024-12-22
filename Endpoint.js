@@ -1,9 +1,10 @@
 
+import Ws from 'isomorphic-ws'
+
 import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
 
-/* TODO: Transport */
 export default function Endpoint (transport, { ws, dispatch, events } = {})
 {
 	var buffer = null
@@ -59,9 +60,26 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 			}
 			else
 			{
-				$ws.send(kind)
+				send_binary(kind)
 			}
 		}
+	}
+
+	async function send_binary (msg)
+	{
+		if ($ws instanceof Ws)
+		{
+			$ws.send(msg)
+			return
+		}
+		if ($ws.capabilities?.binary)
+		{
+			$ws.send(msg)
+			return
+		}
+
+		/* TODO: impl binary emulation */
+		throw new TypeError('binary_not_supported')
 	}
 
 	function handle (event)

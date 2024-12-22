@@ -1,9 +1,10 @@
 
-// import type { ClientRequestArgs } from 'http'
+// import type { ClientRequestArgs } from 'node:http'
 import WebSocket = require('ws')
 
 import type { Transport } from './Transport.js'
-import type { PayloadBinary } from './Transport.js'
+import type { BinarySend } from './Transport.js'
+import type { BinaryRecv } from './Transport.js'
 
 export type Kind = string
 export type Data = string
@@ -15,7 +16,7 @@ export type Protocol_Core =
 	'@connect':   void,
 	'@reconnect': void,
 
-	'@binary': PayloadBinary,
+	'@binary': BinaryRecv,
 
 	'@open':  void,
 	'@close': void,
@@ -60,7 +61,7 @@ export interface Endpoint
 		(kind: Kind, data?: string extends Out[Kind] ? (Out[Kind] | number) : Out[Kind])
 			: void,
 
-	send (data: PayloadBinary): void,
+	send (data: BinarySend): void,
 
 	close (): void,
 
