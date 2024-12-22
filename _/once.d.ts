@@ -14,7 +14,7 @@ export default function
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
-	Key extends keyof Protocol_All<In>,
+	Key extends keyof Protocol_All<In> = string,
 >
 (
 	endpoint: Endpoint<In, Out, Aux>,
@@ -28,7 +28,7 @@ export default function
 	In  extends Protocol = Protocol,
 	Out extends Protocol = Protocol,
 	Aux extends Aux_Base = Aux_Base,
-	Key extends keyof Protocol_All<In>,
+	Key extends keyof Protocol_All<In> = string,
 >
 (
 	dispatch: Dispatch<In, Out, Aux>,

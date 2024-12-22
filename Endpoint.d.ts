@@ -24,7 +24,7 @@ export type Protocol_Core =
 export type Protocol_All <In> = (In & Protocol_Core)
 
 
-export type Handler <Endp extends Endpoint = Endpoint, Data>
+export type Handler <Endp extends Endpoint<any, any, any> = Endpoint, Data = string>
 	= (data: Data, endp: Endp) => void
 
 export type Handler_Composition <Endp extends Endpoint = Endpoint>

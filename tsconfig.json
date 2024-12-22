@@ -19,8 +19,6 @@
 		"lib":  [ "es6" ],
 		"target": "es6",
 
-		"module": "node16",
-
-		"skipLibCheck": true
+		"module": "node16"
 	}
 }

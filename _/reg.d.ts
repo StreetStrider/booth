@@ -18,7 +18,7 @@ export type Reg <Key = unknown, Value = unknown> =
 	[Symbol.iterator]: Entries<Key, Value>
 
 	each (fn: (value: Value, key: Key) => void): void,
-	over (key: Key, fn: (value: Value, key: Key) => void),
+	over (key: Key, fn: (value: Value, key: Key) => void): void,
 }
 
 export type Initializer <Key = unknown, Value = unknown> = (key: Key) => Value
