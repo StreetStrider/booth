@@ -7,11 +7,11 @@ import Websocket from './transport/Websocket.js'
 
 export default function Endpoint (transport, { ws, dispatch, events } = {})
 {
-	var buffer = null
+	var $buffer = null
 	if (! dispatch)
 	{
 		events = Events()
-		buffer = []
+		$buffer = []
 	}
 
 	var $ws
@@ -48,9 +48,9 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 
 	function send (kind, data = '') /* eslint-disable-line complexity */
 	{
-		if (buffer)
+		if ($buffer)
 		{
-			buffer.push([ kind, (data || '') ])
+			$buffer.push([ kind, (data || '') ])
 		}
 		else if ($ws)
 		{
@@ -163,12 +163,12 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 
 	function flush ()
 	{
-		if (! buffer) return
+		if (! $buffer) return
 
-		const buffer_flush = buffer
-		buffer = null
+		const to_flush = $buffer
+		$buffer = null
 
-		for (const pair of buffer_flush)
+		for (const pair of to_flush)
 		{
 			send(...pair)
 		}
@@ -182,7 +182,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 		else
 		{
-			buffer = []
+			$buffer = []
 			$ws = null
 
 			setTimeout(connect, 1e3)
@@ -221,7 +221,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 			dispatch.rooms.leave_every(endp)
 		}
 
-		buffer = null
+		$buffer = null
 		$ws = null
 
 		dispatch = null
