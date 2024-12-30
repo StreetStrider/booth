@@ -37,7 +37,7 @@ export type Handler
 
 export type Handler_Composition
 <
-	Data extends Record<string, string> = Record<string, string>,
+	Data extends Record<string, any> = Record<string, string>,
 	Endp extends Endpoint<any, any, any> = Endpoint
 >
 	= { [ Key in keyof Data ]: Handler<Data[Key], Endp> }
@@ -45,8 +45,10 @@ export type Handler_Composition
 
 export type Aux_Base = Record<string, unknown>
 
+
 export type Endpoint_Protocol_In <Endp extends Endpoint<any, any, any>>
 	= Endp extends Endpoint<infer In, any, any> ? In : never
+
 
 export interface Endpoint
 <

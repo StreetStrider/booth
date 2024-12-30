@@ -8,6 +8,7 @@ export { default as when } from './_/when.js'
 export { default as request } from './_/request.js'
 
 export type { Handler } from './Endpoint.js'
+export type { Handler_Composition } from './Endpoint.js'
 export type { Protocol } from './Endpoint.js'
 export type { Protocol_Core } from './Endpoint.js'
 export type { Protocol_All } from './Endpoint.js'

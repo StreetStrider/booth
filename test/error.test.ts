@@ -9,8 +9,7 @@ import { Dispatch } from 'booth'
 import { Endpoint } from 'booth'
 import { Addr } from 'booth'
 
-import { Compose } from 'booth/midw/compose'
-// import { compose_every } from 'booth/midw/compose'
+import Compose from 'booth/midw/compose'
 import safe from 'booth/midw/safe'
 
 import { Aof } from './kit.js'

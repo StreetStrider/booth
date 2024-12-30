@@ -16,10 +16,7 @@ import { once } from 'booth'
 import { when } from 'booth'
 import { request } from 'booth'
 
-// import compose from 'booth/midw/compose'
-import { Compose } from 'booth/midw/compose'
-// import safe from 'booth/midw/safe'
-// import json from 'booth/midw/json'
+import Compose from 'booth/midw/compose'
 import recoil from 'booth/midw/recoil'
 
 import delay from '../_/delay.js'
