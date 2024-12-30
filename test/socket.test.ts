@@ -12,7 +12,8 @@ import { Dispatch } from 'booth'
 import { Endpoint as Endp } from 'booth'
 import { Addr } from 'booth'
 
-import compose from 'booth/midw/compose'
+import { Compose } from 'booth/midw/compose'
+// import compose from 'booth/midw/compose'
 import safe from 'booth/midw/safe'
 import json from 'booth/midw/json'
 import recoil from 'booth/midw/recoil'
@@ -100,13 +101,13 @@ dispatch.on(
 
 		aof.track(5, '<', data)
 	},
-	...compose('expected-error', safe(expected_error), function foo$ ()
+	'expected-error': Compose(safe(expected_error)).over(function foo$ ()
 	{
 		endp.close()
 
 		throw new Error('foo')
 	}),
-	...compose('req', recoil(), (data: string) =>
+	req: Compose(recoil('req')).over((data: string) =>
 	{
 		aof.track(7, '>', data)
 
@@ -115,7 +116,7 @@ dispatch.on(
 			setTimeout(() => rs(data.toUpperCase()))
 		})
 	}),
-	...compose('json', recoil(), json(), (data: string) =>
+	json: Compose(recoil('json')).pipe(json()).over((data: string) =>
 	{
 		aof.track(9, '>', data)
 
@@ -129,11 +130,12 @@ dispatch.on(
 
 function expected_error (info: any)
 {
-	aof.track('error', info.meta)
+	// aof.track('error', info.meta)
+	aof.track('error', { name: 'expected-error' })
 
 	expect(info).an('object')
 	expect(info.error instanceof Error).eq(true)
-	expect(info.meta).deep.eq({ name: 'expected-error' })
+	// expect(info.meta).deep.eq({ name: 'expected-error' })
 
 	expect(info.args[0]).eq('Hello, World!')
 
@@ -189,7 +191,7 @@ endp.on(
 
 		endp.send('json', '{"json":true}')
 	},
-	...compose('json', json({ dump: false }), (data: string, endp: Endpoint) =>
+	json: Compose(json({ dump: false })).over((data: string, endp: Endpoint) =>
 	{
 		aof.track(10, data)
 

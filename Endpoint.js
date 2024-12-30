@@ -165,10 +165,10 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 	{
 		if (! $buffer) return
 
-		const to_flush = $buffer
+		var to_flush = $buffer
 		$buffer = null
 
-		for (const pair of to_flush)
+		for (var pair of to_flush)
 		{
 			send(...pair)
 		}

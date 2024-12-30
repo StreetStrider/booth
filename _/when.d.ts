@@ -1,5 +1,4 @@
 
-import type { Data } from '../Endpoint.js'
 import type { Aux_Base } from '../Endpoint.js'
 import type { Protocol } from '../Endpoint.js'
 import type { Protocol_All } from '../Endpoint.js'
@@ -18,7 +17,7 @@ export default function
 	key: keyof Protocol_All<In>,
 	timeout?: number,
 )
-	: Promise<Data>
+	: Promise<any> // TODO:
 
 export default function
 <
@@ -31,4 +30,4 @@ export default function
 	key: keyof Protocol_All<In>,
 	timeout?: number,
 )
-	: Promise<Data>
+	: Promise<any> // TODO:

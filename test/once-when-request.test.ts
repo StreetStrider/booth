@@ -16,7 +16,8 @@ import { once } from 'booth'
 import { when } from 'booth'
 import { request } from 'booth'
 
-import compose from 'booth/midw/compose'
+// import compose from 'booth/midw/compose'
+import { Compose } from 'booth/midw/compose'
 // import safe from 'booth/midw/safe'
 // import json from 'booth/midw/json'
 import recoil from 'booth/midw/recoil'
@@ -64,12 +65,12 @@ var
 dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 dispatch.on(
 {
-	...compose('req', recoil(), (data: string) =>
+	req: Compose(recoil('req')).over((data: string) =>
 	{
 		return `OK ${ +data + 100 }`
 	}),
 
-	...compose('req_slow', recoil(), async (data: string) =>
+	req_slow: Compose(recoil('req_slow')).over(async (data: string) =>
 	{
 		await delay(250)
 		return `OK ${ +data + 100 }`

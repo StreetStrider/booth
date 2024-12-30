@@ -8,12 +8,12 @@
 // import type { ErrorEvent } from '@types/ws'
 // import WebSocket = require('ws')
 
-export type BinarySend = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)
-export type BinaryRecv = (Buffer | ArrayBuffer | Buffer[])
+export type Binary_Send = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)
+export type Binary_Recv = (Buffer | ArrayBuffer | Buffer[])
 
 import type { TypedEmitter } from 'tiny-typed-emitter'
 
-export type Payload = (string | BinaryRecv)
+export type Payload = (string | Binary_Recv)
 
 export type Events =
 {
@@ -42,5 +42,5 @@ export type TransportBinary = Transport
 		binary: true,
 	},
 
-	send (payload: BinaryRecv): void,
+	send (payload: Binary_Send): void,
 }

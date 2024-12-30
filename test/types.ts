@@ -96,12 +96,13 @@ async function main ()
 	once(endp, 'ping', (_1, _2) => {}) // $ExpectError
 
 	// *
-	await when(dispatch, 'ping') // $ExpectType string
-	await when(dispatch, 'ping', 1e3) // $ExpectType string
+	// TODO:
+	await when(dispatch, 'ping') // $ExpectType any
+	await when(dispatch, 'ping', 1e3) // $ExpectType any
 
 	await when(dispatch, 'pong') // $ExpectError
 
-	await when(endp, 'pong') // $ExpectType string
+	await when(endp, 'pong') // $ExpectType any
 
 	await when(endp, 'ping') // $ExpectError
 

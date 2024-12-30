@@ -2,41 +2,51 @@
 // import type { ClientRequestArgs } from 'node:http'
 import WebSocket = require('ws')
 
-import type { Transport } from './Transport.js'
-import type { BinarySend } from './Transport.js'
-import type { BinaryRecv } from './Transport.js'
+import type { Disposer } from '@streetstrider/emitter'
 
-export type Kind = string
-export type Data = string
+import type { Transport }  from './Transport.js'
+import type { Binary_Send } from './Transport.js'
+import type { Binary_Recv } from './Transport.js'
 
-/* TODO: proper combination */
-export type Protocol <Keys extends Kind = Kind> = Record<Keys, string>
+/* TODO: combination set subtract */
+export type Protocol <Keys extends string = string>
+	= Record<Keys, string>
+
 export type Protocol_Core =
 {
 	'@connect':   void,
 	'@reconnect': void,
 
-	'@binary': BinaryRecv,
+	'@binary': Binary_Recv,
 
 	'@open':  void,
 	'@close': void,
 	'@error': WebSocket.ErrorEvent,
 }
-export type Protocol_All <In> = (In & Protocol_Core)
+
+export type Protocol_All <In>
+	= (In & Protocol_Core)
 
 
-export type Handler <Endp extends Endpoint<any, any, any> = Endpoint, Data = string>
+export type Handler
+<
+	Data /* not extends */ = string,
+	Endp extends Endpoint<any, any, any> = Endpoint
+>
 	= (data: Data, endp: Endp) => void
 
-export type Handler_Composition <Endp extends Endpoint = Endpoint>
-	= { [ key: string ]: Handler<Endp, string> }
+export type Handler_Composition
+<
+	Data extends Record<string, string> = Record<string, string>,
+	Endp extends Endpoint<any, any, any> = Endpoint
+>
+	= { [ Key in keyof Data ]: Handler<Data[Key], Endp> }
 
 
 export type Aux_Base = Record<string, unknown>
 
-
-export type Disposer = () => void
-
+export type Endpoint_Protocol_In <Endp extends Endpoint<any, any, any>>
+	= Endp extends Endpoint<infer In, any, any> ? In : never
 
 export interface Endpoint
 <
@@ -46,22 +56,22 @@ export interface Endpoint
 >
 {
 	on <Key extends keyof Protocol_All<In>>
-		(map: { [ K in Key ]?: Handler<this, Protocol_All<In>[K]> })
+		(map: { [ K in Key ]?: Handler<Protocol_All<In>[K], this> })
 			: Disposer,
 
 	on <Key extends keyof In>
-		(key: Key, handler: Handler<this, In[Key]>)
+		(key: Key, handler: Handler<In[Key], this>)
 			: Disposer,
 
 	on <Key extends keyof Protocol_Core>
-		(key: Key, handler: Handler<this, Protocol_Core[Key]>)
+		(key: Key, handler: Handler<Protocol_Core[Key], this>)
 			: Disposer,
 
 	send <Kind extends keyof Out>
 		(kind: Kind, data?: string extends Out[Kind] ? (Out[Kind] | number) : Out[Kind])
 			: void,
 
-	send (data: BinarySend): void,
+	send (data: Binary_Send): void,
 
 	close (): void,
 

@@ -1,7 +1,6 @@
 
 import WebSocket = require('ws')
 
-import type { Data } from './Endpoint.js'
 import type { Endpoint } from './Endpoint.js'
 import type { Protocol } from './Endpoint.js'
 import type { Aux_Base } from './Endpoint.js'
@@ -20,7 +19,7 @@ export type Room
 
 	has (endp: Endpoint<In, Out, Aux>): boolean;
 
-	send <Kind extends keyof Out> (kind: Kind, data?: Data): void;
+	send: Endpoint<In, Out, Aux>['send'],
 	each (fn: (endp: Endpoint<In, Out, Aux>) => void): void;
 }
 
@@ -37,7 +36,7 @@ export type Rooms
 	has (name: string): boolean;
 	remove (name: string): void;
 
-	send <Kind extends keyof Out> (name: string, kind: Kind, data?: Data): void;
+	send: Endpoint<In, Out, Aux>['send'],
 
 	join_if_any (name: string, endp: Endpoint<In, Out, Aux>): void;
 	leave_every (endp: Endpoint<In, Out, Aux>): void;
