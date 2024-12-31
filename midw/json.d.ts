@@ -1,8 +1,9 @@
-/* eslint max-len: 0 */
-/* eslint-disable */ // TODO:
 
-import type { Handler } from '../Endpoint.js'
-import type { Middleware }  from './compose.js'
+import type { Endpoint } from '../Endpoint.js'
+
+import type { Transformer } from './compose.js'
+import type { Middleware } from './compose.js'
+
 
 export type Options =
 {
@@ -10,10 +11,37 @@ export type Options =
 	dump: boolean,
 }
 
-// declare function json <In, Out, End> (options:  { dump: false }):  Middleware<Handler<In, Out>, Handler<string, Out>, Endp>
-// declare function json <In, Out, End> (options:  { load: false }):  Middleware<Handler<In, Out>, Handler<In, string>, Endp>
-// declare function json <In, Out, End> (options?: Partial<Options>): Middleware<Handler<In, Out>, Handler<string, string>, Endp>
 
-declare function json (v?: any): any // TODO:
+// (1).
+declare function json
+<
+	T extends Transformer<any, any, Endp>,
+	Endp extends Endpoint<any, any, any>
+>
+(options: { dump: false })
+	: T extends Transformer<any, infer Out, Endp> ?
+		Middleware<T, Transformer<string, Out, Endp>, Endp> : never
+
+
+// (2).
+declare function json
+<
+	T extends Transformer<any, any, Endp>,
+	Endp extends Endpoint<any, any, any>
+>
+(options?: { load: false })
+	: T extends Transformer<infer In, any, Endp> ?
+		Middleware<T, Transformer<In, string, Endp>, Endp> : never
+
+
+// (2).
+declare function json
+<
+	T extends Transformer<any, any, Endp>,
+	Endp extends Endpoint<any, any, any>
+>
+(options: { load: false })
+	: Middleware<T, Transformer<string, string, Endp>, Endp>
+
 
 export default json

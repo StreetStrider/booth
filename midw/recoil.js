@@ -2,7 +2,7 @@
 
 export default function recoil (name)
 {
-	return (fn, meta) =>
+	return (fn /*, meta */) =>
 	{
 		return async (data, endp) =>
 		{
@@ -10,8 +10,8 @@ export default function recoil (name)
 
 			if (r !== void 0)
 			{
-				endp.send(name ?? meta?.name, r)
-				// endp.send(name, r) // TODO:
+				endp.send(name, r)
+				// endp.send(name ?? meta?.name, r)
 			}
 		}
 	}

@@ -1,19 +1,21 @@
 
 import type { Endpoint } from '../Endpoint.js'
 
-import type { Meta } from './compose.js'
+// import type { Meta } from './compose.js'
 import type { Transformer } from './compose.js'
-import type { Middleware } from './compose.js'
+import type { Middleware }  from './compose.js'
+
 
 export type Descr =
 {
 	error: unknown,
-	meta: Meta,
+	// meta: Meta,
 	args: unknown[],
 	fn: unknown,
 }
 
 export type Reporter = (descr: Descr) => void
+
 
 export default function
 <
