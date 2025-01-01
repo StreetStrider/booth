@@ -106,7 +106,7 @@ dispatch.on(
 
 		throw new Error('foo')
 	}),
-	req: Compose(recoil('req')).over((data: string) =>
+	req: Compose(recoil('req')).over(data =>
 	{
 		aof.track(7, '>', data)
 
@@ -115,7 +115,7 @@ dispatch.on(
 			setTimeout(() => rs(data.toUpperCase()))
 		})
 	}),
-	json: Compose(recoil('json')).pipe(json()).over((data: string) =>
+	json: Compose(recoil('json')).pipe(json()).over(data =>
 	{
 		aof.track(9, '>', data)
 
@@ -190,7 +190,7 @@ endp.on(
 
 		endp.send('json', '{"json":true}')
 	},
-	json: Compose(json({ dump: false })).over((data: string, endp: Endpoint) =>
+	json: Compose(json({ dump: false })).over((data, endp) =>
 	{
 		aof.track(10, data)
 

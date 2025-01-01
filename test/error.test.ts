@@ -54,19 +54,16 @@ function expected_error (info: any)
 
 
 var
-dispatch = Dispatch<{ foo2: string }>(addr.for_dispatch())
-// dispatch.on({ 'foo3': () => {} })
+dispatch = Dispatch(addr.for_dispatch())
 dispatch.on(
-//{
-	// ...Compose(safe(expected_error)).over(
-	Compose(safe(expected_error)).over(
+{
+	...Compose(safe(expected_error)).over(
 	{
 		foo1 (/* _, endp */) { endp.send('foo2'); throw new Error('expected_foo1') },
 		foo2 (/* _, endp */) { endp.send('foo3'); throw new Error('expected_foo2') },
 		foo3 (/* _, endp */) { throw new Error('expected_foo3') },
 	}),
-//} // TODO:
-)
+})
 
 var
 endp = Endpoint(addr.for_endpoint())

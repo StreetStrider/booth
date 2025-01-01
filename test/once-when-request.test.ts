@@ -62,12 +62,12 @@ var
 dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 dispatch.on(
 {
-	req: Compose(recoil('req')).over((data: string) =>
+	req: Compose(recoil('req')).over(data =>
 	{
 		return `OK ${ +data + 100 }`
 	}),
 
-	req_slow: Compose(recoil('req_slow')).over(async (data: string) =>
+	req_slow: Compose(recoil('req_slow')).over(async (data) =>
 	{
 		await delay(250)
 		return `OK ${ +data + 100 }`

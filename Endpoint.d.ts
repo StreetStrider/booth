@@ -49,6 +49,9 @@ export type Aux_Base = Record<string, unknown>
 export type Endpoint_Protocol_In <Endp extends Endpoint<any, any, any>>
 	= Endp extends Endpoint<infer In, any, any> ? In : never
 
+export type Mixed_String <S>
+	= string extends S ? (S | number) : S
+
 
 export interface Endpoint
 <
@@ -70,7 +73,7 @@ export interface Endpoint
 			: Disposer,
 
 	send <Kind extends keyof Out>
-		(kind: Kind, data?: string extends Out[Kind] ? (Out[Kind] | number) : Out[Kind])
+		(kind: Kind, data?: Mixed_String<Out[Kind]>)
 			: void,
 
 	send (data: Binary_Send): void,
