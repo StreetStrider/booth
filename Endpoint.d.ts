@@ -102,8 +102,8 @@ export interface Endpoint
 		(key: Key, handler: Handler<Key, Protocol_Core[Key], this>)
 			: Disposer,
 
-	send <Kind extends keyof Out>
-		(kind: Kind, data?: Mixed_String<Out[Kind]>)
+	send <Key extends keyof Out>
+		(key: Key, data?: Mixed_String<Out[Key]>)
 			: void,
 
 	send (data: Binary_Send): void,

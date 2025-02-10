@@ -46,22 +46,21 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 	}
 
-	function send (kind, data = '') /* eslint-disable-line complexity */
+	function send (key, data = '') /* eslint-disable-line complexity */
 	{
-		// TODO: mv kind
 		if ($buffer)
 		{
-			$buffer.push([ kind, (data || '') ])
+			$buffer.push([ key, (data || '') ])
 		}
 		else if ($ws)
 		{
-			if (typeof kind === 'string')
+			if (typeof key === 'string')
 			{
-				$ws.send(`@${ kind }:${ String(data) }`)
+				$ws.send(`@${ key }:${ String(data) }`)
 			}
 			else
 			{
-				send_binary(kind)
+				send_binary(key)
 			}
 		}
 	}

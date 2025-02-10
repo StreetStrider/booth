@@ -28,9 +28,9 @@ export default function Rooms ()
 		reg.remove(name)
 	}
 
-	function send (name, kind, data = '')
+	function send (name, key, data = '')
 	{
-		reg.over(name, room => room.send(kind, data))
+		reg.over(name, room => room.send(key, data))
 	}
 
 	function join_if_any (name, endp)
