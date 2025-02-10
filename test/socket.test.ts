@@ -42,7 +42,7 @@ var aof = Aof('socket', () =>
 	[ 8, 'REQUEST' ],
 	[ 9, '>', { json: true } ],
 	[ 10, [ 'a', 'b', 'c' ] ],
-	[ 'error', { name: 'expected-error' } ],
+	[ 'error', { key: 'expected-error' } ],
 	[ 'close', 2 ],
 ],
 () =>
@@ -77,20 +77,20 @@ var
 dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 dispatch.on(
 {
-	ok (_, endp)
+	ok (_, { endp })
 	{
 		aof.track(1)
 
 		endp.send('ok')
 	},
-	try (_, endp)
+	try (_, { endp })
 	{
 		aof.track(3)
 
 		/* forces reconnect: */
 		endp.close()
 	},
-	hello (data, endp)
+	hello (data, { endp })
 	{
 		aof.track(4, '>', data)
 
@@ -106,7 +106,7 @@ dispatch.on(
 
 		throw new Error('foo')
 	}),
-	req: Compose(recoil('req')).over(data =>
+	req: Compose(recoil()).over(data =>
 	{
 		aof.track(7, '>', data)
 
@@ -115,7 +115,7 @@ dispatch.on(
 			setTimeout(() => rs(data.toUpperCase()))
 		})
 	}),
-	json: Compose(recoil('json')).pipe(json()).over(data =>
+	json: Compose(recoil()).pipe(json()).over(data =>
 	{
 		aof.track(9, '>', data)
 
@@ -127,19 +127,18 @@ dispatch.on(
 	},
 })
 
-function expected_error (info: any)
+function expected_error ({ fn, error, data, meta }: any)
 {
-	// aof.track('error', info.meta)
-	aof.track('error', { name: 'expected-error' })
+	aof.track('error', { key: meta.key })
 
-	expect(info).an('object')
-	expect(info.error instanceof Error).eq(true)
-	// expect(info.meta).deep.eq({ name: 'expected-error' })
+	expect(meta.key).eq('expected-error')
 
-	expect(info.args[0]).eq('Hello, World!')
+	expect(fn).a('function')
+	expect(fn.name).eq('foo$')
 
-	expect(info.fn).a('function')
-	expect(info.fn.name).eq('foo$')
+	expect(error instanceof Error).eq(true)
+
+	expect(data).eq('Hello, World!')
 }
 
 
@@ -152,7 +151,7 @@ var
 endp = Endp<Protocol_E, Protocol_B>(addr.for_endpoint())
 endp.on(
 {
-	'@open' (/* _, endp */)
+	'@open' (/* _, { endp } */)
 	{
 		aof.track('open', opens)
 
@@ -164,13 +163,13 @@ endp.on(
 
 		connects++
 	},
-	ok (/* data, endp */)
+	ok (/* data, { endp } */)
 	{
 		aof.track(2)
 
 		endp.send('try')
 	},
-	'@reconnect' (_, endp)
+	'@reconnect' (_, { endp })
 	{
 		aof.track('reconnect', reconnects)
 
@@ -178,25 +177,25 @@ endp.on(
 
 		endp.send('hello', 'Hello, World!')
 	},
-	hello (data, endp)
+	hello (data, { endp })
 	{
 		aof.track(6, data)
 
 		endp.send('req', 'request')
 	},
-	req (data, endp)
+	req (data, { endp })
 	{
 		aof.track(8, data)
 
 		endp.send('json', '{"json":true}')
 	},
-	json: Compose(json({ dump: false })).over((data, endp) =>
+	json: Compose(json({ dump: false })).over((data, { endp }) =>
 	{
 		aof.track(10, data)
 
 		endp.send('expected-error', 'Hello, World!')
 	}),
-	'@close' (/* _, endp */)
+	'@close' (/* _, { endp } */)
 	{
 		closes++
 

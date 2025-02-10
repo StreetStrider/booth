@@ -2,26 +2,26 @@
 
 export default function safe (fn_report = report_default)
 {
-	return (fn /*, meta */) =>
+	return (fn) =>
 	{
-		return async (...args) =>
+		return async (data, meta) =>
 		{
 			try
 			{
-				return await fn(...args)
+				return await fn(data, meta)
 			}
 			catch (error)
 			{
-				fn_report({ error, /* meta, */ args, fn })
+				fn_report({ fn, error, data, meta })
 			}
 		}
 	}
 }
 
 
-export function report_default ({ error, /* meta, */ args })
+export function report_default ({ /* fn, */ error, data, meta })
 {
-	// console.error('booth/safe:', meta.name)
-	console.error('arg:', args[0])
+	console.error('booth/safe:', meta.key)
+	console.error('data:', data)
 	console.error(error)
 }

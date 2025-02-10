@@ -48,6 +48,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 
 	function send (kind, data = '') /* eslint-disable-line complexity */
 	{
+		// TODO: mv kind
 		if ($buffer)
 		{
 			$buffer.push([ kind, (data || '') ])
@@ -93,15 +94,22 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		var colon = msg.indexOf(':')
 		if (colon === -1) return
 
-		var kind = msg.slice(1, colon)
+		var key  = msg.slice(1, colon)
 		var data = msg.slice(colon + 1)
 
-		events.emit(kind, data, endp)
+		var meta = { key, msg, data, endp }
+
+		events.emit(key, data, meta)
 	}
 
-	function handle_binary (data)
+	function handle_binary (msg)
 	{
-		events.emit('@binary', data, endp)
+		var key = '@binary'
+
+		var data = msg
+		var meta = { key, msg, data, endp }
+
+		events.emit(key, data, meta)
 	}
 
 	function connect () /* eslint-disable-line complexity */
@@ -129,9 +137,9 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 			ev('open', flush)
 		}
 
-		ev('open',   () => events.emit('@open',  void 0, endp))
-		ev('close',  () => events.emit('@close', void 0, endp))
-		ev('error', (e) => events.emit('@error',      e, endp))
+		ev('open',   () => events.emit('@open',  void 0, { endp }))
+		ev('close',  () => events.emit('@close', void 0, { endp }))
+		ev('error', (e) => events.emit('@error',      e, { endp }))
 
 		ev('message', handle)
 
@@ -154,8 +162,8 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		/* instantly opened when in dispatch */
 		if (dispatch)
 		{
-			events.emit('@open', void 0, endp)
-			events.emit('@connect', void 0, endp)
+			events.emit('@open',    void 0, { endp })
+			events.emit('@connect', void 0, { endp })
 
 			dispatch.rooms.join_if_any('@all', endp)
 		}
@@ -195,11 +203,11 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		{
 			connect_or_reconnect.yes = true
 
-			events.emit('@connect', void 0, endp)
+			events.emit('@connect',   void 0, { endp })
 		}
 		else
 		{
-			events.emit('@reconnect', void 0, endp)
+			events.emit('@reconnect', void 0, { endp })
 		}
 	}
 

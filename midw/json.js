@@ -13,27 +13,27 @@ export default function json (options)
 {
 	options = { ...defaults, ...options }
 
-	return (fn /*, meta */) =>
+	return (fn) =>
 	{
 		if (options.load && options.dump)
 		{
-			return async (data, endp) =>
+			return async (data, meta) =>
 			{
-				return dump(await fn(load(data), endp))
+				return dump(await fn(load(data), meta))
 			}
 		}
 		else if (options.load)
 		{
-			return (data, endp) =>
+			return (data, meta) =>
 			{
-				return fn(load(data), endp)
+				return fn(load(data), meta)
 			}
 		}
 		else if (options.dump)
 		{
-			return async (data, endp) =>
+			return async (data, meta) =>
 			{
-				return dump(await fn(data, endp))
+				return dump(await fn(data, meta))
 			}
 		}
 	}

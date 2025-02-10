@@ -62,12 +62,12 @@ var
 dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 dispatch.on(
 {
-	req: Compose(recoil('req')).over(data =>
+	req: Compose(recoil()).over(data =>
 	{
 		return `OK ${ +data + 100 }`
 	}),
 
-	req_slow: Compose(recoil('req_slow')).over(async (data) =>
+	req_slow: Compose(recoil()).over(async (data) =>
 	{
 		await delay(250)
 		return `OK ${ +data + 100 }`
@@ -84,7 +84,7 @@ var
 endp = Endpoint<Protocol_E, Protocol_B>(addr.for_endpoint())
 endp.on(
 {
-	async '@open' (_, endp)
+	async '@open' (_, { endp })
 	{
 		endp.send('req', 10)
 		once(endp, 'req', (data) =>

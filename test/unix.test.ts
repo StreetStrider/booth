@@ -45,7 +45,7 @@ var
 dispatch = Dispatch({ server })
 dispatch.on(
 {
-	hello (data, endp)
+	hello (data, { endp })
 	{
 		aof.track(2, '>', data)
 
@@ -71,7 +71,7 @@ var
 endp = Endpoint(addr.for_endpoint())
 endp.on(
 {
-	'@open' (_, endp)
+	'@open' (_, { endp })
 	{
 		endp.send('hello', 'Hello, World!')
 

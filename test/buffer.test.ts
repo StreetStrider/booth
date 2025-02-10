@@ -37,7 +37,7 @@ dispatch.on(
 	{
 	},
 	*/
-	'@binary' ($data, endp)
+	'@binary' ($data, { endp })
 	{
 		expect($data instanceof Buffer).eq(true)
 
@@ -59,7 +59,7 @@ var
 endp = Endpoint(addr.for_endpoint())
 endp.on(
 {
-	'@open' (_, endp)
+	'@open' (_, { endp })
 	{
 		endp.send(Buffer.from('abc'))
 	},

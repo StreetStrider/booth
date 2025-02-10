@@ -32,19 +32,19 @@ console.log('ERRORTEST', ...addr.view())
 
 var errors = 0
 
-function expected_error (info: any)
+function expected_error ({ fn, error, meta }: any)
 {
 	errors++
 
-	expect(info).an('object')
-	expect(info.error instanceof Error).eq(true)
-	// expect(info.meta.name).match(/^foo\d$/)
+	expect(meta.key).match(/^foo\d$/)
 
-	expect(info.fn).a('function')
-	// expect(info.fn.name).eq(info.meta.name)
-	// expect(info.error.message).eq(`expected_${ info.meta.name }`)
+	expect(fn).a('function')
+	expect(fn.name).eq(meta.key)
 
-	aof.track(errors, info.error.message)
+	expect(error instanceof Error).eq(true)
+	expect(error.message).eq(`expected_${ meta.key }`)
+
+	aof.track(errors, error.message)
 
 	if (errors === 3)
 	{

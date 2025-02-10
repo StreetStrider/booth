@@ -25,7 +25,7 @@ dispatch = Dispatch(addr.for_dispatch())
 dispatch.rooms.get('@all')
 dispatch.on(
 {
-	join_special (yes, endp)
+	join_special (yes, { endp })
 	{
 		if (yes)
 		{

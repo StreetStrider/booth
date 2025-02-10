@@ -19,7 +19,7 @@ export default function
 (
 	endpoint: Endpoint<In, Out, Aux>,
 	key: Key,
-	fn: Handler<Protocol_All<In>[Key], Endpoint<In, Out, Aux>>,
+	fn: Handler<Key, Protocol_All<In>[Key], Endpoint<In, Out, Aux>>,
 )
 	: Disposer
 
@@ -33,6 +33,6 @@ export default function
 (
 	dispatch: Dispatch<In, Out, Aux>,
 	key: Key,
-	fn: Handler<Protocol_All<In>[Key], Endpoint<In, Out, Aux>>,
+	fn: Handler<Key, Protocol_All<In>[Key], Endpoint<In, Out, Aux>>,
 )
 	: Disposer

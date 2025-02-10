@@ -20,7 +20,7 @@ async function main ()
 	const dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 
 	dispatch.on('ping', (_1, _2) => {})
-	dispatch.on('ping', (data, endp) =>
+	dispatch.on('ping', (data, { endp }) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux_Base>
@@ -32,7 +32,7 @@ async function main ()
 	dispatch.on(
 	{
 		stat () {},
-		ping (data, endp)
+		ping (data, { endp })
 		{
 			data // $ExpectType string
 			endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux_Base>
@@ -54,7 +54,7 @@ async function main ()
 	endp.on('@connect', () => {})
 	endp.on('ping', (_1, _2) => {}) // $ExpectError
 	endp.on('pong', (_1, _2) => {})
-	endp.on('pong', (data, endp) =>
+	endp.on('pong', (data, { endp }) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux_Base>
@@ -66,7 +66,7 @@ async function main ()
 	{
 		'@connect': () => {},
 		stat () {},
-		pong (data, endp)
+		pong (data, { endp })
 		{
 			data // $ExpectType string
 			endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux_Base>
@@ -79,7 +79,7 @@ async function main ()
 	})
 
 	// *
-	once(dispatch, 'ping', (data, endp) =>
+	once(dispatch, 'ping', (data, { endp }) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux_Base>
@@ -87,7 +87,7 @@ async function main ()
 
 	once(dispatch, 'pong', (_1, _2) => {}) // $ExpectError
 
-	once(endp, 'pong', (data, endp) =>
+	once(endp, 'pong', (data, { endp }) =>
 	{
 		data // $ExpectType string
 		endp // $ExpectType Endpoint<Protocol_E, Protocol_B, Aux_Base>
