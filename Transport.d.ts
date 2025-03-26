@@ -28,6 +28,7 @@ export interface Transport extends TypedEmitter<Events>
 	capabilities?:
 	{
 		binary?: boolean,
+		reconnect?: boolean,
 	},
 
 	send (payload: string): void,

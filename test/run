@@ -1,8 +1,21 @@
 #! /bin/sh
-
 #
 # process.versions.deno, process.versions.node
+# process.execPath
+# import.meta.url
 #
+
+Deno ()
+{
+	deno run \
+		-R=. \
+		-R=/tmp/booth \
+		-R=$(which deno) \
+		-W=/tmp/booth/ \
+		-N=0.0.0.0,127.0.0.1 \
+		-E \
+		"${@}"
+}
 
 set -e
 
@@ -16,16 +29,11 @@ tsx test/room.test.ts
 tsx test/error.test.ts
 tsx test/buffer.test.ts
 tsx test/once-when-request.test.ts
+tsx test/stdio.test.ts
 
 
 rm -rf /tmp/booth
 mkdir  /tmp/booth
-
-
-Deno ()
-{
-	deno run -R=. -R=/tmp/booth -W=/tmp/booth/ -N=0.0.0.0,127.0.0.1 -E "${1}"
-}
 
 
 Deno ./test/socket.test.ts
@@ -34,3 +42,4 @@ Deno test/room.test.ts
 Deno test/error.test.ts
 # Deno test/buffer.test.ts
 Deno test/once-when-request.test.ts
+Deno --allow-run test/stdio.test.ts

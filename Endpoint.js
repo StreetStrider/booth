@@ -181,21 +181,6 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 	}
 
-	function reconnect_or_cleanup ()
-	{
-		if (! $ws)
-		{
-			cleanup()
-		}
-		else
-		{
-			$buffer = []
-			$ws = null
-
-			setTimeout(connect, 1e3)
-		}
-	}
-
 	function connect_or_reconnect ()
 	{
 		if (! connect_or_reconnect.yes)
@@ -208,6 +193,35 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		{
 			events.emit('@reconnect', void 0, { endp })
 		}
+	}
+
+	function reconnect_or_cleanup ()
+	{
+		if (! $ws)
+		{
+			cleanup()
+			return
+		}
+		if (! should_reconnect())
+		{
+			cleanup()
+			return
+		}
+
+		$buffer = []
+		$ws = null
+
+		setTimeout(connect, 1e3)
+	}
+
+	function should_reconnect ()
+	{
+		if ($ws instanceof Ws)
+		{
+			return true
+		}
+
+		return ($ws?.capabilities?.reconnect ?? true)
 	}
 
 	function close ()

@@ -10,11 +10,40 @@ import { writeFileSync as write } from 'node:fs'
 
 import { expect } from 'chai'
 
+
+export function is_node ()
+{
+	return process.execPath.match('/bin/node')
+}
+
+export function is_deno ()
+{
+	return process.execPath.match('/bin/deno')
+}
+
+
+function runtime ()
+{
+	if (is_node())
+	{
+		return 'node'
+	}
+	if (is_deno())
+	{
+		return 'deno'
+	}
+
+	throw new TypeError('unknown_runtime')
+}
+
+
 export const tmp = '/tmp/booth'
 
 export function Aof (name, fn_result, fn_end)
 {
-	var file = open(logname(name), 'ax')
+	name = (name + '_' + runtime())
+
+	var file = open(logname(name), 'a')
 
 	var t = setTimeout(() =>
 	{
