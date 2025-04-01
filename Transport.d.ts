@@ -1,5 +1,7 @@
 /* eslint max-len: 0 */
+
 // import type { EventEmitter } from 'node:events'
+// import type { TypedEmitter } from 'tiny-typed-emitter'
 
 // type Data = string | Buffer | ArrayBuffer | Buffer[];
 // export type TypedArray = (Int8Array | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array)
@@ -8,22 +10,23 @@
 // import type { ErrorEvent } from '@types/ws'
 // import WebSocket = require('ws')
 
+
 export type Binary_Send = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)
 export type Binary_Recv = (Buffer | ArrayBuffer | Buffer[])
 
-import type { TypedEmitter } from 'tiny-typed-emitter'
+import type { TypedEventTarget } from 'typescript-event-target'
 
 export type Payload = (string | Binary_Recv)
 
 export type Events =
 {
-	open:    () => void,
-	close:   () => void,
-	error:   (event: Error) => void,
-	message: (event: { data: Payload, type?: string }) => void,
+	open:    Event,
+	close:   Event, /* TODO: CloseEvent */
+	error:   Event,
+	message: MessageEvent,
 }
 
-export interface Transport extends TypedEmitter<Events>
+export interface Transport extends TypedEventTarget<Events>
 {
 	capabilities?:
 	{

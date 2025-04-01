@@ -16,7 +16,7 @@
 
 		"strict": true,
 
-		"lib":  [ "es6" ],
+		"lib":  [ "es6", "dom" ],
 		"target": "es6",
 
 		"module": "node16"

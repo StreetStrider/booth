@@ -1,5 +1,4 @@
 
-import { EventEmitter } from 'node:events'
 import { createInterface as Lines } from 'node:readline'
 
 
@@ -7,15 +6,10 @@ export default function Stdio (input, output)
 {
 	let is_done = false
 
-	const transport = new EventEmitter
+	const transport = new EventTarget
 
 	input  || (input  = process.stdin)
 	output || (output = process.stdout)
-
-	transport.addEventListener = (...args) =>
-	{
-		return transport.addListener(...args)
-	}
 
 	transport.capabilities =
 	{
@@ -36,8 +30,10 @@ export default function Stdio (input, output)
 		// TODO: consider stream handle
 		// input.destroy()
 		// output.end()
+		input  = null
+		output = null
 
-		transport.emit('close')
+		transport.dispatchEvent(new Event('close')) /* TODO: CloseEvent () node@23 */
 	}
 
 	return (init(), transport)
@@ -46,12 +42,12 @@ export default function Stdio (input, output)
 	{
 		setTimeout(() =>
 		{
-			transport.emit('open')
+			transport.dispatchEvent(new Event('open'))
 		})
 
 		for await (const line of Lines({ input }))
 		{
-			transport.emit('message', { data: line })
+			transport.dispatchEvent(new MessageEvent('message', { data: line }))
 		}
 
 		setTimeout(() =>
