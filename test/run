@@ -30,6 +30,7 @@ tsx test/error.test.ts
 tsx test/buffer.test.ts
 tsx test/once-when-request.test.ts
 tsx test/stdio.test.ts
+node test/postmessage.test.js
 
 
 rm -rf /tmp/booth
@@ -43,3 +44,4 @@ Deno test/error.test.ts
 # Deno test/buffer.test.ts
 Deno test/once-when-request.test.ts
 Deno --allow-run test/stdio.test.ts
+Deno test/postmessage.test.js

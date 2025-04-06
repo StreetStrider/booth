@@ -27,9 +27,9 @@ export default function Stdio (input, output)
 		if (is_done) return
 		is_done = true
 
-		// TODO: consider stream handle
-		// input.destroy()
-		// output.end()
+		/* we do not own */
+		/* input.destroy() */
+		/* output.end() */
 		input  = null
 		output = null
 
