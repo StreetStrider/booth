@@ -22,6 +22,10 @@ set -e
 rm -rf /tmp/booth
 mkdir  /tmp/booth
 
+# only:
+# Deno test/unix.test.ts
+# exit
+
 
 tsx test/socket.test.ts
 tsx test/unix.test.ts
@@ -38,10 +42,10 @@ mkdir  /tmp/booth
 
 
 Deno ./test/socket.test.ts
-# Deno test/unix.test.ts
+# Deno test/unix.test.ts # (see https://github.com/denoland/deno/issues/27450)
 Deno test/room.test.ts
 Deno test/error.test.ts
-# Deno test/buffer.test.ts
+Deno test/buffer.test.ts
 Deno test/once-when-request.test.ts
 Deno --allow-run test/stdio.test.ts
 Deno test/postmessage.test.js
