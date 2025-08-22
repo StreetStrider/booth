@@ -30,6 +30,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		aux: {},
 	}
 
+
 	function on (...args)
 	{
 		if (dispatch)

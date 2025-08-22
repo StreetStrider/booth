@@ -6,7 +6,7 @@ import { timeout as Timeout } from './timeout.js'
 
 export default function when (emitter, key, timeout = 5e3)
 {
-	timeout || (timeout = Infinity)
+	timeout ||= Infinity
 
 	if (timeout === Infinity)
 	{

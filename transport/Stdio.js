@@ -4,12 +4,12 @@ import { createInterface as Lines } from 'node:readline'
 
 export default function Stdio (input, output)
 {
-	let is_done = false
+	var is_done = false
 
-	const transport = new EventTarget
+	var transport = new EventTarget
 
-	input  || (input  = process.stdin)
-	output || (output = process.stdout)
+	input  ??= process.stdin
+	output ??= process.stdout
 
 	transport.capabilities =
 	{
@@ -45,7 +45,7 @@ export default function Stdio (input, output)
 			transport.dispatchEvent(new Event('open'))
 		})
 
-		for await (const line of Lines({ input }))
+		for await (var line of Lines({ input }))
 		{
 			transport.dispatchEvent(new MessageEvent('message', { data: line }))
 		}

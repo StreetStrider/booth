@@ -3,7 +3,7 @@
 
 export default function Postmessage (port)
 {
-	const transport = new EventTarget
+	var transport = new EventTarget
 
 	transport.capabilities =
 	{
