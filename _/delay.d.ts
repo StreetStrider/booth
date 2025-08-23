@@ -1,3 +1,3 @@
 
 
-export default function delay (ms: number): Promise<void>
+export default function delay (ms?: number): Promise<void>

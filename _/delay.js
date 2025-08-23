@@ -1,6 +1,6 @@
 
 
-export default function delay (ms)
+export default function delay (ms = 0)
 {
 	return new Promise(rs =>
 	{

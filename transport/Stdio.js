@@ -1,6 +1,8 @@
 
 import { createInterface as Lines } from 'node:readline'
 
+import delay from '../_/delay.js'
+
 
 export default function Stdio (input, output)
 {
@@ -40,20 +42,16 @@ export default function Stdio (input, output)
 
 	async function init ()
 	{
-		setTimeout(() =>
-		{
-			transport.dispatchEvent(new Event('open'))
-		})
+		await delay()
+		transport.dispatchEvent(new Event('open'))
 
 		for await (var line of Lines({ input }))
 		{
 			transport.dispatchEvent(new MessageEvent('message', { data: line }))
 		}
 
-		setTimeout(() =>
-		{
-			transport.close()
-		})
+		await delay()
+		transport.close()
 	}
 }
 
