@@ -1,6 +1,9 @@
 
 import Ws from 'isomorphic-ws'
 
+// import { version } from './package.json' with { type: 'json' }
+const version = '0.16'
+
 import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
@@ -83,11 +86,13 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		throw new TypeError('binary_not_supported')
 	}
 
-	function handle (event)
+	function recv (event)
 	{
 		var msg = event.data
 
-		if (typeof msg    !== 'string') return handle_binary(msg)
+		events.emit('@recv', msg, { endp })
+
+		if (typeof msg    !== 'string') return recv_binary(msg)
 		if (msg.charAt(0) !== '@') return
 		if (msg.charAt(1) === '@') return
 
@@ -102,7 +107,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		events.emit(key, data, meta)
 	}
 
-	function handle_binary (msg)
+	function recv_binary (msg)
 	{
 		var key = '@binary'
 
@@ -112,7 +117,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		events.emit(key, data, meta)
 	}
 
-	function connect () /* eslint-disable-line complexity */
+	function connect () /* eslint-disable-line complexity, max-statements */
 	{
 		if (! dispatch)
 		{
@@ -131,19 +136,20 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 
 
-		/* before user */
+		/* before user's */
 		if (! dispatch)
 		{
 			ev('open', flush)
 		}
 
+		/* user's */
 		ev('open',   () => events.emit('@open',  void 0, { endp }))
 		ev('close',  () => events.emit('@close', void 0, { endp }))
 		ev('error', (e) => events.emit('@error',      e, { endp }))
 
-		ev('message', handle)
+		ev('message', recv)
 
-		/* after user */
+		/* after user's */
 		if (! dispatch)
 		{
 			ev('open',  connect_or_reconnect)
@@ -159,13 +165,15 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 			$ws.addEventListener(name, handler)
 		}
 
-		/* instantly opened when in dispatch */
+		/* instantly opened when under Dispatch */
 		if (dispatch)
 		{
 			events.emit('@open',    void 0, { endp })
 			events.emit('@connect', void 0, { endp })
 
 			dispatch.rooms.join_if_any('@all', endp)
+
+			$ws.send(`@@booth:${ version }`)
 		}
 	}
 

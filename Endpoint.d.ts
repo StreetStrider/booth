@@ -6,6 +6,7 @@ import type { Disposer } from '@streetstrider/emitter'
 
 import type { Transport }   from './Transport.js'
 import type { Binary_Send } from './Transport.js'
+import type { Payload }     from './Transport.js'
 import type { Binary_Recv } from './Transport.js'
 
 
@@ -68,6 +69,7 @@ export type Protocol_Core =
 	'@connect':   void,
 	'@reconnect': void,
 
+	'@recv':   Payload,
 	'@binary': Binary_Recv,
 
 	'@open':  void,
