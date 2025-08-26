@@ -152,7 +152,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		/* after user's */
 		if (! dispatch)
 		{
-			ev('open',  connect_or_reconnect)
+			ev('open',  on_connect_or_reconnect)
 			ev('close', reconnect_or_cleanup)
 		}
 		else
@@ -190,11 +190,13 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 	}
 
-	function connect_or_reconnect ()
+	var connected_once = false
+
+	function on_connect_or_reconnect ()
 	{
-		if (! connect_or_reconnect.yes)
+		if (! connected_once)
 		{
-			connect_or_reconnect.yes = true
+			connected_once = true
 
 			events.emit('@connect',   void 0, { endp })
 		}
