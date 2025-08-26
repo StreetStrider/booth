@@ -116,6 +116,13 @@ export interface Endpoint
 }
 
 
+export type Options =
+{
+	should_reconnect: boolean,
+	reconnect_interval: number,
+}
+
+
 export default function Endpoint
 <
 	In  extends Protocol = Protocol,
@@ -125,6 +132,7 @@ export default function Endpoint
 (
 	// ws: WebSocket | WebSocket.ClientOptions | ClientRequestArgs | string
 	transport: ((() => Transport) | string),
+	options?: Partial<Options>,
 )
 	:
 Endpoint<In, Out, Aux>
