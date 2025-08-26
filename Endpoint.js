@@ -8,8 +8,17 @@ import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
 
-export default function Endpoint (transport, { ws, dispatch, events } = {})
+const defaults =
 {
+	should_reconnect: void 0,
+	reconnect_interval: 1e3,
+}
+
+
+export default function Endpoint (transport, options, { ws, dispatch, events } = {})
+{
+	options = { ...defaults, ...options }
+
 	var $buffer = null
 	if (! dispatch)
 	{
@@ -50,7 +59,7 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		}
 	}
 
-	function send (key, data = '') /* eslint-disable-line complexity */
+	function send (key, data = '')
 	{
 		if ($buffer)
 		{
@@ -222,11 +231,16 @@ export default function Endpoint (transport, { ws, dispatch, events } = {})
 		$buffer = []
 		$ws = null
 
-		setTimeout(connect, 1e3)
+		setTimeout(connect, options.reconnect_interval)
 	}
 
 	function should_reconnect ()
 	{
+		if (options.should_reconnect !== void 0)
+		{
+			return options.should_reconnect
+		}
+
 		if ($ws instanceof Ws)
 		{
 			return true

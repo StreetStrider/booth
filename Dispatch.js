@@ -21,7 +21,7 @@ export default function Dispatch (wss)
 		rooms: Rooms(),
 	}
 
-	wss.on('connection', (ws) => Endpoint(null, { ws, dispatch, events }))
+	wss.on('connection', (ws) => Endpoint(null, null, { ws, dispatch, events }))
 
 	function on (...args)
 	{

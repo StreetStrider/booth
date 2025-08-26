@@ -26,6 +26,14 @@ export default
 	},
 
 	...typescript,
+
+	{
+		rules:
+		{
+			complexity: [ 1, 6 ],
+		},
+	},
+
 	{
 		files: [ '**/*.d.ts' ],
 
