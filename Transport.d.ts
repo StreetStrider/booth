@@ -8,7 +8,7 @@
 // export type PayloadBinary = (ArrayBuffer | Blob | TypedArray | DataView)
 // import type { BufferLike } from 'ws'
 // import type { ErrorEvent } from '@types/ws'
-// import WebSocket = require('ws')
+// import type * as WebSocket from 'ws'
 
 
 export type Binary_Send = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)

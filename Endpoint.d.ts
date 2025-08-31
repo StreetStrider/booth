@@ -1,6 +1,6 @@
 
 /* import type { ClientRequestArgs } from 'node:http' */
-import WebSocket = require('ws')
+import type * as WebSocket from 'ws'
 
 import type { Disposer } from '@streetstrider/emitter'
 

@@ -1,5 +1,5 @@
 
-import WebSocket = require('ws')
+import type * as WebSocket from 'ws'
 
 import type { Endpoint } from './Endpoint.js'
 import type { Protocol } from './Endpoint.js'
