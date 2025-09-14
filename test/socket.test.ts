@@ -27,6 +27,7 @@ var closes = 0
 
 var aof = Aof('socket', () =>
 [
+	[ 'listening' ],
 	[ 'open', 0 ],
 	[ 'connect', 0 ],
 	[ 1 ],
@@ -77,6 +78,10 @@ var
 dispatch = Dispatch<Protocol_B, Protocol_E>(addr.for_dispatch())
 dispatch.on(
 {
+	'@listening' ()
+	{
+		aof.track('listening')
+	},
 	ok (_, { endp })
 	{
 		aof.track(1)

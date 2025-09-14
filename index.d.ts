@@ -11,10 +11,12 @@ export type { Handler } from './Endpoint.js'
 export type { Handler_Composition } from './Endpoint.js'
 export type { Protocol } from './Endpoint.js'
 export type { Protocol_Core } from './Endpoint.js'
-export type { Protocol_All } from './Endpoint.js'
+/* export type { Protocol_All } from './Endpoint.js' */
 /* export type { Endpoint } from './Endpoint.js' */
 export type { Aux_Base } from './Endpoint.js'
 
 export type { Room }  from './Dispatch.js'
 export type { Rooms } from './Dispatch.js'
+/* export type { Protocol_All } from './Dispatch.js' */
+export type { Protocol_Core_Dispatch } from './Dispatch.js'
 /* export type { Dispatch } from './Dispatch.js' */

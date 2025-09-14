@@ -23,7 +23,7 @@ async function main ()
 	dispatch.on('ping', (data, { endp }) =>
 	{
 		data // $ExpectType string
-		endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux_Base>
+		endp // $ExpectType Endpoint<Protocol_All<Protocol_B>, Protocol_E, Aux_Base>
 	})
 	dispatch.on('pong', (_1, _2) => {}) // $ExpectError
 	dispatch.on('stat', (_1, _2) => {})
@@ -35,7 +35,7 @@ async function main ()
 		ping (data, { endp })
 		{
 			data // $ExpectType string
-			endp // $ExpectType Endpoint<Protocol_B, Protocol_E, Aux_Base>
+			endp // $ExpectType Endpoint<Protocol_All<Protocol_B>, Protocol_E, Aux_Base>
 		},
 	})
 	dispatch.on(

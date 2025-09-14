@@ -22,6 +22,7 @@ export default function Dispatch (wss)
 	}
 
 	wss.on('connection', (ws) => Endpoint(null, null, { ws, dispatch, events }))
+	wss.on('listening',  ()   => events?.emit('@listening', void 0, { dispatch }))
 
 	function on (...args)
 	{

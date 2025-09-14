@@ -6,6 +6,14 @@ import type { Protocol } from './Endpoint.js'
 import type { Aux_Base } from './Endpoint.js'
 
 
+export type Protocol_Core_Dispatch =
+{
+	'@listening': void,
+}
+
+export type Protocol_All <In>
+	= (In & Protocol_Core_Dispatch)
+
 export type Room
 <
 	In  extends Protocol = Protocol,
@@ -51,9 +59,9 @@ export type Dispatch
 >
 	=
 {
-	on: Endpoint<In, Out, Aux>['on'];
+	on: Endpoint<Protocol_All<In>, Out, Aux>['on'];
 	close (): void;
-	rooms: Rooms<In, Out, Aux>;
+	rooms: Rooms<Protocol_All<In>, Out, Aux>;
 }
 
 
