@@ -22,6 +22,7 @@
 
     "Dispatch.js",
     "Endpoint.js",
+    "Residual.js",
 
     "midw/",
     "transport/",
@@ -33,8 +34,11 @@
   "exports":
   {
     ".": "./index.js",
+
     "./endpoint": "./Endpoint.js",
     "./dispatch": "./Dispatch.js",
+    "./residual": "./Residual.js",
+
     "./midw/*": "./midw/*.js",
     "./transport/*": "./transport/*.js"
   },
