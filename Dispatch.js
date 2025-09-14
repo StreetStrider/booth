@@ -40,17 +40,17 @@ export default function Dispatch (wss)
 		if (! dispatch) return
 
 		wss.close()
+		wss = null
 
-		events = null
-		wss    = null
-		dispatch  = null
+		events   = null
+		dispatch = null
 	}
 
 	return dispatch
 }
 
 
-//
+/* * */
 import { WebSocketServer } from 'ws'
 
 function Wss (wss)

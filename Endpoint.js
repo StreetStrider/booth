@@ -2,13 +2,13 @@
 import Ws from 'isomorphic-ws'
 
 // import { version } from './package.json' with { type: 'json' }
-const version = '0.16'
+var version = '0.16'
 
 import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
 
-const defaults =
+var defaults =
 {
 	should_reconnect: void 0,
 	reconnect_interval: 1e3,

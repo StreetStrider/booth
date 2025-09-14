@@ -66,7 +66,7 @@ export function Aof (name, fn_result, fn_end)
 	{
 		close(file)
 		clearTimeout(t)
-		fn_end && fn_end()
+		fn_end?.()
 	}
 
 	function view ()
