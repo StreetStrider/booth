@@ -4,6 +4,6 @@ export default function delay (ms = 0)
 {
 	return new Promise(rs =>
 	{
-		setTimeout(() => rs(), ms)
+		setTimeout(() => rs(), ms)?.unref?.() // TODO:
 	})
 }

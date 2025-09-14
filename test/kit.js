@@ -21,6 +21,15 @@ export function is_deno ()
 	return process.execPath.match('/bin/deno')
 }
 
+export function executable ()
+{
+	if (is_node())
+	{
+		return 'tsx'
+	}
+
+	return process.execPath
+}
 
 function runtime ()
 {

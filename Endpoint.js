@@ -19,10 +19,11 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 {
 	options = { ...defaults, ...options }
 
+	events ??= Events()
+
 	var $buffer = null
 	if (! dispatch)
 	{
-		events = Events()
 		$buffer = []
 	}
 
