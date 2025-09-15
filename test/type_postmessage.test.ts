@@ -22,7 +22,11 @@ var aof = Aof('postmessage', () =>
 	[ 3 ],
 	[ 'close', 2 ],
 	/* [ 'close', 1 ], */
-])
+],
+() =>
+{
+	endp.close()
+})
 
 const is_child = (process.env.IS_WORKER || (! is_main))
 
@@ -34,7 +38,7 @@ if (! is_child)
 	/* worker.on('error', (e) => {}) */
 	/* worker.on('exit', () => {}) */
 
-	const endp = Endpoint(() => Postmessage(worker))
+	var endp = Endpoint(() => Postmessage(worker))
 
 	endp.on('@connect', () =>
 	{
@@ -67,7 +71,7 @@ if (! is_child)
 }
 else
 {
-	const endp = Endpoint(() => Postmessage(parentPort!))
+	var endp = Endpoint(() => Postmessage(parentPort!))
 
 	endp.on('@connect', () =>
 	{
@@ -94,7 +98,7 @@ else
 
 		setTimeout(() =>
 		{
-			process.exit()
+			aof.end()
 		})
 	})
 }

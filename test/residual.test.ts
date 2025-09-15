@@ -92,7 +92,6 @@ function Server (wss: any)
 			console.log('OK')
 
 			aof.end()
-			// process.exit()
 		})
 	})
 }

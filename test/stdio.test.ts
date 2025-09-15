@@ -21,7 +21,11 @@ var aof = Aof('stdio', () =>
 	[ 3 ],
 	[ 'close', 2 ],
 	[ 'close', 1 ],
-])
+],
+() =>
+{
+	endp.close()
+})
 
 
 const is_child = process.argv.includes('--child')
@@ -33,7 +37,7 @@ if (! is_child)
 
 	/* child.on('spawn', () => {}) */
 
-	const endp = Endpoint(() => Stdio.from_child_process(child))
+	var endp = Endpoint(() => Stdio.from_child_process(child))
 
 	endp.on('@connect', () =>
 	{
@@ -65,7 +69,7 @@ if (! is_child)
 }
 else
 {
-	const endp = Endpoint(() => Stdio())
+	var endp = Endpoint(() => Stdio())
 
 	endp.on('@connect', () =>
 	{
@@ -86,7 +90,7 @@ else
 
 		setTimeout(() =>
 		{
-			process.exit()
+			aof.end()
 		})
 	})
 }
