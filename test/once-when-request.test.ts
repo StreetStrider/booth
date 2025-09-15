@@ -69,7 +69,7 @@ dispatch.on(
 
 	req_slow: Compose(recoil()).over(async (data) =>
 	{
-		await delay(250)
+		await delay(250) /* must be > 101ms */
 		return `OK ${ +data + 100 }`
 	}),
 
@@ -119,7 +119,7 @@ endp.on(
 		try
 		{
 			endp.send('req_slow', 0)
-			aof.track('x', await when(endp, 'req_slow', 100))
+			aof.track('x', await when(endp, 'req_slow', 101))
 		}
 		catch (e: any)
 		{
@@ -134,7 +134,7 @@ endp.on(
 
 		try
 		{
-			aof.track('x', await request(endp, 'req_slow', 0, 100))
+			aof.track('x', await request(endp, 'req_slow', 0, 101))
 		}
 		catch (e: any)
 		{

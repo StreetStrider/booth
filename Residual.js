@@ -11,7 +11,7 @@ import Events from './_/Events.js'
 import when from './_/when.js'
 import delay from './_/delay.js'
 import random from './_/random.js'
-import { timeout } from './_/timeout.js' /* TODO: */
+import { Timeouted } from './_/timeout.js'
 
 import logthru from './_/logthru.js'
 
@@ -23,6 +23,7 @@ var defaults =
 	Server () {},
 	Client () {},
 	retries_max: 2,
+	timeout: 5e3,
 }
 
 
@@ -151,7 +152,7 @@ export default function Residual (options)
 		try
 		{
 			var spawned = once(child, 'message')
-			var [ msg ] = await Promise.race([ spawned, timeout(5e3) ]) /* TODO: unref */
+			var [ msg ] = await Timeouted(spawned, options.timeout)
 
 			if (msg !== '@listening')
 			{

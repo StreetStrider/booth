@@ -2,8 +2,13 @@
 
 export default function delay (ms = 0)
 {
-	return new Promise(rs =>
+	var timer
+	var p = new Promise(rs =>
 	{
-		setTimeout(() => rs(), ms)?.unref?.() // TODO:
+		timer = setTimeout(() => rs(), ms)//?.unref?.()
 	})
+
+	p.timer = timer
+
+	return p
 }

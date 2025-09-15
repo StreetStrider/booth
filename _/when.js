@@ -1,7 +1,7 @@
 
 import once from './once.js'
 
-import { timeout as Timeout } from './timeout.js'
+import { Timeouted } from './timeout.js'
 
 
 export default function when (emitter, key, timeout = 5e3)
@@ -28,7 +28,7 @@ export default function when (emitter, key, timeout = 5e3)
 
 	try
 	{
-		return Promise.race([ result, Timeout(timeout) ])
+		return Timeouted(result, timeout)
 		.finally(() =>
 		{
 			ds()
