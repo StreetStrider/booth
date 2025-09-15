@@ -1,10 +1,7 @@
-/* eslint max-statements: [ 1, 21 ] */
+/* eslint max-statements: [ 1, 23 ] */
 
 import { once }  from 'node:events'
 import { spawn } from 'node:child_process'
-
-// import type { Protocol } from 'booth'
-// import type { Endpoint } from 'booth/endpoint'
 
 import Dispatch from './Dispatch.js'
 import Endpoint from './Endpoint.js'
@@ -19,21 +16,36 @@ import { timeout } from './_/timeout.js' /* TODO: */
 import logthru from './_/logthru.js'
 
 
-export default function Residual ({ addr, server, client, })
+var defaults =
 {
+	name: 'app_example',
+	exe: process.execPath,
+	Server () {},
+	Client () {},
+	retries_max: 2,
+}
+
+
+export default function Residual (options)
+{
+	options = { ...defaults, ...options }
+
+	var addr = options.addr
+
 	if (process.argv.includes('--residual'))
 	{
-		logthru('app_example')
+		logthru(options.name)
 
 		var wss = Dispatch(addr.for_dispatch())
 
-		var ready = capture(server, wss)
-		.then(async () =>
-		{
-			await when(wss, '@listening')
+		var Server = options.Server
 
-			process.send('@residual')
+		Promise.resolve().then(() =>
+		{
+			Server?.(wss)
 		})
+		.then(() => when(wss, '@listening'))
+		.then(() => process.send('@listening'))
 		.then(() => wss)
 
 		var close = function close ()
@@ -49,9 +61,7 @@ export default function Residual ({ addr, server, client, })
 	var events = Events()
 
 	var ok = false
-
 	var retries = 0
-	var retries_max = 2
 
 
 	async function main ()
@@ -63,25 +73,24 @@ export default function Residual ({ addr, server, client, })
 			if (ok) break
 			retries++
 
-			if (retries > retries_max) break
-			// console.info('retry:', retries, 'max:', retries_max)
+			if (retries > options.retries_max) break
+			/* console.info('retry:', retries, 'max:', options.retries_max) */
 
 			if (retries > 1)
 			{
 				await delay(random(1, 5) * 100./* ms */)
 			}
 
-			// await attempt(upstart)
-			await upstart()
+			await attempt(upstart)
 			await attempt(connect_and_ping)
 		}
 
 		if (! ok)
 		{
-			throw new Error(`unable_to_residual (retries: ${ retries_max })`)
+			throw new Error(`unable_to_residual (retries: ${ options.retries_max })`)
 		}
 
-		// TODO: single process mode?
+		/* TODO: fallback in single process mode */
 	}
 
 	async function connect_and_ping ()
@@ -95,7 +104,6 @@ export default function Residual ({ addr, server, client, })
 
 	async function connect ()
 	{
-		/* @ts-expect-error */
 		endp = Endpoint(addr.for_endpoint(), { should_reconnect: false }, { events })
 
 		var on_connect = when(endp, '@connect')
@@ -127,28 +135,25 @@ export default function Residual ({ addr, server, client, })
 
 	async function upstart ()
 	{
-		var exe = 'tsx' // process.execPath
 		var argv =
 		[
-			process.argv[1],
+			process.argv[1], /* TODO: test deno compile, provide option */
 			'--residual',
 		]
-		var options =
+		var spawn_options =
 		{
-			// stdio: 'ignore',
 			stdio: [ 'ignore', 'ignore', 'ignore', 'ipc' ],
 			detached: true,
 		}
 
-		var child = spawn(exe, argv, options)
+		var child = spawn(options.exe, argv, spawn_options)
 
 		try
 		{
 			var spawned = once(child, 'message')
+			var [ msg ] = await Promise.race([ spawned, timeout(5e3) ]) /* TODO: unref */
 
-			var [ msg ] = await Promise.race([ spawned, timeout(5e3) ])
-
-			if (msg !== '@residual')
+			if (msg !== '@listening')
 			{
 				throw new Error('not_a_residual')
 			}
@@ -194,8 +199,10 @@ export default function Residual ({ addr, server, client, })
 	// TODO:
 	// events.on('close', reconnect)
 
+	var Client = options.Client
+
 	var ready = main()
-	.then(() => client && capture(client, endp))
+	.then(() => Client?.(endp))
 	.then(() =>
 	{
 		/* instantly opened when under Residual Endpoint */
@@ -209,10 +216,4 @@ export default function Residual ({ addr, server, client, })
 	}
 
 	return { ready, close }
-}
-
-
-async function capture (fn, ...args)
-{
-	return fn(...args)
 }

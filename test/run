@@ -20,21 +20,25 @@ Deno ()
 set -e
 
 
+Clean ()
+{
+	rm -rf /tmp/booth
+	mkdir  /tmp/booth
+}
+
 Pkill ()
 {
 	pkill -f '\-\-residual' || true
 }
 
 
-rm -rf /tmp/booth
-mkdir  /tmp/booth
-
+Clean
 
 if false
 then
 	Pkill
 	tsx test/residual.test.ts
-	# Deno test/residual.test.ts
+	Deno --allow-run test/residual.test.ts
 	exit
 fi
 
@@ -52,8 +56,7 @@ Pkill
 tsx test/residual.test.ts
 
 
-rm -rf /tmp/booth
-mkdir  /tmp/booth
+Clean
 
 
 Deno ./test/socket.test.ts
@@ -65,5 +68,5 @@ Deno test/once-when-request.test.ts
 Deno --allow-run test/stdio.test.ts
 Deno test/recv.test.ts
 Deno test/postmessage.test.js
-# Pkill
-# Deno test/residual.test.ts
+Pkill
+Deno --allow-run test/residual.test.ts

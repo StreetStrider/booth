@@ -21,7 +21,7 @@ export function is_deno ()
 	return process.execPath.match('/bin/deno')
 }
 
-export function executable ()
+export function testing_executable ()
 {
 	if (is_node())
 	{
@@ -31,7 +31,7 @@ export function executable ()
 	return process.execPath
 }
 
-function runtime ()
+function engine_name ()
 {
 	if (is_node())
 	{
@@ -50,7 +50,7 @@ export const tmp = '/tmp/booth'
 
 export function Aof (name, fn_result, fn_end)
 {
-	name = (name + '_' + runtime())
+	name = (name + '_' + engine_name())
 
 	var file = open(logname(name), 'a')
 

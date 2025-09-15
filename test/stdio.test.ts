@@ -8,8 +8,8 @@ import { spawn } from 'node:child_process'
 import { Endpoint } from 'booth'
 import Stdio from 'booth/transport/Stdio'
 
-import { is_node } from './kit.js'
 import { Aof } from './kit.js'
+import { testing_executable } from './kit.js'
 
 
 var aof = Aof('stdio', () =>
@@ -27,11 +27,7 @@ var aof = Aof('stdio', () =>
 const is_child = process.argv.includes('--child')
 if (! is_child)
 {
-	let exe = process.execPath
-	if (is_node())
-	{
-		exe = 'tsx'
-	}
+	let exe = testing_executable()
 	const filename = import.meta.url.slice('file://'.length)
 	const child = spawn(exe, [ filename, '--child' ] /*, { stdio: 'inherit' } */)
 

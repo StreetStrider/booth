@@ -39,7 +39,6 @@ function stream_patch (filename, stream)
 	// function write (...args: unknown[]): boolean
 	function write (...args)
 	{
-		/* @-ts-expect-error */
 		var r = $write(...args)
 
 		if (typeof args.at(-1) === 'function')
@@ -54,14 +53,13 @@ function stream_patch (filename, stream)
 			chunk = strip(chunk)
 		}
 
-		/* @-ts-expect-error */
 		append(filename, chunk, { encoding }, () => {})
 
 		return r
 	}
 
 	stream.write  = write
-	stream.$write = $write /* @-ts-expect-error */
+	stream.$write = $write
 }
 
 
@@ -86,7 +84,6 @@ function log_toplevel_error (filename, type) /* : ('unhandledRejection' | 'uncau
 				breakLength: 120,
 			})
 
-			/* @-ts-expect-error *-/
 			process.stdout.$write(repr_term)
 		}
 		*/

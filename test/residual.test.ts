@@ -28,6 +28,7 @@ import { Addr } from 'booth'
 // import logthru from '../_/logthru.js'
 
 import { Aof } from './kit.js'
+import { testing_executable } from './kit.js'
 
 
 var aof = Aof('residual', () =>
@@ -47,13 +48,17 @@ var addr = Addr.Websocket(9000)
 console.log('WS', ...addr.view())
 
 
-// TODO: reconnect() as a method?
-
 type Protocol_B = Protocol<'ping'>
 type Protocol_E = Protocol<'pong'>
 
 
-var residual = Residual({ addr, server, client })
+var residual = Residual(
+{
+	addr,
+	exe: testing_executable(),
+	Server,
+	Client,
+})
 
 
 // endp = Endp<Protocol_E, Protocol_B>(addr.for_endpoint())
@@ -63,13 +68,14 @@ endp.on(
 	'@error' (...args)
 	{
 		console.log(...args)
-		process.exit()
 	}
 })
 //*/
 
-function server (wss: any)
+function Server (wss: any)
 {
+	console.log('SERVER')
+
 	wss.on('@connect', () =>
 	{
 		aof.track('connect', 1)
@@ -83,13 +89,15 @@ function server (wss: any)
 
 		setTimeout(() =>
 		{
+			console.log('OK')
+
 			aof.end()
-			process.exit()
+			// process.exit()
 		})
 	})
 }
 
-function client (endp: any)
+function Client (endp: any)
 {
 	endp.on('@connect', () =>
 	{

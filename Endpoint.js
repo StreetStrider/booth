@@ -216,6 +216,8 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
+	// TODO: reconnect() as a method?
+
 	function reconnect_or_cleanup ()
 	{
 		if (! $ws)
