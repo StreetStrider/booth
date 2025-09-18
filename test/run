@@ -43,6 +43,9 @@ then
 fi
 
 
+tsx --version
+echo ''
+
 tsx test/socket.test.ts
 tsx test/unix.test.ts
 tsx test/room.test.ts
@@ -58,6 +61,10 @@ tsx test/residual.test.ts
 
 Clean
 
+
+echo ''
+deno --version
+echo ''
 
 Deno ./test/socket.test.ts
 # Deno test/unix.test.ts # (see https://github.com/denoland/deno/issues/27450)
