@@ -21,7 +21,7 @@ var aof = Aof('postmessage', () =>
 	[ 2, 'data2' ],
 	[ 3 ],
 	[ 'close', 2 ],
-	/* [ 'close', 1 ], */
+	[ 'close', 1 ],
 ],
 () =>
 {
@@ -65,8 +65,12 @@ if (! is_child)
 
 	endp.on('@close', () =>
 	{
-		/* aof.track('close', 1) */
-		aof.end_check()
+		setTimeout(() =>
+		{
+			aof.track('close', 1)
+			aof.end_check()
+		}
+		, 100)
 	})
 }
 else
@@ -75,8 +79,13 @@ else
 
 	endp.on('@connect', () =>
 	{
-		aof.track('connect', 2)
-		endp.send('ok1', 'data1')
+		setTimeout(() =>
+		{
+			aof.track('connect', 2)
+
+			endp.send('ok1', 'data1')
+		}
+		, 100)
 	})
 
 	endp.on('ok2', (data, { endp }) =>
@@ -102,3 +111,7 @@ else
 		})
 	})
 }
+
+//
+// check type_postmessage.test.ts
+//
