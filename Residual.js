@@ -11,7 +11,8 @@ import Events from './_/Events.js'
 import when from './_/when.js'
 import delay from './_/delay.js'
 import random from './_/random.js'
-import { Timeouted } from './_/timeout.js'
+import { Timeouted as Timeout } from './_/timeout.js'
+import { race } from './_/timeout.js'
 
 import logthru from './_/logthru.js'
 
@@ -75,7 +76,9 @@ export default function Residual (options)
 			retries++
 
 			if (retries > options.retries_max) break
-			/* console.info('retry:', retries, 'max:', options.retries_max) */
+
+			/*
+			console.info('retry:', retries, 'max:', options.retries_max) //*/
 
 			if (retries > 1)
 			{
@@ -108,7 +111,10 @@ export default function Residual (options)
 		endp = Endpoint(addr.for_endpoint(), { should_reconnect: false }, { events })
 
 		var on_connect = when(endp, '@connect')
-		var on_error   = when(endp, '@error').then(e =>
+
+		var on_error = when(endp, '@error')
+		var timer = on_error.timer
+		on_error = on_error.then(e =>
 		{
 			if (e.error.code !== 'ECONNREFUSED')
 			{
@@ -116,8 +122,9 @@ export default function Residual (options)
 			}
 			throw e
 		})
+		on_error.timer = timer
 
-		await Promise.race([ on_connect, on_error ])
+		await race(on_connect, on_error)
 	}
 
 	async function ping ()
@@ -152,7 +159,7 @@ export default function Residual (options)
 		try
 		{
 			var spawned = once(child, 'message')
-			var [ msg ] = await Timeouted(spawned, options.timeout)
+			var [ msg ] = await Timeout(spawned, options.timeout)
 
 			if (msg !== '@listening')
 			{

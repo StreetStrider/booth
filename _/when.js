@@ -1,7 +1,7 @@
 
 import once from './once.js'
 
-import { Timeouted } from './timeout.js'
+import { Timeouted as Timeout } from './timeout.js'
 
 
 export default function when (emitter, key, timeout = 5e3)
@@ -28,12 +28,17 @@ export default function when (emitter, key, timeout = 5e3)
 
 	try
 	{
-		return Timeouted(result, timeout)
-		.finally(() =>
+		var p = Timeout(result, timeout)
+		var timer = p.timer
+
+		p = p.finally(() =>
 		{
 			ds()
 			ds = null
 		})
+		p.timer = timer
+
+		return p
 	}
 	finally
 	{
