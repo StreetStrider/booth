@@ -33,6 +33,7 @@ import { testing_executable } from './kit.js'
 
 var aof = Aof('residual', () =>
 [
+	[ 'listening' ],
 	[ 'connect', 1 ],
 	[ 'connect', 2 ],
 	[ 3 ],
@@ -62,19 +63,16 @@ var residual = Residual(
 
 
 // endp = Endp<Protocol_E, Protocol_B>(addr.for_endpoint())
-/*
-endp.on(
-{
-	'@error' (...args)
-	{
-		console.log(...args)
-	}
-})
-//*/
+
 
 function Server (wss: any)
 {
 	console.log('SERVER')
+
+	wss.on('@listening', () =>
+	{
+		aof.track('listening')
+	})
 
 	wss.on('@connect', () =>
 	{
