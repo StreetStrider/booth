@@ -145,7 +145,6 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 			}
 		}
 
-
 		/* before user's */
 		if (! dispatch)
 		{
@@ -200,13 +199,13 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	var connected_once = false
+	var been_connected = false
 
 	function on_connect_or_reconnect ()
 	{
-		if (! connected_once)
+		if (! been_connected)
 		{
-			connected_once = true
+			been_connected = true
 
 			events.emit('@connect',   void 0, { endp })
 		}

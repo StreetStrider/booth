@@ -36,8 +36,8 @@ var aof = Aof('residual', () =>
 	[ 'listening' ],
 	[ 'connect', 1 ],
 	[ 'connect', 2 ],
-	[ 3 ],
-	[ 4 ],
+	[ 'ping' ],
+	[ 'pong' ],
 ],
 () =>
 {
@@ -79,11 +79,11 @@ function Server (wss: any)
 		aof.track('connect', 1)
 	})
 
-	wss.on('foo', (_: any, { endp }: any) =>
+	wss.on('ping', (_: any, { endp }: any) =>
 	{
-		aof.track(3)
+		aof.track('ping')
 
-		endp.send('bar')
+		endp.send('pong')
 
 		setTimeout(() =>
 		{
@@ -91,6 +91,16 @@ function Server (wss: any)
 
 			aof.end()
 		})
+	})
+
+	wss.on('do-close', (_: any, { endp }: any) =>
+	{
+		endp.close()
+	})
+
+	wss.on('do-quit', (_: any, { endp }: any) =>
+	{
+		residual.close()
 	})
 }
 
@@ -100,12 +110,16 @@ function Client (endp: any)
 	{
 		aof.track('connect', 2)
 
-		endp.send('foo')
+		endp.send('ping')
 	})
-	endp.on('bar', () =>
+	endp.on('pong', () =>
 	{
-		aof.track(4)
+		aof.track('pong')
 
+		endp.send('do-close')
+	})
+	endp.on('@close', () =>
+	{
 		aof.end_check()
 	})
 }
