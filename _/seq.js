@@ -2,7 +2,7 @@
 
 export default function Seq (values)
 {
-	const $store = new Set(values)
+	var $store = new Set(values)
 
 
 	function add (value)
@@ -37,7 +37,7 @@ export default function Seq (values)
 
 	function each (fn)
 	{
-		for (const value of $store)
+		for (var value of $store)
 		{
 			fn(value)
 		}

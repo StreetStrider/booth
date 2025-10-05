@@ -8,7 +8,7 @@ export default function Reg (values, initializer = NotFound)
 		values = void 0
 	}
 
-	const $store = new Map(values)
+	var $store = new Map(values)
 
 
 	function get (key)
@@ -34,7 +34,7 @@ export default function Reg (values, initializer = NotFound)
 	{
 		if (! has(key)) throw new ReferenceError
 
-		const value = $store.get(key)
+		var value = $store.get(key)
 		$store.remove(key)
 		return value
 	}
@@ -59,7 +59,7 @@ export default function Reg (values, initializer = NotFound)
 
 	function each (fn)
 	{
-		for (const [ key, value ] of $store)
+		for (var [ key, value ] of $store)
 		{
 			fn(value, key)
 		}
