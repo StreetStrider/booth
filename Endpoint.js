@@ -145,6 +145,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 			}
 		}
 
+		// TODO: consider check @@booth frame and provide customizer_fn before open
 		/* before user's */
 		if (! dispatch)
 		{
