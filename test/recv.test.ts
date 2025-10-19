@@ -23,6 +23,7 @@ import { Aof } from './kit.js'
 var aof = Aof('recv', () =>
 [
 	[ [ 'E', '@@booth:0.16' ] ],
+	[ [ 'B', '@@booth:0.16:endp' ] ],
 	[ [ 'B', '@ok:' ] ],
 	[ 1 ],
 	[ [ 'E', '@ok:' ] ],

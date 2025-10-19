@@ -1,7 +1,11 @@
 
 import 'console-ultimate'
 
-console.info('stdio.test')
+const is_child = process.argv.includes('--child')
+if (! is_child)
+{
+	console.info('stdio.test')
+}
 
 import { spawn } from 'node:child_process'
 
@@ -28,7 +32,6 @@ var aof = Aof('stdio', () =>
 })
 
 
-const is_child = process.argv.includes('--child')
 if (! is_child)
 {
 	let exe = testing_executable()

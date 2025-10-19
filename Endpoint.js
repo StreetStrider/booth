@@ -1,7 +1,7 @@
 
 import Ws from 'isomorphic-ws'
 
-// import { version } from './package.json' with { type: 'json' }
+/* import { version } from './package.json' with { type: 'json' } */
 var version = '0.16'
 
 import Events from './_/Events.js'
@@ -127,7 +127,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		events.emit(key, data, meta)
 	}
 
-	function connect () /* eslint-disable-line complexity, max-statements */
+	function connect () /* eslint-disable-line complexity */
 	{
 		if (! dispatch)
 		{
@@ -145,24 +145,25 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 			}
 		}
 
-		// TODO: consider check @@booth frame and provide customizer_fn before open
-		/* before user's */
+		/* #1 */
 		if (! dispatch)
 		{
-			ev('open', flush)
+			ev('open', on_endp_open)
+		}
+		else
+		{
+			ev('open', () => events.emit('@open', void 0, { endp }))
 		}
 
-		/* user's */
-		ev('open',   () => events.emit('@open',  void 0, { endp }))
+		/* #2 */
 		ev('close',  () => events.emit('@close', void 0, { endp }))
 		ev('error', (e) => events.emit('@error',      e, { endp }))
 
 		ev('message', recv)
 
-		/* after user's */
+		/* #3 */
 		if (! dispatch)
 		{
-			ev('open',  on_connect_or_reconnect)
 			ev('close', reconnect_or_cleanup)
 		}
 		else
@@ -187,6 +188,18 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
+	async function on_endp_open ()
+	{
+		$ws.send(`@@booth:${ version }:endp`)
+
+		events.emit('@open',  void 0, { endp })
+
+		/* TBD: custom check here */
+
+		flush()
+		on_connect_or_reconnect()
+	}
+
 	function flush ()
 	{
 		if (! $buffer) return
@@ -201,7 +214,6 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	}
 
 	var been_connected = false
-
 	function on_connect_or_reconnect ()
 	{
 		if (! been_connected)
@@ -216,8 +228,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	// TODO: reconnect() as a method?
-
+	/* TODO: reconnect() as a method? */
 	function reconnect_or_cleanup ()
 	{
 		if (! $ws)
@@ -254,11 +265,10 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 
 	function close ()
 	{
-		if ($ws)
-		{
-			$ws.close()
-			$ws = null
-		}
+		if (! $ws) return
+
+		$ws.close()
+		$ws = null
 	}
 
 	function cleanup ()
