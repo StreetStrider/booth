@@ -48,7 +48,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	{
 		if (dispatch)
 		{
-			return () => {}
+			return noop
 		}
 		else if (events)
 		{
@@ -56,7 +56,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 		else
 		{
-			return () => {}
+			return noop
 		}
 	}
 
@@ -291,3 +291,6 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 
 	return (connect(), endp)
 }
+
+
+function noop () {}

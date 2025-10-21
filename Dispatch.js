@@ -32,7 +32,7 @@ export default function Dispatch (wss)
 		}
 		else
 		{
-			return () => {}
+			return noop
 		}
 	}
 
@@ -63,3 +63,6 @@ function Wss (wss)
 
 	return wss
 }
+
+
+function noop () {}
