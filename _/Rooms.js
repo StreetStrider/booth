@@ -28,7 +28,7 @@ export default function Rooms ()
 		reg.remove(name)
 	}
 
-	function send (name, key, data = '')
+	function send (name, key, data)
 	{
 		reg.over(name, room => room.send(key, data))
 	}

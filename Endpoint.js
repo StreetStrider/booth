@@ -1,3 +1,4 @@
+/* eslint max-statements: [ 1, 25 ] */
 
 import Ws from 'isomorphic-ws'
 
@@ -31,7 +32,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	if (dispatch)
 	{
 		$ws = ws
-		ws = null
+		ws  = null
 	}
 
 
@@ -60,17 +61,17 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	function send (key, data = '')
+	function send (key, data)
 	{
 		if ($buffer)
 		{
-			$buffer.push([ key, (data || '') ])
+			$buffer.push([ key, data ])
 		}
 		else if ($ws)
 		{
 			if (typeof key === 'string')
 			{
-				$ws.send(`@${ key }:${ String(data) }`)
+				$ws.send(`@${ key }:${ String(data ?? '') }`)
 			}
 			else
 			{
@@ -113,17 +114,15 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		var data = msg.slice(colon + 1)
 
 		var meta = { key, msg, data, endp }
-
 		events.emit(key, data, meta)
 	}
 
 	function recv_binary (msg)
 	{
-		var key = '@binary'
-
+		var key  = '@binary'
 		var data = msg
-		var meta = { key, msg, data, endp }
 
+		var meta = { key, msg, data, endp }
 		events.emit(key, data, meta)
 	}
 
@@ -228,7 +227,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	/* TODO: reconnect() as a method? */
+	/* TBD: reconnect() as a method? */
 	function reconnect_or_cleanup ()
 	{
 		if (! $ws)
@@ -275,10 +274,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	{
 		if (! endp) return
 
-		if (dispatch)
-		{
-			dispatch.rooms.leave_every(endp)
-		}
+		dispatch?.rooms.leave_every(endp)
 
 		$buffer = null
 		$ws = null

@@ -21,7 +21,7 @@ export default function Room ()
 		return seq.has(endp)
 	}
 
-	function send (key, data = '')
+	function send (key, data)
 	{
 		seq.each(endp => endp.send(key, data))
 	}
