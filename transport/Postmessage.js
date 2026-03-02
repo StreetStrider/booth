@@ -47,7 +47,7 @@ export default function Postmessage (port)
 
 	return (init(), transport)
 
-	async function init ()
+	function init ()
 	{
 		port.addListener('message', on_message)
 		port.addListener('close', on_close)

@@ -30,7 +30,8 @@ export default
 	{
 		rules:
 		{
-			complexity: [ 1, 6 ],
+			'complexity': [ 1, 6 ],
+			'require-await': 2,
 		},
 	},
 

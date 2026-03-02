@@ -80,7 +80,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	async function send_binary (msg)
+	function send_binary (msg)
 	{
 		if ($ws instanceof Ws)
 		{
@@ -187,7 +187,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	async function on_endp_open ()
+	function on_endp_open ()
 	{
 		$ws.send(`@@booth:${ version }:endp`)
 
