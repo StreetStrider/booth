@@ -195,6 +195,8 @@ export default function Residual (options)
 	}
 
 	/*
+	// NOTE: reconnect will require carefully determining "leader"
+	// NOTE: consider implementing watchdog on the residual side instead
 	function reconnect ()
 	{
 		if (! ok) return

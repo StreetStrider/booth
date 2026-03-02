@@ -1,4 +1,5 @@
-
+// unref can be moved to Timeout and turned into (unref + clearTimeout)
+// but unref mostly relevant for node, not browser
 
 export default function delay (ms = 0)
 {
