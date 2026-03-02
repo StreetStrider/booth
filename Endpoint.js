@@ -147,11 +147,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		/* #1 */
 		if (! dispatch)
 		{
-			ev('open', on_endp_open)
-		}
-		else
-		{
-			ev('open', () => events.emit('@open', void 0, { endp }))
+			ev('open', on_open_endp)
 		}
 
 		/* #2 */
@@ -175,9 +171,11 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 			$ws.addEventListener(name, handler)
 		}
 
-		/* instantly opened when under Dispatch */
 		if (dispatch)
 		{
+			/* TBD: custom check here */
+
+			/* instantly opened when under Dispatch, we're in a callback already */
 			events.emit('@open',    void 0, { endp })
 			events.emit('@connect', void 0, { endp })
 
@@ -187,13 +185,13 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	function on_endp_open ()
+	function on_open_endp ()
 	{
-		$ws.send(`@@booth:${ version }:endp`)
-
-		events.emit('@open',  void 0, { endp })
-
 		/* TBD: custom check here */
+
+		events.emit('@open', void 0, { endp })
+
+		$ws.send(`@@booth:${ version }:endp`)
 
 		flush()
 		on_connect_or_reconnect()
