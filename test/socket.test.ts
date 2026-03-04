@@ -82,9 +82,15 @@ dispatch.on(
 	{
 		aof.track('listening')
 	},
+	'@open' (_, { endp })
+	{
+		endp.aux.data = 'data_dispatch'
+	},
 	ok (_, { endp })
 	{
 		aof.track(1)
+
+		expect(endp.aux.data).eq('data_dispatch')
 
 		endp.send('ok')
 	},
@@ -160,6 +166,8 @@ endp.on(
 	{
 		aof.track('open', opens)
 
+		endp.aux.data = 'data_endp'
+
 		opens++
 	},
 	'@connect' ()
@@ -168,9 +176,11 @@ endp.on(
 
 		connects++
 	},
-	ok (/* data, { endp } */)
+	ok (_, { endp })
 	{
 		aof.track(2)
+
+		expect(endp.aux.data).eq('data_endp')
 
 		endp.send('try')
 	},
