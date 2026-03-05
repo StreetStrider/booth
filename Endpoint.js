@@ -9,6 +9,9 @@ import Events from './_/Events.js'
 import Websocket from './transport/Websocket.js'
 
 
+/* * */
+function noop () {}
+
 var defaults =
 {
 	should_reconnect: void 0,
@@ -285,6 +288,3 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 
 	return (connect(), endp)
 }
-
-
-function noop () {}

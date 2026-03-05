@@ -7,6 +7,25 @@ import Rooms  from './_/Rooms.js'
 import Endpoint from './Endpoint.js'
 
 
+/* * */
+function noop () {}
+
+
+/* * */
+import { WebSocketServer } from 'ws'
+
+function Wss (wss)
+{
+	if (is_plain(wss))
+	{
+		return new WebSocketServer(wss)
+	}
+
+	return wss
+}
+
+
+/* * */
 export default function Dispatch (wss)
 {
 	wss = Wss(wss)
@@ -49,20 +68,3 @@ export default function Dispatch (wss)
 
 	return dispatch
 }
-
-
-/* * */
-import { WebSocketServer } from 'ws'
-
-function Wss (wss)
-{
-	if (is_plain(wss))
-	{
-		return new WebSocketServer(wss)
-	}
-
-	return wss
-}
-
-
-function noop () {}
