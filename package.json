@@ -116,7 +116,7 @@
 
 
     "eslint":
-      "9.15.0",
+      "10.0.2",
 
     "outlander":
       "StrangeTransistor/outlander#3.0.0",
@@ -125,29 +125,29 @@
       "11",
 
     "@typescript-eslint/parser":
-      "8.40",
+      "8.56",
 
     "@typescript-eslint/eslint-plugin":
-      "8.40",
+      "8.56",
 
 
     "dtslint":
       "4.2.1",
 
     "typescript":
-      "5.9.2",
+      "5.9.3",
 
     "@types/node":
-      "24.3.0",
+      "25.3.3",
 
     "@types/ws":
       "8.18.1",
 
     "@types/chai":
-      "5.2.2",
+      "5.2.3",
 
     "typescript-event-target":
-      "1.1.1",
+      "1.1.2",
 
 
     "chai":
