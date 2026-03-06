@@ -34,12 +34,13 @@ import { testing_executable } from './kit.js'
 var aof = Aof('residual', () =>
 [
 	[ 'listening' ],
-	[ 'open', 1 ],
-	[ 'connect', 1 ],
-	[ 'open', 2 ],
-	[ 'connect', 2 ],
+	[ 'open', 'server' ],
+	[ 'connect', 'server' ],
+	[ 'open', 'client', 1 ],
+	[ 'connect', 'client', 1 ],
 	[ 'ping' ],
 	[ 'pong' ],
+	[ 'close', 'client', 1 ],
 ],
 () =>
 {
@@ -78,12 +79,12 @@ function Server (wss: any)
 
 	wss.on('@open', () =>
 	{
-		aof.track('open', 1)
+		aof.track('open', 'server')
 	})
 
 	wss.on('@connect', () =>
 	{
-		aof.track('connect', 1)
+		aof.track('connect', 'server')
 	})
 
 	wss.on('ping', (_: any, { endp }: any) =>
@@ -113,13 +114,16 @@ function Server (wss: any)
 
 function Client (endp: any)
 {
+	var n = 0
+
 	endp.on('@open', () =>
 	{
-		aof.track('open', 2)
+		n++
+		aof.track('open', 'client', n)
 	})
 	endp.on('@connect', () =>
 	{
-		aof.track('connect', 2)
+		aof.track('connect', 'client', n)
 
 		endp.send('ping')
 	})
@@ -131,6 +135,8 @@ function Client (endp: any)
 	})
 	endp.on('@close', () =>
 	{
+		aof.track('close', 'client', n)
+
 		aof.end_check()
 	})
 }
