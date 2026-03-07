@@ -50,7 +50,7 @@ function Server (options)
 
 	var wss = Dispatch(options.addr.for_dispatch())
 
-	Promise.resolve().then(() =>
+	var ready = Promise.resolve().then(() =>
 	{
 		var Server = options.Server
 		Server?.(wss)
