@@ -116,7 +116,7 @@
 
 
     "eslint":
-      "10.0.2",
+      "9.39.4",
 
     "outlander":
       "StrangeTransistor/outlander#3.0.0",
