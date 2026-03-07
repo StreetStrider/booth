@@ -40,10 +40,9 @@ export default function Residual (options)
 
 		var wss = Dispatch(addr.for_dispatch())
 
-		var Server = options.Server
-
 		Promise.resolve().then(() =>
 		{
+			var Server = options.Server
 			Server?.(wss)
 		})
 		.then(() => when(wss, '@listening'))
@@ -59,6 +58,7 @@ export default function Residual (options)
 	}
 
 
+	/* * */
 	var endp
 	var events = Events()
 
@@ -68,25 +68,23 @@ export default function Residual (options)
 
 	async function main ()
 	{
-		await attempt(connect_and_ping)
+		await progress(connect_and_ping)
 
-		for (;;)
+		while (! ok)
 		{
-			if (ok) break
 			retries++
-
 			if (retries > options.retries_max) break
 
-			/*
-			console.info('retry:', retries, 'max:', options.retries_max) //*/
+			//*
+			console.debug('retry:', retries, 'max:', options.retries_max) //*/
 
 			if (retries > 1)
 			{
 				await delay(random(1, 5) * 100./* ms */)
 			}
 
-			await attempt(upstart)
-			await attempt(connect_and_ping)
+			await progress(upstart)
+			await progress(connect_and_ping)
 		}
 
 		if (! ok)
@@ -143,6 +141,7 @@ export default function Residual (options)
 
 	async function upstart ()
 	{
+		console.info('UPSTART')
 		var argv =
 		[
 			process.argv[1], /* TODO: test deno compile, provide option */
@@ -180,7 +179,7 @@ export default function Residual (options)
 		return child
 	}
 
-	async function attempt (fn)
+	async function progress (fn)
 	{
 		if (ok) return
 

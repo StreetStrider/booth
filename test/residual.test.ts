@@ -95,7 +95,7 @@ function Server (wss: any)
 
 		setTimeout(() =>
 		{
-			console.log('OK')
+			console.info('OK')
 
 			aof.end()
 		})
@@ -136,6 +136,8 @@ function Client (endp: any)
 	endp.on('@close', () =>
 	{
 		aof.track('close', 'client', n)
+
+		console.info('OK')
 
 		aof.end_check()
 	})
