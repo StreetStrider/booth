@@ -32,33 +32,45 @@ export default function Residual (options)
 {
 	options = { ...defaults, ...options }
 
-	var addr = options.addr
-
 	if (process.argv.includes('--residual'))
 	{
-		logthru(options.name)
+		return Server(options)
+	}
+	else
+	{
+		return Client(options)
+	}
+}
 
-		var wss = Dispatch(addr.for_dispatch())
 
-		Promise.resolve().then(() =>
-		{
-			var Server = options.Server
-			Server?.(wss)
-		})
-		.then(() => when(wss, '@listening'))
-		.then(() => process.send('@listening'))
-		.then(() => wss)
+//::
+function Server (options)
+{
+	logthru(options.name)
 
-		var close = function close ()
-		{
-			wss.close()
-		}
+	var wss = Dispatch(options.addr.for_dispatch())
 
-		return { ready, close }
+	Promise.resolve().then(() =>
+	{
+		var Server = options.Server
+		Server?.(wss)
+	})
+	.then(() => when(wss, '@listening'))
+	.then(() => process.send('@listening'))
+	.then(() => wss)
+
+	function close ()
+	{
+		wss.close()
 	}
 
+	return { ready, close }
+}
 
-	/* * */
+
+//::
+function Client (options)
+{
 	var endp
 	var events = Events()
 
@@ -106,7 +118,7 @@ export default function Residual (options)
 
 	async function connect ()
 	{
-		endp = Endpoint(addr.for_endpoint(), { should_reconnect: false }, { events })
+		endp = Endpoint(options.addr.for_endpoint(), { should_reconnect: false }, { events })
 
 		var on_connect = when(endp, '@connect')
 
@@ -220,7 +232,7 @@ export default function Residual (options)
 	})
 	.then(() => endp)
 
-	var close = function close ()
+	function close ()
 	{
 		endp?.close()
 	}
