@@ -5,6 +5,10 @@
 # import.meta.url
 #
 
+
+set -e
+
+
 Deno ()
 {
 	deno run \
@@ -16,9 +20,6 @@ Deno ()
 		-E \
 		"${@}"
 }
-
-set -e
-
 
 Clean ()
 {
@@ -32,11 +33,13 @@ Pkill ()
 }
 
 
+Pkill
 Clean
+
 
 if false
 then
-	Pkill
+	# Pkill
 	tsx test/residual.test.ts
 	Deno --allow-run test/residual.test.ts
 	exit
@@ -55,7 +58,7 @@ tsx test/once-when-request.test.ts
 tsx test/stdio.test.ts
 tsx test/recv.test.ts
 node test/postmessage.test.js
-Pkill
+# Pkill
 tsx test/residual.test.ts
 
 
@@ -75,5 +78,5 @@ Deno test/once-when-request.test.ts
 Deno --allow-run test/stdio.test.ts
 Deno test/recv.test.ts
 Deno test/postmessage.test.js
-Pkill
+# Pkill
 Deno --allow-run test/residual.test.ts
