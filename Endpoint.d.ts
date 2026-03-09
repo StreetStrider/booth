@@ -110,6 +110,8 @@ export interface Endpoint
 
 	send (data: Binary_Send): void,
 
+	open (): void,
+
 	close (): void,
 
 	aux: Aux,

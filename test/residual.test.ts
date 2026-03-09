@@ -127,6 +127,13 @@ function Client (endp: any)
 
 		endp.send('ping')
 	})
+	/*
+	endp.on('@reconnect', () =>
+	{
+		aof.track('reconnect', 'client', n)
+
+		endp.send('ping')
+	})*/
 	endp.on('pong', () =>
 	{
 		aof.track('pong')
@@ -137,8 +144,11 @@ function Client (endp: any)
 	{
 		aof.track('close', 'client', n)
 
-		console.info('OK')
+		// if (n === 2)
+		{
+			aof.end_check()
+		}
 
-		aof.end_check()
+		console.info('OK')
 	})
 }

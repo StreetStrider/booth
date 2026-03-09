@@ -78,7 +78,7 @@ function Client (options)
 	var retries = 0
 
 
-	async function main ()
+	async function setup ()
 	{
 		await progress(connect_and_ping)
 
@@ -95,6 +95,7 @@ function Client (options)
 				await delay(random(1, 5) * 100./* ms */)
 			}
 
+			// await progress(connect_and_ping) // TODO: tbd
 			await progress(upstart)
 			await progress(connect_and_ping)
 		}
@@ -118,21 +119,38 @@ function Client (options)
 
 	async function connect ()
 	{
-		endp = Endpoint(options.addr.for_endpoint(), { should_reconnect: false }, { events })
+		if (! endp)
+		{
+			var endp_options =
+			{
+				should_reconnect: false,
+				should_cleanup: false,
+			}
+
+			endp = Endpoint(options.addr.for_endpoint(), endp_options, { events })
+		}
+		else
+		{
+			endp.open()
+		}
 
 		var on_connect = when(endp, '@connect')
 
-		var on_error = when(endp, '@error')
-		var timer = on_error.timer
-		on_error = on_error.then(e =>
 		{
-			if (e.error.code !== 'ECONNREFUSED')
+			var on_error = when(endp, '@error')
+			var timer = on_error.timer
+
+			on_error = on_error.then(e =>
 			{
-				console.warn('uncommon reconnect error', e)
-			}
-			throw e
-		})
-		on_error.timer = timer
+				if (e.error.code !== 'ECONNREFUSED')
+				{
+					console.warn('uncommon reconnect error', e)
+				}
+				throw e
+			})
+
+			on_error.timer = timer
+		}
 
 		await race(on_connect, on_error)
 	}
@@ -206,6 +224,7 @@ function Client (options)
 	}
 
 	/*
+	// TODO: reconnect
 	// NOTE: reconnect will require carefully determining "leader"
 	// NOTE: consider implementing watchdog on the residual side instead
 	function reconnect ()
@@ -213,16 +232,15 @@ function Client (options)
 		if (! ok) return
 		ok = false
 
-		main()
+		setup()//.then(console.info, console.error)
 	}
-	*/
 
-	// TODO:
-	// events.on('close', reconnect)
+	events.on('@close', reconnect)
+	//*/
 
 	var Client = options.Client
 
-	var ready = main()
+	var ready = setup()
 	.then(() => Client?.(endp))
 	.then(() =>
 	{

@@ -16,6 +16,7 @@ var defaults =
 {
 	should_reconnect: void 0,
 	reconnect_interval: 1e3,
+	should_cleanup: void 0,
 }
 
 
@@ -43,10 +44,15 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	{
 		on,
 		send,
+
+		open,
 		close,
+
 		aux: {},
 	}
 
+
+	// TODO: status()
 
 	function on (...args)
 	{
@@ -129,8 +135,16 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		events.emit(key, data, meta)
 	}
 
-	function connect () /* eslint-disable-line complexity */
+	function open () /* eslint-disable-line complexity */
 	{
+		if (! endp)
+		{
+			throw new ReferenceError('has_been_cleaned')
+		}
+
+		// TODO: TBD: pre-close (async involved)
+		// TBD: check status
+
 		if (! dispatch)
 		{
 			if (typeof transport === 'function')
@@ -162,7 +176,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		/* #3 */
 		if (! dispatch)
 		{
-			ev('close', reconnect_or_cleanup)
+			ev('close', on_close_endp)
 		}
 		else
 		{
@@ -228,8 +242,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		}
 	}
 
-	/* TBD: reconnect() as a method? */
-	function reconnect_or_cleanup ()
+	function on_close_endp ()
 	{
 		if (! $ws)
 		{
@@ -245,7 +258,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		$buffer = []
 		$ws = null
 
-		setTimeout(connect, options.reconnect_interval)
+		setTimeout(open, options.reconnect_interval)
 	}
 
 	function should_reconnect ()
@@ -267,6 +280,9 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	{
 		if (! $ws) return
 
+		// TODO: TBD: await close (async involved)
+		// TBD: check status
+
 		$ws.close()
 		$ws = null
 	}
@@ -274,6 +290,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	function cleanup ()
 	{
 		if (! endp) return
+		if (options.should_cleanup === false) return
 
 		dispatch?.rooms.leave_every(endp)
 
@@ -286,5 +303,5 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		endp = null
 	}
 
-	return (connect(), endp)
+	return (open(), endp)
 }
