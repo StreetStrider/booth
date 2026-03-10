@@ -1,11 +1,14 @@
-/* eslint max-statements: [ 1, 25 ] */
+/* eslint max-statements: [ 1, 26 ] */
 
 import Ws from 'isomorphic-ws'
 
 /* import { version } from './package.json' with { type: 'json' } */
 var version = '0.16'
 
+import { CLOSED } from './status.js'
+
 import Events from './_/Events.js'
+
 import Websocket from './transport/Websocket.js'
 
 
@@ -45,6 +48,8 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		on,
 		send,
 
+		status,
+
 		open,
 		close,
 
@@ -52,7 +57,10 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 	}
 
 
-	// TODO: status()
+	function status ()
+	{
+		return $ws?.readyState ?? CLOSED
+	}
 
 	function on (...args)
 	{

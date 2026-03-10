@@ -19,6 +19,7 @@
     "CHANGELOG.md",
 
     "index.js",
+    "status.js",
 
     "Dispatch.js",
     "Endpoint.js",
@@ -34,6 +35,8 @@
   "exports":
   {
     ".": "./index.js",
+
+    "./status": "./status.js",
 
     "./endpoint": "./Endpoint.js",
     "./dispatch": "./Dispatch.js",

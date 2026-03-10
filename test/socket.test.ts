@@ -8,6 +8,8 @@ import { expect } from 'chai'
 import type { Protocol } from 'booth'
 import type { Endpoint } from 'booth/endpoint'
 
+import * as status from 'booth/status'
+
 import { Dispatch } from 'booth'
 import { Endpoint as Endp } from 'booth'
 import { Addr } from 'booth'
@@ -160,10 +162,15 @@ function expected_error ({ fn, error, data, meta }: any)
  */
 var
 endp = Endp<Protocol_E, Protocol_B>(addr.for_endpoint())
+
+expect(endp.status()).eq(status.CONNECTING)
+
 endp.on(
 {
 	'@open' (/* _, { endp } */)
 	{
+		expect(endp.status()).eq(status.OPEN)
+
 		aof.track('open', opens)
 
 		endp.aux.data = 'data_endp'
@@ -212,6 +219,8 @@ endp.on(
 	}),
 	'@close' (/* _, { endp } */)
 	{
+		expect(endp.status()).eq(status.CLOSED)
+
 		closes++
 
 		aof.track('close', closes)

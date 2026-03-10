@@ -11,10 +11,13 @@
 // import type * as WebSocket from 'ws'
 
 
+import type { TypedEventTarget } from 'typescript-event-target'
+
+import type { Status } from './status.js'
+
+
 export type Binary_Send = (Buffer | ArrayBuffer | DataView | ArrayBufferView | Uint8Array | SharedArrayBuffer)
 export type Binary_Recv = (Buffer | ArrayBuffer | Buffer[])
-
-import type { TypedEventTarget } from 'typescript-event-target'
 
 export type Payload = (string | Binary_Recv)
 
@@ -33,6 +36,8 @@ export interface Transport extends TypedEventTarget<Events>
 		binary?: boolean,
 		reconnect?: boolean,
 	},
+
+	readyState: Status,
 
 	send (payload: string): void,
 	close (): void,

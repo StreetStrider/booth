@@ -1,4 +1,7 @@
 
+import delay from '../_/delay.js'
+
+import * as status from '../status.js'
 
 
 export default function Postmessage (port)
@@ -10,6 +13,8 @@ export default function Postmessage (port)
 		binary: false, /* TODO: postmessage binary */
 		reconnect: false,
 	}
+
+	transport.readyState = status.CONNECTING
 
 	transport.send = (s) =>
 	{
@@ -32,9 +37,14 @@ export default function Postmessage (port)
 		transport.dispatchEvent(new MessageEvent('message', { data }))
 	}
 
-	function on_close ()
+	async function on_close ()
 	{
+		transport.readyState = status.CLOSING
 		finalize()
+
+		await delay()
+
+		transport.readyState = status.CLOSED
 		transport.dispatchEvent(new Event('close'))
 	}
 
@@ -47,16 +57,16 @@ export default function Postmessage (port)
 
 	return (init(), transport)
 
-	function init ()
+	async function init ()
 	{
 		port.addListener('message', on_message)
 		port.addListener('close', on_close)
 
-		setTimeout(() =>
-		{
-			transport.dispatchEvent(new Event('open'))
+		await delay()
 
-			port.start?.()
-		})
+		transport.readyState = status.OPEN
+		transport.dispatchEvent(new Event('open'))
+
+		port.start?.()
 	}
 }

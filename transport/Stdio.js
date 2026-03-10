@@ -3,6 +3,8 @@ import { createInterface as Lines } from 'node:readline'
 
 import delay from '../_/delay.js'
 
+import * as status from '../status.js'
+
 
 export default function Stdio (input, output)
 {
@@ -18,6 +20,8 @@ export default function Stdio (input, output)
 		binary: false, /* TODO: stdio binary */
 		reconnect: false,
 	}
+
+	transport.readyState = status.CONNECTING
 
 	transport.send = (s) =>
 	{
@@ -35,14 +39,18 @@ export default function Stdio (input, output)
 		input  = null
 		output = null
 
+		transport.readyState = status.CLOSED
 		transport.dispatchEvent(new Event('close')) /* TODO: CloseEvent () node@23 */
 	}
+
 
 	return (init(), transport)
 
 	async function init ()
 	{
 		await delay()
+
+		transport.readyState = status.OPEN
 		transport.dispatchEvent(new Event('open'))
 
 		for await (var line of Lines({ input }))
@@ -51,6 +59,9 @@ export default function Stdio (input, output)
 		}
 
 		await delay()
+		transport.readyState = status.CLOSING
+		await delay()
+
 		transport.close()
 	}
 }

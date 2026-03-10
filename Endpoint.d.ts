@@ -4,6 +4,8 @@ import type * as WebSocket from 'ws'
 
 import type { Disposer } from '@streetstrider/emitter'
 
+import type { Status } from './status.js'
+
 import type { Transport }   from './Transport.js'
 import type { Binary_Send } from './Transport.js'
 import type { Payload }     from './Transport.js'
@@ -92,6 +94,8 @@ export interface Endpoint
 	Aux extends Aux_Base = Aux_Base,
 >
 {
+	status (): Status,
+
 	on <Key extends keyof Protocol_All<In>>
 		(map: { [ K in Key ]?: Handler<K, Protocol_All<In>[K], this> })
 			: Disposer,
