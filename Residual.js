@@ -6,14 +6,16 @@ import { spawn } from 'node:child_process'
 import Dispatch from './Dispatch.js'
 import Endpoint from './Endpoint.js'
 
+import logthru from './_/logthru.js'
+
 import Events from './_/Events.js'
 
 import when from './_/when.js'
 import delay from './_/delay.js'
 import random from './_/random.js'
 import { Timeouted } from './_/timeout.js'
-
-import logthru from './_/logthru.js'
+import { when_connected } from './_/when-status.js'
+// import { when_closed } from './_/when-status.js' // TODO:
 
 
 var defaults =
@@ -133,10 +135,10 @@ function Client (options)
 			endp.open()
 		}
 
-		var on_connect = when(endp, '@connect')
-		var on_error   = when(endp, '@error').then(e => { throw e })
-
-		await Promise.race([ on_connect, on_error ])
+		await when_connected(endp)
+		// var on_connect = when(endp, '@connect')
+		// var on_error   = when(endp, '@error').then(e => { throw e })
+		// await Promise.race([ on_connect, on_error ])
 	}
 
 	async function ping ()
@@ -192,7 +194,7 @@ function Client (options)
 		return child
 	}
 
-	async function progress (fn)
+	async function progress (fn) /* eslint-disable-line complexity */
 	{
 		if (ok) return
 
