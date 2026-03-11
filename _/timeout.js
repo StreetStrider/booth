@@ -4,35 +4,14 @@ import delay from './delay.js'
 
 export function Timeouted (promise, timeout = 0)
 {
-	var tp = Timeout(timeout)
-
-	var p = race(promise, tp)
-	p.timer = tp.timer
-
-	return p
+	return Promise.race([ promise, Timeout(timeout) ])
 }
 
 
-export function race (left, right)
+export function Timeout (ms = 0)
 {
-	return Promise.race([ left, right ])
-	.finally(() =>
-	{
-		clearTimeout(left.timer)
-		clearTimeout(right.timer)
-	})
-}
-
-
-function Timeout (ms = 0)
-{
-	var p = delay(ms)
-	var timer = p.timer
-
-	p = p.then(() => { throw new TimeoutError })
-	p.timer = timer
-
-	return p
+	return delay(ms, { unref: true })
+	.then(() => { throw new TimeoutError })
 }
 
 

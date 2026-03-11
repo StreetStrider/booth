@@ -6,6 +6,7 @@ import type { Endpoint } from '../Endpoint.js'
 
 import type { Dispatch } from '../Dispatch.js'
 
+
 export default function
 <
 	In  extends Protocol = Protocol,
@@ -19,6 +20,7 @@ export default function
 	timeout?: number,
 )
 	: Promise<Protocol_All<In>[Key]>
+
 
 export default function
 <

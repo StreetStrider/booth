@@ -11,8 +11,7 @@ import Events from './_/Events.js'
 import when from './_/when.js'
 import delay from './_/delay.js'
 import random from './_/random.js'
-import { Timeouted as Timeout } from './_/timeout.js'
-import { race } from './_/timeout.js'
+import { Timeouted } from './_/timeout.js'
 
 import logthru from './_/logthru.js'
 
@@ -138,9 +137,7 @@ function Client (options)
 
 		{
 			var on_error = when(endp, '@error')
-			var timer = on_error.timer
-
-			on_error = on_error.then(e =>
+			.then(e =>
 			{
 				if (e.error.code !== 'ECONNREFUSED')
 				{
@@ -148,11 +145,9 @@ function Client (options)
 				}
 				throw e
 			})
-
-			on_error.timer = timer
 		}
 
-		await race(on_connect, on_error)
+		await Promise.race([ on_connect, on_error ])
 	}
 
 	async function ping ()
@@ -188,7 +183,7 @@ function Client (options)
 		try
 		{
 			var spawned = once(child, 'message')
-			var [ msg ] = await Timeout(spawned, options.timeout)
+			var [ msg ] = await Timeouted(spawned, options.timeout)
 
 			if (msg !== '@listening')
 			{

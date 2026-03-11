@@ -1,48 +1,18 @@
 
 import once from './once.js'
 
-import { Timeouted as Timeout } from './timeout.js'
+import { Timeouted } from './timeout.js'
 
 
-export default function when (emitter, key, timeout = 5e3)
+export default function when (emitter, key, timeout = 15e3)
 {
-	timeout ||= Infinity
+	var p = new Promise(rs => once(emitter, key, rs))
 
-	if (timeout === Infinity)
+	if ((timeout >= 0) && (timeout < Infinity))
 	{
-		try
-		{
-			return new Promise(rs => once(emitter, key, rs))
-		}
-		finally
-		{
-			emitter = null
-		}
+		p = Timeouted(p, timeout)
 	}
 
-	var ds
-	var result = new Promise(rs =>
-	{
-		ds = once(emitter, key, rs)
-	})
-
-	try
-	{
-		var p = Timeout(result, timeout)
-		var timer = p.timer
-
-		p = p.finally(() =>
-		{
-			ds()
-			ds = null
-		})
-		p.timer = timer
-
-		return p
-	}
-	finally
-	{
-		emitter = null
-		result  = null
-	}
+	emitter = null
+	return p
 }

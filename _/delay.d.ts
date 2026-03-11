@@ -1,3 +1,9 @@
 
 
-export default function delay (ms?: number): Promise<void>
+export type Options =
+{
+	unref?: boolean,
+}
+
+
+export default function delay (ms?: number, options?: Options): Promise<void>
