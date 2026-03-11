@@ -86,7 +86,7 @@ function Client (options)
 			retries++
 			if (retries > options.retries_max) break
 
-			//*
+			/*
 			console.debug('retry:', retries, 'max:', options.retries_max) //*/
 
 			if (retries > 1)
@@ -134,18 +134,7 @@ function Client (options)
 		}
 
 		var on_connect = when(endp, '@connect')
-
-		{
-			var on_error = when(endp, '@error')
-			.then(e =>
-			{
-				if (e.error.code !== 'ECONNREFUSED')
-				{
-					console.warn('uncommon reconnect error', e)
-				}
-				throw e
-			})
-		}
+		var on_error   = when(endp, '@error').then(e => { throw e })
 
 		await Promise.race([ on_connect, on_error ])
 	}
@@ -166,7 +155,6 @@ function Client (options)
 
 	async function upstart ()
 	{
-		console.info('UPSTART')
 		var argv =
 		[
 			process.argv[1], /* TODO: test deno compile, provide option */
@@ -212,9 +200,14 @@ function Client (options)
 		{
 			await fn()
 		}
-		catch
+		catch (e)
 		{
 			ok = false
+
+			if (e?.error?.code === 'ECONNREFUSED') return
+			if (e?.message === 'Timeout') return
+
+			console.error('PROGRESS', e)
 		}
 	}
 

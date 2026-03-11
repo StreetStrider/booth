@@ -148,7 +148,5 @@ function Client (endp: any)
 		{
 			aof.end_check()
 		}
-
-		console.info('OK')
 	})
 }
