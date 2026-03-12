@@ -1,4 +1,5 @@
-
+/* global Deno */
+/* eslint complexity: [ 1, 7 ] */
 
 
 export default function delay (ms, options)
@@ -11,6 +12,11 @@ export default function delay (ms, options)
 		if (options?.unref)
 		{
 			timer?.unref?.()
+
+			if (typeof Deno !== 'undefined')
+			{
+				Deno.unrefTimer(timer)
+			}
 		}
 
 		timer = null

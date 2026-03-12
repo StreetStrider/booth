@@ -4,7 +4,7 @@ import once from './once.js'
 import { Timeouted } from './timeout.js'
 
 
-export default function when (emitter, key, timeout = 15e3)
+export default function when (emitter, key, timeout = 5e3)
 {
 	var p = new Promise(rs => once(emitter, key, rs))
 
