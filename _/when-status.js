@@ -24,6 +24,7 @@ export async function when_connected (endp)
 }
 
 
+/*
 export async function when_closed (endp)
 {
 	if (endp.status() === status.CLOSED)
@@ -37,3 +38,4 @@ export async function when_closed (endp)
 
 	await when(endp, '@close')
 }
+*/

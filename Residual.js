@@ -15,7 +15,6 @@ import delay from './_/delay.js'
 import random from './_/random.js'
 import { Timeouted } from './_/timeout.js'
 import { when_connected } from './_/when-status.js'
-import { when_closed } from './_/when-status.js'
 
 
 var defaults =
@@ -116,9 +115,6 @@ function Client (options)
 
 	async function open_and_ping ()
 	{
-		// console.log(111, endp?.status())
-		await (endp && when_closed(endp))
-		// console.log(222, endp?.status())
 		await open()
 		await ping()
 

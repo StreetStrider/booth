@@ -39,8 +39,9 @@ Clean
 
 if false
 then
-	# Pkill
+	Pkill
 	tsx test/residual.test.ts
+	Pkill
 	Deno --allow-run test/residual.test.ts
 	exit
 fi
@@ -58,10 +59,10 @@ tsx test/once-when-request.test.ts
 tsx test/stdio.test.ts
 tsx test/recv.test.ts
 node test/postmessage.test.js
-# Pkill
 tsx test/residual.test.ts
 
 
+Pkill
 Clean
 
 
@@ -78,5 +79,4 @@ Deno test/once-when-request.test.ts
 Deno --allow-run test/stdio.test.ts
 Deno test/recv.test.ts
 Deno test/postmessage.test.js
-# Pkill
 Deno --allow-run test/residual.test.ts
