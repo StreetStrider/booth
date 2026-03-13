@@ -215,10 +215,6 @@ function Client (options)
 		}
 	}
 
-	//*
-	// TODO: reconnect
-	// NOTE: reconnect will require carefully determining "leader"
-	// NOTE: consider implementing watchdog on the residual side instead
 	function reconnect ()
 	{
 		if (! ok) return
@@ -226,11 +222,10 @@ function Client (options)
 
 		ok = false
 
-		setup()//.then(console.info, console.error)
+		setup().catch(e => events.emit('@error', e, { endp }))
 	}
 
 	events.on('@close', reconnect)
-	//*/
 
 	var Client = options.Client
 
