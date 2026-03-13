@@ -22,6 +22,7 @@ var defaults =
 {
 	name: 'app_example',
 	exe: process.execPath,
+	logthru: false,
 	Server () {},
 	Client () {},
 	retries_max: 2,
@@ -47,7 +48,10 @@ export default function Residual (options)
 //::
 function Server (options)
 {
-	logthru(options.name)
+	if (options.logthru)
+	{
+		logthru(options.name)
+	}
 
 	var wss = Dispatch(options.addr.for_dispatch())
 

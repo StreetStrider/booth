@@ -25,7 +25,6 @@ import { Addr } from 'booth'
 // import random from '../_/random.js'
 // import { timeout } from '../_/timeout.js' /* TODO: */
 
-// import logthru from '../_/logthru.js'
 
 import { Aof } from './kit.js'
 import { testing_executable } from './kit.js'
@@ -67,6 +66,7 @@ var residual = Residual(
 {
 	addr,
 	exe: testing_executable(),
+	logthru: true,
 	Server,
 	Client,
 })
