@@ -2,7 +2,7 @@
 /* import type { Writable } from 'node:stream' */
 
 import { mkdirSync as mkdir } from 'node:fs'
-import { appendFile as append } from 'node:fs'
+import { appendFileSync as append } from 'node:fs'
 
 import { inspect } from 'node:util'
 
@@ -20,7 +20,7 @@ export default function logthru (name, stdout = process.stdout, stderr = process
 
 	var ts = (new Date).toISOString().slice(0, 10)
 
-	append(logname, `${ ts }:\n`, () => {})
+	append(logname, `${ ts }:\n`)
 
 	stream_patch(logname, stdout)
 	stream_patch(logname, stderr)
@@ -53,7 +53,7 @@ function stream_patch (filename, stream)
 			chunk = strip(chunk)
 		}
 
-		append(filename, chunk, { encoding }, () => {})
+		append(filename, chunk, { encoding })
 
 		return r
 	}
@@ -73,8 +73,8 @@ function log_toplevel_error (filename, type) /* : ('unhandledRejection' | 'uncau
 			breakLength: 120,
 		})
 
-		append(filename, `${ type }\n`, () => {})
-		append(filename, `${ repr_text }\n`, () => {})
+		append(filename, `${ type }\n`)
+		append(filename, `${ repr_text }\n`)
 
 		/*
 		if (dev or not residual) // TODO: --residual ?
