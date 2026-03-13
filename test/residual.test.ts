@@ -41,6 +41,13 @@ var aof = Aof('residual', () =>
 	[ 'ping' ],
 	[ 'pong' ],
 	[ 'close', 'client', 1 ],
+	[ 'open', 'server' ],
+	[ 'connect', 'server' ],
+	[ 'open', 'client', 2 ],
+	[ 'reconnect', 'client', 2 ],
+	[ 'ping' ],
+	[ 'pong' ],
+	[ 'close', 'client', 2 ]
 ],
 () =>
 {
@@ -93,12 +100,13 @@ function Server (wss: any)
 
 		endp.send('pong')
 
+		/*
 		setTimeout(() =>
 		{
 			console.info('OK')
 
 			aof.end()
-		})
+		})//*/
 	})
 
 	wss.on('do-close', (_: any, { endp }: any) =>
@@ -108,7 +116,17 @@ function Server (wss: any)
 
 	wss.on('do-quit', (_: any, { endp }: any) =>
 	{
-		residual.close()
+		// console.debug('do-quit')
+		endp.close()
+		// residual.close()
+
+		//*
+		setTimeout(() =>
+		{
+			console.info('OK')
+
+			aof.end()
+		})//
 	})
 }
 
@@ -116,6 +134,11 @@ function Client (endp: any)
 {
 	var n = 0
 
+	endp.on('@upstart', (child: any) =>
+	{
+		/* should not fire */
+		aof.track('upstart')
+	})
 	endp.on('@open', () =>
 	{
 		n++
@@ -127,25 +150,35 @@ function Client (endp: any)
 
 		endp.send('ping')
 	})
-	/*
+	//*
 	endp.on('@reconnect', () =>
 	{
 		aof.track('reconnect', 'client', n)
 
 		endp.send('ping')
-	})*/
+	})//*/
 	endp.on('pong', () =>
 	{
 		aof.track('pong')
 
-		endp.send('do-close')
+		if (n === 1)
+		{
+			endp.send('do-close')
+		}
+		if (n === 2)
+		{
+			endp.send('do-quit')
+		}
 	})
 	endp.on('@close', () =>
 	{
 		aof.track('close', 'client', n)
 
-		// if (n === 2)
+		if (n === 2)
 		{
+			// endp.send('do-quit')
+			endp.close()
+
 			aof.end_check()
 		}
 	})

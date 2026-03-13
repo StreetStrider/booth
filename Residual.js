@@ -15,7 +15,7 @@ import delay from './_/delay.js'
 import random from './_/random.js'
 import { Timeouted } from './_/timeout.js'
 import { when_connected } from './_/when-status.js'
-// import { when_closed } from './_/when-status.js' // TODO:
+import { when_closed } from './_/when-status.js'
 
 
 var defaults =
@@ -62,7 +62,8 @@ function Server (options)
 
 	function close ()
 	{
-		wss.close()
+		wss?.close()
+		wss = null
 	}
 
 	return { ready, close }
@@ -81,7 +82,7 @@ function Client (options)
 
 	async function setup ()
 	{
-		await progress(connect_and_ping)
+		await progress(open_and_ping)
 
 		while (! ok)
 		{
@@ -94,31 +95,34 @@ function Client (options)
 			if (retries > 1)
 			{
 				await delay(random(1, 5) * 100./* ms */)
+				await progress(open_and_ping)
 			}
 
-			// await progress(connect_and_ping) // TODO: tbd
 			await progress(upstart)
-			await progress(connect_and_ping)
+			await progress(open_and_ping)
 		}
+
 
 		if (! ok)
 		{
 			throw new Error(`unable_to_residual (retries: ${ options.retries_max })`)
 		}
-
 		/* TODO: fallback in single process mode */
 	}
 
-	async function connect_and_ping ()
+	async function open_and_ping ()
 	{
-		await connect()
+		// console.log(111, endp?.status())
+		await (endp && when_closed(endp))
+		// console.log(222, endp?.status())
+		await open()
 		await ping()
 
 		ok = true
 		retries = 0
 	}
 
-	async function connect ()
+	async function open ()
 	{
 		if (! endp)
 		{
@@ -136,9 +140,6 @@ function Client (options)
 		}
 
 		await when_connected(endp)
-		// var on_connect = when(endp, '@connect')
-		// var on_error   = when(endp, '@error').then(e => { throw e })
-		// await Promise.race([ on_connect, on_error ])
 	}
 
 	async function ping ()
@@ -191,7 +192,8 @@ function Client (options)
 		child.channel?.unref()
 		child.unref()
 
-		return child
+		events.emit('@upstart', void 0, { endp })
+		/* return child */
 	}
 
 	async function progress (fn) /* eslint-disable-line complexity */
@@ -213,13 +215,15 @@ function Client (options)
 		}
 	}
 
-	/*
+	//*
 	// TODO: reconnect
 	// NOTE: reconnect will require carefully determining "leader"
 	// NOTE: consider implementing watchdog on the residual side instead
 	function reconnect ()
 	{
 		if (! ok) return
+		if (! endp) return
+
 		ok = false
 
 		setup()//.then(console.info, console.error)
@@ -243,6 +247,7 @@ function Client (options)
 	function close ()
 	{
 		endp?.close()
+		endp = null
 	}
 
 	return { ready, close }
