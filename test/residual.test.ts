@@ -46,7 +46,15 @@ var aof = Aof('residual', () =>
 	[ 'reconnect', 'client', 2 ],
 	[ 'ping' ],
 	[ 'pong' ],
-	[ 'close', 'client', 2 ]
+	[ 'close', 'client', 2 ],
+	[ 'upstart' ],
+	[ 'open', 'server' ],
+	[ 'connect', 'server' ],
+	[ 'open', 'client', 3 ],
+	[ 'reconnect', 'client', 3 ],
+	[ 'ping' ],
+	[ 'pong' ],
+	[ 'close', 'client', 3 ],
 ],
 () =>
 {
@@ -152,6 +160,11 @@ function Client (endp: any)
 		}
 		if (endp.aux.iteration === 2)
 		{
+			endp.send('do-close')
+			// endp.send('do-crash')
+		}
+		if (endp.aux.iteration === 3)
+		{
 			endp.send('do-quit')
 		}
 	})
@@ -159,7 +172,7 @@ function Client (endp: any)
 	{
 		aof.track('close', 'client', endp.aux.iteration)
 
-		if (endp.aux.iteration === 2)
+		if (endp.aux.iteration === 3)
 		{
 			aof.end_check()
 		}

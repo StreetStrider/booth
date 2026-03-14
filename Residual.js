@@ -139,7 +139,7 @@ function Client (options)
 			endp.open()
 		}
 
-		await when_connected(endp)
+		await when_connected(endp, { timeout: 200./* ms */ })
 	}
 
 	async function ping ()

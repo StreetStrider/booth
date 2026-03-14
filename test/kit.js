@@ -58,7 +58,7 @@ export function Aof (name, fn_result, fn_end)
 	{
 		expect.fail(`Aof ${ name } does not finish`)
 	}
-	, 5e3)
+	, 8e3)
 
 	function track (...log)
 	{
