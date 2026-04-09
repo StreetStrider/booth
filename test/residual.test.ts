@@ -21,7 +21,7 @@ import { Addr } from 'booth'
 // import Events from '../_/Events.js'
 
 // import when from '../_/when.js'
-// import delay from '../_/delay.js'
+import delay from '../_/delay.js'
 // import random from '../_/random.js'
 // import { timeout } from '../_/timeout.js' /* TODO: */
 
@@ -47,7 +47,7 @@ var aof = Aof('residual', () =>
 	[ 'ping' ],
 	[ 'pong' ],
 	[ 'close', 'client', 2 ],
-	[ 'upstart' ],
+	// [ 'upstart' ],
 	[ 'open', 'server' ],
 	[ 'connect', 'server' ],
 	[ 'open', 'client', 3 ],
@@ -114,10 +114,11 @@ function Server (wss: any)
 		endp.close()
 	})
 
-	wss.on('do-quit', (_: any, { endp }: any) =>
+	wss.on('do-quit', async (_: any, { endp }: any) =>
 	{
 		endp.close()
 
+		await delay(100)
 		console.info('OK')
 		aof.end()
 	})
@@ -131,21 +132,23 @@ function Client (endp: any)
 		/* should not fire */
 		aof.track('upstart')
 	})
-	endp.on('@open', () =>
+	endp.on('@open', async () =>
 	{
 		endp.aux.iteration ??= 0
 		endp.aux.iteration++
 
+		await delay(50)
 		aof.track('open', 'client', endp.aux.iteration)
 	})
-	endp.on('@connect', () =>
+	endp.on('@connect', async () =>
 	{
+		await delay(50)
 		aof.track('connect', 'client', endp.aux.iteration)
-
 		endp.send('ping')
 	})
-	endp.on('@reconnect', () =>
+	endp.on('@reconnect', async () =>
 	{
+		await delay(50)
 		aof.track('reconnect', 'client', endp.aux.iteration)
 
 		endp.send('ping')
@@ -165,15 +168,20 @@ function Client (endp: any)
 		}
 		if (endp.aux.iteration === 3)
 		{
+			residual.fin()
 			endp.send('do-quit')
+			// residual.close()
 		}
 	})
-	endp.on('@close', () =>
+	endp.on('@close', async () =>
 	{
 		aof.track('close', 'client', endp.aux.iteration)
 
 		if (endp.aux.iteration === 3)
 		{
+			// residual.fin()
+
+			await delay(50)
 			aof.end_check()
 		}
 	})

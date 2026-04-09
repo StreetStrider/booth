@@ -6,7 +6,7 @@ import * as status from '../status.js'
 import when from './when.js'
 
 
-export async function when_connected (endp, options)
+export async function when_opened (endp, options)
 {
 	if (endp.status() === status.OPEN)
 	{
@@ -19,7 +19,7 @@ export async function when_connected (endp, options)
 
 	var timeout = (options?.timeout ?? 5e3)
 
-	var on_connect = when(endp, '@connect', timeout)
+	var on_connect = when(endp, '@open', timeout)
 	var on_error   = when(endp, '@error', timeout).then(e => { throw e })
 
 	await Promise.race([ on_connect, on_error ])

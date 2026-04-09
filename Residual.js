@@ -14,7 +14,7 @@ import when from './_/when.js'
 import delay from './_/delay.js'
 import random from './_/random.js'
 import { Timeouted } from './_/timeout.js'
-import { when_connected } from './_/when-status.js'
+import { when_opened } from './_/when-status.js'
 
 
 var defaults =
@@ -130,6 +130,8 @@ function Client (options)
 			{
 				should_reconnect: false,
 				should_cleanup: false,
+				on_open_success: false,
+				emit_on_open_success: false,
 			}
 
 			endp = Endpoint(options.addr.for_endpoint(), endp_options, { events })
@@ -139,12 +141,12 @@ function Client (options)
 			endp.open()
 		}
 
-		await when_connected(endp, { timeout: 200./* ms */ })
+		await when_opened(endp)
 	}
 
 	async function ping ()
 	{
-		var rs = await when(endp, '@recv', 100./* ms */)
+		var rs = await when(endp, '@recv')
 
 		if (typeof rs !== 'string')
 		{
@@ -222,7 +224,10 @@ function Client (options)
 
 		ok = false
 
-		setup().catch(e => events.emit('@error', e, { endp }))
+		setup().then(
+			()  => events.emit('@@open/success'),
+			(e) => events.emit('@error', e, { endp }),
+		)
 	}
 
 	events.on('@close', reconnect)
@@ -235,7 +240,7 @@ function Client (options)
 	{
 		/* instantly opened when under Residual Endpoint */
 		events.emit('@open',    void 0, { endp })
-		events.emit('@connect', void 0, { endp })
+		events.emit('@@open/success')
 	})
 	.then(() => endp)
 
@@ -245,5 +250,10 @@ function Client (options)
 		endp = null
 	}
 
-	return { ready, close }
+	function fin ()
+	{
+		endp = null
+	}
+
+	return { ready, close, fin }
 }

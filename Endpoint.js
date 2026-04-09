@@ -1,4 +1,3 @@
-/* eslint max-statements: [ 1, 26 ] */
 
 import Ws from 'isomorphic-ws'
 
@@ -20,11 +19,15 @@ var defaults =
 	should_reconnect: void 0,
 	reconnect_interval: 1e3,
 	should_cleanup: void 0,
+	emit_on_open_success: true,
 }
 
 
-export default function Endpoint (transport, options, { ws, dispatch, events } = {})
+export default function Endpoint (transport, options) /* eslint-disable-line max-statements, complexity */
 {
+	var internal = (arguments[2] ?? {})
+	var { ws, dispatch, events } = internal
+
 	options = { ...defaults, ...options }
 
 	events ??= Events()
@@ -143,7 +146,7 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 		events.emit(key, data, meta)
 	}
 
-	function open () /* eslint-disable-line complexity */
+	function open () /* eslint-disable-line max-statements, complexity */
 	{
 		if (! endp)
 		{
@@ -198,8 +201,6 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 
 		if (dispatch)
 		{
-			/* TBD: custom check here */
-
 			/* instantly opened when under Dispatch, we're in a callback already */
 			events.emit('@open',    void 0, { endp })
 			events.emit('@connect', void 0, { endp })
@@ -212,14 +213,25 @@ export default function Endpoint (transport, options, { ws, dispatch, events } =
 
 	function on_open_endp ()
 	{
-		/* TBD: custom check here */
-
 		events.emit('@open', void 0, { endp })
 
 		$ws.send(`@@booth:${ version }:endp`)
 
+		if (options.emit_on_open_success)
+		{
+			on_open_success()
+		}
+	}
+
+	function on_open_success ()
+	{
 		flush()
 		on_connect_or_reconnect()
+	}
+
+	if (internal.events && (! options.on_open_success))
+	{
+		events.on('@@open/success', on_open_success)
 	}
 
 	function flush ()
