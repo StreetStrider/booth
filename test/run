@@ -30,6 +30,7 @@ Clean ()
 Pkill ()
 {
 	pkill -f '\-\-residual' || true
+	sleep .5
 }
 
 
@@ -37,12 +38,17 @@ Pkill
 Clean
 
 
-if false
+if true
 then
 	Pkill
 	tsx test/residual.test.ts
-	Pkill
-	Deno --allow-run test/residual.test.ts
+
+	if true
+	then
+		Pkill
+		Deno --allow-run test/residual.test.ts
+	fi
+
 	exit
 fi
 

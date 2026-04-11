@@ -55,6 +55,16 @@ var aof = Aof('residual', () =>
 	[ 'ping' ],
 	[ 'pong' ],
 	[ 'close', 'client', 3 ],
+	[ 'close', 'client', 3 ],
+	[ 'listening' ],
+	[ 'upstart' ],
+	[ 'open', 'server' ],
+	[ 'connect', 'server' ],
+	[ 'open', 'client', 4 ],
+	[ 'reconnect', 'client', 4 ],
+	[ 'ping' ],
+	[ 'pong' ],
+	[ 'close', 'client', 4 ],
 ],
 () =>
 {
@@ -116,9 +126,10 @@ function Server (wss: any)
 
 	wss.on('do-quit', async (_: any, { endp }: any) =>
 	{
+		await delay(100)
+
 		endp.close()
 
-		await delay(100)
 		console.info('OK')
 		aof.end()
 	})
@@ -168,10 +179,20 @@ function Client (endp: any)
 		}
 		if (endp.aux.iteration === 3)
 		{
-			residual.fin()
+			// residual.fin()
 			endp.send('do-quit')
 			// residual.close()
 		}
+		if (endp.aux.iteration === 4)
+		{
+			endp.send('do-quit')
+			residual.close()
+		}
+	})
+	endp.on('@error', (e) =>
+	{
+		// console.log('EEE')
+		// console.log(e)
 	})
 	endp.on('@close', async () =>
 	{
@@ -179,9 +200,14 @@ function Client (endp: any)
 
 		if (endp.aux.iteration === 3)
 		{
+			// console.trace()
+		}
+
+		if (endp.aux.iteration === 4)
+		{
 			// residual.fin()
 
-			await delay(50)
+			// await delay(50)
 			aof.end_check()
 		}
 	})
