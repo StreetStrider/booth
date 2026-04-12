@@ -31,7 +31,7 @@ export function testing_executable ()
 	return process.execPath
 }
 
-function engine_name ()
+export function engine_name ()
 {
 	if (is_node())
 	{

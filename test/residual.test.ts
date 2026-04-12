@@ -27,6 +27,7 @@ import delay from '../_/delay.js'
 
 
 import { Aof } from './kit.js'
+import { engine_name } from './kit.js'
 import { testing_executable } from './kit.js'
 
 
@@ -83,6 +84,7 @@ type Protocol_E = Protocol<'pong'>
 var residual = Residual(
 {
 	addr,
+	name: 'app_example_' + engine_name(),
 	exe: testing_executable(),
 	logthru: true,
 	Server,
@@ -188,11 +190,6 @@ function Client (endp: any)
 			endp.send('do-quit')
 			residual.close()
 		}
-	})
-	endp.on('@error', (e) =>
-	{
-		// console.log('EEE')
-		// console.log(e)
 	})
 	endp.on('@close', async () =>
 	{

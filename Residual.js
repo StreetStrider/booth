@@ -54,12 +54,9 @@ function Server (options)
 
 	var wss = Dispatch(options.addr.for_dispatch())
 
-	var ready = Promise.resolve().then(() =>
-	{
-		var Server = options.Server
-		Server?.(wss)
-	})
-	.then(() => when(wss, '@listening'))
+	options.Server?.call(null, wss)
+
+	var ready = when(wss, '@listening')
 	.then(() => process.send('@listening'))
 	.then(() => wss)
 

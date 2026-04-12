@@ -29,8 +29,10 @@ Clean ()
 
 Pkill ()
 {
-	pkill -f '\-\-residual' || true
-	sleep .5
+	pkill -9 -f '\-\-residual' || true
+	while nc -z localhost 9009; do sleep .5; done
+
+	sleep 3
 }
 
 
@@ -38,7 +40,7 @@ Pkill
 Clean
 
 
-if true
+if false
 then
 	Pkill
 	tsx test/residual.test.ts
@@ -49,6 +51,7 @@ then
 		Deno --allow-run test/residual.test.ts
 	fi
 
+	Pkill
 	exit
 fi
 
@@ -86,3 +89,5 @@ Deno --allow-run test/stdio.test.ts
 Deno test/recv.test.ts
 Deno test/postmessage.test.js
 Deno --allow-run test/residual.test.ts
+
+Pkill
