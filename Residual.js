@@ -254,3 +254,102 @@ function Client (options)
 
 	return { ready, close, fin }
 }
+
+
+/*
+// #1
+function Server (options)
+{
+    if (options.logthru)
+    {
+        logthru(options.name)
+    }
+
+    var wss
+    async function listen () // eslint-disable-line require-await
+    {
+        wss = Dispatch(options.addr.for_dispatch())
+
+        options.Server?.call(null, wss)
+
+        var ready = when(wss, '@listening')
+
+        return ready
+    }
+
+    // var wss = Dispatch(options.addr.for_dispatch())
+    // options.Server?.call(null, wss)
+
+    // var ready = when(wss, '@listening')
+    var ready = listen()
+    .then(() => process.send('@listening'))
+    .then(() => wss)
+
+    function close ()
+    {
+        wss?.close()
+        wss = null
+    }
+
+    return { ready, close }
+}
+
+// #2
+function Server (options)
+{
+    if (options.logthru)
+    {
+        logthru(options.name)
+    }
+
+    var wss
+
+    var attempts = 1
+    var attempts_max = 5
+
+    async function listen ()
+    {
+        try
+        {
+            wss = Dispatch(options.addr.for_dispatch())
+        }
+        catch (e)
+        {
+            if (e.code !== 'EADDRINUSE')
+            {
+                throw e
+            }
+
+            attempts++
+            console.log('attempts', attempts, e.code, String(e))
+
+            if (attempts < attempts_max)
+            {
+                await delay(100./* ms *-/)
+                return listen()
+            }
+
+            throw e
+        }
+
+        options.Server?.call(null, wss)
+
+        return when(wss, '@listening')
+    }
+
+    // var wss = Dispatch(options.addr.for_dispatch())
+    // options.Server?.call(null, wss)
+
+    var ready = listen()
+    .then(() => process.send('@listening'))
+    .then(() => wss)
+
+    function close ()
+    {
+        wss?.close()
+        wss = null
+    }
+
+    return { ready, close }
+}
+//*/

@@ -30,8 +30,8 @@ Clean ()
 Pkill ()
 {
 	pkill -9 -f '\-\-residual' || true
-	while nc -z localhost 9009; do sleep .5; done
 
+	while nc -z localhost 9009; do sleep .5; done
 	sleep 3
 }
 
