@@ -16,8 +16,9 @@ Deno ()
 		-R=/tmp/booth \
 		-R=$(which deno) \
 		-W=/tmp/booth/ \
-		-N=0.0.0.0,127.0.0.1 \
+		-N='0.0.0.0,127.0.0.1,[::]' \
 		-E \
+		--unsafe-proto \
 		"${@}"
 }
 
