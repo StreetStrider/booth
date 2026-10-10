@@ -1,0 +1,14 @@
+
+lockfile: false
+
+blockExoticSubdeps: false # metalpipe
+
+allowBuilds:
+  core-js: true
+  es5-ext: true
+  esbuild: true
+  rollup-plugin-pug: true
+
+overrides:
+  ? "@definitelytyped/utils"
+  : "0.1.4"

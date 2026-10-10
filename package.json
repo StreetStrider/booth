@@ -155,13 +155,5 @@
 
     "chai":
       "5.1.2"
-  },
-
-  "pnpm":
-  {
-    "overrides":
-    {
-      "@definitelytyped/utils": "0.1.4"
-    }
   }
 }
