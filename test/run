@@ -60,7 +60,7 @@ fi
 
 
 tsx --version
-echo ''
+echo
 
 tsx test/socket.test.ts
 tsx test/unix.test.ts
@@ -78,9 +78,9 @@ Pkill
 # Clean
 
 
-echo ''
+echo
 deno --version
-echo ''
+echo
 
 Deno ./test/socket.test.ts
 # Deno test/unix.test.ts # (see https://github.com/denoland/deno/issues/27450)
@@ -94,3 +94,5 @@ Deno test/postmessage.test.js
 # Deno --allow-run test/residual.test.ts
 
 Pkill
+
+echo

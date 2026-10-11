@@ -155,7 +155,7 @@ function Client (options)
 		}
 	}
 
-	async function upstart ()
+	async function upstart () /* eslint-disable-line complexity */
 	{
 		var argv =
 		[
@@ -259,12 +259,7 @@ function Client (options)
 		endp = null
 	}
 
-	function fin ()
-	{
-		endp = null
-	}
-
-	return { ready, close, fin }
+	return { ready, close }
 }
 
 

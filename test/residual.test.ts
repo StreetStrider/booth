@@ -139,6 +139,7 @@ function Server (wss: any)
 
 	setTimeout(() =>
 	{
+		/* teardown for hang situation */
 		process.exit()
 	}
 	, 20e3)
@@ -164,6 +165,7 @@ function Client (endp: any)
 	{
 		await delay(50)
 		aof.track('connect', 'client', endp.aux.iteration)
+
 		endp.send('ping')
 	})
 	endp.on('@reconnect', async () =>
@@ -184,13 +186,11 @@ function Client (endp: any)
 		if (endp.aux.iteration === 2)
 		{
 			endp.send('do-close')
-			// endp.send('do-crash')
+			/* endp.send('do-crash') */
 		}
 		if (endp.aux.iteration === 3)
 		{
-			// residual.fin()
 			endp.send('do-quit')
-			// residual.close()
 		}
 		if (endp.aux.iteration === 4)
 		{
@@ -202,16 +202,8 @@ function Client (endp: any)
 	{
 		aof.track('close', 'client', endp.aux.iteration)
 
-		if (endp.aux.iteration === 3)
-		{
-			// console.trace()
-		}
-
 		if (endp.aux.iteration === 4)
 		{
-			// residual.fin()
-
-			// await delay(50)
 			aof.end_check()
 		}
 	})
