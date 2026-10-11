@@ -169,6 +169,7 @@ function Client (options)
 		}
 
 		var child = spawn(options.exe, argv, spawn_options)
+		var error
 
 		try
 		{
@@ -180,16 +181,24 @@ function Client (options)
 				throw new Error('not_a_residual')
 			}
 		}
-		catch
+		catch (e)
 		{
+			error = e
 			child.kill()
+		}
+		finally
+		{
+			child?.channel?.unref()
+			child?.unref()
+		}
+
+		if (error != null)
+		{
+			throw error
 		}
 
 		/* child.stdout.pipe(process.stdout) */
 		/* child.stderr.pipe(process.stderr) */
-
-		child.channel?.unref()
-		child.unref()
 
 		events.emit('@upstart', void 0, { endp })
 		/* return child */
