@@ -236,7 +236,10 @@ function Client (options)
 	.then(() =>
 	{
 		/* instantly opened when under Residual Endpoint */
-		events.emit('@open',    void 0, { endp })
+		events.emit('@open', void 0, { endp })
+	})
+	.then(() =>
+	{
 		events.emit('@@open/success')
 	})
 	.then(() => endp)
