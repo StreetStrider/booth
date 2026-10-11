@@ -28,6 +28,7 @@ import delay from '../_/delay.js'
 
 import { Aof } from './kit.js'
 import { engine_name } from './kit.js'
+import { engine_code } from './kit.js'
 import { testing_executable } from './kit.js'
 
 
@@ -73,7 +74,7 @@ var aof = Aof('residual', () =>
 })
 
 
-var addr = Addr.Websocket(9009)
+var addr = Addr.Websocket(10000 + engine_code())
 console.log('WS', ...addr.view())
 
 
@@ -135,6 +136,12 @@ function Server (wss: any)
 		console.info('OK')
 		aof.end()
 	})
+
+	setTimeout(() =>
+	{
+		process.exit()
+	}
+	, 20e3)
 }
 
 

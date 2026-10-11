@@ -31,8 +31,10 @@ Clean ()
 Pkill ()
 {
 	pkill -9 -f '\-\-residual' || true
+	pkill -9 -f '\-\-residual' || true
 
-	while nc -z localhost 9009; do sleep .5; done
+	while nc -z localhost 10001; do sleep .5; done
+	while nc -z localhost 10002; do sleep .5; done
 	sleep 3
 }
 
@@ -73,7 +75,7 @@ tsx test/residual.test.ts
 
 
 Pkill
-Clean
+# Clean
 
 
 echo ''

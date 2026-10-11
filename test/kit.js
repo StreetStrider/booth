@@ -45,6 +45,15 @@ export function engine_name ()
 	throw new TypeError('unknown_runtime')
 }
 
+export function engine_code ()
+{
+	switch (engine_name())
+	{
+		case 'node': return 1
+		case 'deno': return 2
+	}
+}
+
 
 export const tmp = '/tmp/booth'
 
