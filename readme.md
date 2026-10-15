@@ -5,7 +5,7 @@
 Alike socket.io, but less powerful. Simple Event API, simple reconnect strategy,
 symmetric usage via `Endpoint()` on both client and server sides.
 
-# api
+# API
 ```js
 /*
  * options: WebSocket.Server options
@@ -45,6 +45,25 @@ endpoint.on({ name: handler })
 function handler (data, endpoint) { /* … */ }
 ```
 
-# license
+# Residual
+Upstart Dispatch backend on first run or connect to an already running one.
+
+```js
+const residual = Residual(
+{
+	Server (wss) { /* init Dispatch server */ },
+	Client (ws)  { /* init Endpoint */},
+})
+```
+
+# Transports
+```js
+import Postmessage from 'booth/transport/Postmessage'
+
+const worker = new Worker(filename /*, { stdout: true } */)
+const endp = Endpoint(() => Postmessage(worker))
+```
+
+# License
 ISC.
 Copyright © 2026, Strider.
